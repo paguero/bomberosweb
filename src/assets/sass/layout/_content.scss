@@ -1,0 +1,50 @@
+//
+// Content
+//
+
+// Desktop mode
+@include media-breakpoint-up(lg) {
+	.app-content {
+		[data-kt-app-toolbar-enabled="true"]:not([data-kt-app-toolbar-fixed="true"]) & {
+			padding-top: 0;
+		}		
+	}
+}
+
+// Tablet & mobile modes
+@include media-breakpoint-down(lg) {
+	.app-content { 
+		[data-kt-app-toolbar-enabled="true"]:not([data-kt-app-toolbar-fixed-mobile="true"]) & {
+			padding-top: 0;
+		}
+	}
+}
+
+.p-badge {
+    background: #006cd9!important;
+	text-transform: uppercase;
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 100!important;
+    min-width: 1.5rem;
+    height: 1.5rem;
+    line-height: 1.8rem;
+	box-sizing: border-box!important;
+}
+.p-badge.p-badge-lg {
+    margin-bottom: 2px;
+    padding-left: 4px;
+    padding-right: 4px;
+    min-width: 25px!important;
+    height: 25px!important;
+	line-height: 1.8rem!important;
+    text-transform: uppercase;
+    text-align: center;
+    background-color: #006cd9;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 13px;
+    font-size: 11px!important;
+    box-sizing: border-box!important;
+    white-space: nowrap;
+}

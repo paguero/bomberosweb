@@ -1,0 +1,193 @@
+<script setup lang="ts">
+
+</script>
+
+<template>
+  <main  class="content-wrapper flex-row-fluid ">
+     <section style="padding-left: 0px; padding-right: 0px;" class="banner container-fluid">
+        <div class="banner-container container">
+        <div class="banner-text">
+          <img src="/media/img/banner/banner-text.png" />
+        </div>
+     
+            <!-- PATENTE-->
+            <div class="banner-form">
+                <Form autocomplete="off" class="form-signinx d-flex align-items-stretch flex-column" novalidate="novalidate"
+                      @submit="saveChanges1()"
+                      :validation-schema="cotizacionValidator">
+       
+                <img src="/media/img/banner/soap-2023.png" style="width: 107px;margin:auto" />
+                <h5>Ingresa tu patente</h5>
+                <div class="sr-soap-header-patente__input" style="margin:auto; align-items:center">
+                    
+                        <div class="form" style="margin:auto; align-items:center">
+                                
+                            <Field
+                                  v-maska data-maska="#### ##"
+                                  type="text"
+                                  maxlength="7"
+                                  name="patente" v-mask="'AAAA AA'"
+                                  class="
+                                    form-control form-control-lg form-control-solid
+                                    mb-3 mb-lg-0
+                                  "
+                                  placeholder="SOAP 24"
+                                  v-model="cotizacionDetails.vehiculo.patente"
+                                />
+                           <div class="fv-plugins-message-container">
+                                  <div class="fv-help-block">
+                                    <ErrorMessage name="patente" />
+                                  </div>
+                                </div>
+                        </div>
+                    
+                </div>
+                <div class="sr-soap-header-patente__btn">
+                    <button type="submit" ref="submitButton1" class="btn banner-form__button btn-quotation">COMPRAR</button> 
+                   
+                </div>
+                </Form>
+            </div>
+        </div>
+    </section>
+    <Price></Price>
+    <section class="aliados">
+      <div class="container p-5 align-items-center text-center">
+        <h2>Nuestros Aliados</h2>
+        <div class="d-flex align-items-center justify-content-around">
+            <img src="/media/img/content/saca-tu-permiso.png"/>
+            <img src="/media/img/content/south.png"/>
+            <img src="/media/img/content/tarjetaliderbci 1.png"/>
+            <img src="/media/img/content/logo-aseguraonline-horizontal-1-1 1.png"/>
+        </div>
+        <div class="d-flex align-items-center justify-content-around mt-4">
+            <img src="/media/img/content/logos-stpr_Mesa_de_trabajo.png"/>
+            <img src="/media/img/content/logo-seguro-las-condes.png"/>
+            <img src="/media/img/content/mercado_pago.png"/>
+        </div>
+      </div>
+    </section>
+
+    <div show class="sticky-alert"><router-link :to="{ name: 'home'}"><i class="fas fa-link"></i> Conoce Aquí lo recaudado hasta el momento y ayudanos a compartir y seguir ayudando a nuestros #HEROESDEVERDAD</router-link></div>
+    <!--div class="notification-box">
+    <router-link :to="{ name: 'indicators'}">
+                                              <i v-b-tooltip.hover title="Conocer los aportes recaudados" class="fas fa-chart-bar"></i></router-link>
+    </div-->
+    <Bombero></Bombero>
+    <Faq></Faq> 
+    
+        <transition name="fade">
+          <div v-show="mostrarChatBot" class="panel-chatbot">
+            <ChatBot :mostrarChatBot="mostrarChatBot"> </ChatBot>
+          </div>
+        </transition>
+
+        <div class="botonChatBot" v-show="botonChatBot">
+          <img
+            src="/media/img/ejecutivo-animado.gif"
+            alt=""
+            @click="(mostrarChatBot = true), (botonChatBot = false)"
+          />
+        </div>
+  </main>
+</template>
+
+
+<script lang="ts">
+import { ref, defineComponent } from "vue";
+import { useBus } from  "@/core/bus/bus";
+import { ErrorMessage, Field, Form } from "vee-validate";
+import Price from "@/components/widgets/Price.vue";
+import Bombero from "@/components/widgets/Bombero.vue";
+import Faq from "@/components/widgets/Faq.vue";
+import ChatBot from "@/components/widgets/ChatBot.vue";
+import _ from "lodash";
+import * as Yup from "yup";
+import { useRouter, useRoute} from "vue-router";
+import { useAuthStore } from "@/stores/auth";
+import { useCotizacionStore } from "@/stores/cotizacion";
+import { vMaska } from "maska"
+import Swal from "sweetalert2/dist/sweetalert2.js";
+import moment from "moment";
+
+export interface IVehiculo {
+  patente: string
+}
+export interface ICotizacion {
+  vehiculo: IVehiculo,
+  carroId:string
+}
+export default defineComponent({
+  name: "main-dashboard",
+  components: {
+    Price,
+    Faq,
+    Bombero,
+    ChatBot,
+    ErrorMessage,
+    Field,
+    Form,
+  },
+  setup() {
+    const router = useRouter();
+    const store = useCotizacionStore();
+    let loading = ref(true);
+    const { bus } = useBus();
+    const mostrarChatBot = ref(false);
+    const botonChatBot = ref(false);
+    const submitButton1 = ref<HTMLElement | null>(null);
+    const cotizacionValidator = Yup.object().shape({
+      patente: Yup.string().required("Es obligatorio").label("Patente")
+    });
+    var jsonCarro = store.getCarro();
+    let carro = {carroId:''};
+    if(jsonCarro){
+      carro = JSON.parse(store.getCarro());
+    }
+    const cotizacionDetails= ref<ICotizacion>({
+      carroId : carro.carroId,
+      vehiculo : {
+        patente : store.currentCotizacion?.patente    
+    }});
+
+    const saveChanges1 = () => {
+      if (submitButton1.value) {
+        console.log('enviando');
+        // Activate indicator
+        submitButton1.value.setAttribute("data-kt-indicator", "on");
+        store.createCotizacion(cotizacionDetails.value)
+          .then(() => {
+            loading = ref(false);
+            submitButton1.value?.removeAttribute("data-kt-indicator");
+            bus.emit("actualiza-carro-compra", store.currentCotizacion.carroId);
+            store.setCarro(JSON.stringify({carroId:store.currentCotizacion.carroId, cotizacionId:store.currentCotizacion.cotizacionId}));
+            router.push({ name: "info-vehiculo", params:{id:store.currentCotizacion.cotizacionId} });
+          })
+          .catch(() => {
+            const [error] = Object.values(store.cotizacionErrors) as any;
+            Swal.fire({
+                text: error?.descripcion,
+                icon: "error",
+                buttonsStyling: false,
+                confirmButtonText: "Ok",
+                heightAuto: false,
+                customClass: {
+                confirmButton: "btn fw-semobold btn-light-primary",
+                },
+            });
+          });
+      }
+    };
+
+    
+    return {
+      submitButton1,
+      saveChanges1,
+      cotizacionDetails,
+      cotizacionValidator,
+      mostrarChatBot,
+      botonChatBot
+    };
+  },
+});
+</script>

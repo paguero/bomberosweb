@@ -1,0 +1,66 @@
+//
+// Root
+//
+@font-face {
+font-family: "Gotham Black-Regular";
+src: url("https://anima-uploads.s3.amazonaws.com/projects/604751d1cad0de7ec2222754/fonts/gotham-black.ttf")
+    format("truetype");
+}
+
+@font-face {
+font-family: "Gotham-Book";
+src: url("https://anima-uploads.s3.amazonaws.com/projects/6546a6a8e6cfe31c46f5ccea/fonts/gotham-book.otf")
+    format("opentype");
+}
+
+@font-face {
+font-family: "Gotham-Regular";
+src: url("https://anima-uploads.s3.amazonaws.com/projects/62ba91238d381f5d60e3d21d/fonts/gotham-regular.otf")
+    format("opentype");
+}
+html {
+  font-family: sans-serif;
+  text-size-adjust: 100%;
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: $root-font-size !important;
+    font-weight: $font-weight-base;
+    font-family: $font-family-gotham;//$font-family-sans-serif;
+
+    // Tablet mode
+    @include media-breakpoint-down(lg) {
+        font-size: $root-font-size-lg !important;
+    }
+
+    // Mobile mode
+    @include media-breakpoint-down(md) {
+        font-size: $root-font-size-md !important;
+    }    
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+
+    a:hover,
+    a:active,
+    a:focus {
+        text-decoration: none !important;
+    }
+}
+
+canvas {
+    user-select: none;
+}
+
+// Angular integration
+router-outlet {
+    display: none;
+}
