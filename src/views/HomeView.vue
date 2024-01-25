@@ -56,8 +56,8 @@
         <div class="d-flex align-items-center justify-content-around">
             <img src="/media/img/content/saca-tu-permiso.png"/>
             <img src="/media/img/content/south.png"/>
-            <img src="/media/img/content/tarjetaliderbci 1.png"/>
-            <img src="/media/img/content/logo-aseguraonline-horizontal-1-1 1.png"/>
+            <img src="/media/img/content/tarjetaliderbci1.png"/>
+            <img src="/media/img/content/logo-aseguraonline-horizontal-1-1.png"/>
         </div>
         <div class="d-flex align-items-center justify-content-around mt-4">
             <img src="/media/img/content/logos-stpr_Mesa_de_trabajo.png"/>
