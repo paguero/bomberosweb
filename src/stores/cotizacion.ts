@@ -106,6 +106,16 @@ export const useCotizacionStore = defineStore("cotizacion", () => {
 		throw new Error();
       });
   }
+  function getCotizacionModificarPoliza(numeroFolio: string,numeroPoliza:string,patente:string) {
+    return ApiService.get(`soap/cotizacion/${numeroFolio}/${numeroPoliza}/${patente}`)
+      .then(({ data }) => {
+        setCotizacion(data);
+      })
+      .catch(({ response }) => {
+        setCotizacionError(response.data.errores);
+		throw new Error();
+      });
+  }
 
   function createCotizacion(params: ICotizacion|any) {
     return ApiService.post("soap/cotizacion", params)
@@ -153,7 +163,8 @@ export const useCotizacionStore = defineStore("cotizacion", () => {
     updateCotizacion,
     deleteCotizacion,
     setCarro,
-    getCarro
+    getCarro,
+    getCotizacionModificarPoliza
   };
 });
 

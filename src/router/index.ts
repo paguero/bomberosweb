@@ -85,6 +85,24 @@ const routes: Array<RouteRecordRaw> = [
           breadcrumbs: ["Dashboards"],
         },
       },
+      {
+        path: "/modifica-tu-poliza/ingresar",
+        name: "modifica-tu-poliza-ingresar",
+        component: () => import("@/views/ModificaTuPolizaIngresarView.vue"),
+        meta: {
+          pageTitle: "Dashboard",
+          breadcrumbs: ["Dashboards"],
+        },
+      },
+      {
+        path: "/modifica-tu-poliza/:id",
+        name: "modifica-tu-poliza",
+        component: () => import("@/views/ModificaTuPolizaView.vue"),
+        meta: {
+          pageTitle: "Dashboard",
+          breadcrumbs: ["Dashboards"],
+        },
+      },
       
     ],
   },
