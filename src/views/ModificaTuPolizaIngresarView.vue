@@ -14,9 +14,9 @@ const numeroPoliza = ref("");
 const patente = ref("");
 const loading = ref(false);
 
-const fomulario = Yup.object().shape({
-  numeroFolio: Yup.string().required("s obligatorio").label("Folio"),
-  numeroPoliza: Yup.string().required("s obligatorio").label("Número Póliza"),
+const formulario = Yup.object().shape({
+  numeroFolio: Yup.string().required("Es obligatorio").label("Folio"),
+  numeroPoliza: Yup.string().required("Es obligatorio").label("Número Póliza"),
   patente: Yup.string()
     .required("Es obligatorio")
     .label("Patente")
