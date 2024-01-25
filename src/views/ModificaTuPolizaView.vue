@@ -19,7 +19,7 @@ import { useVehiculoStore } from "@/stores/vehiculo";
 import { useAnioStore } from "@/stores/anio";
 import { usePrimaSoapStore } from "@/stores/primaSoap";
 import type { ICotizacion } from "@/stores/cotizacion";
-
+import { rutEsValido } from "@/core/validators/YupRut";
 import { vMaska } from "maska";
 import { patenteEsValido } from "@/core/validators/YupPatente";
 import MixedWidgetImage from "@/components/widgets/mixed/WidgetImage.vue";
@@ -36,46 +36,69 @@ const storePrima = usePrimaSoapStore();
 const datosConfirmados = ref(false);
 const loading = ref(true);
 const visible = ref(false);
-const numeroFolio = ref("123456");
-const numeroPoliza = ref("1000200302");
-const patente = ref("JLBH34");
 
-const fomulario = Yup.object().shape({
-  numeroFolio: Yup.string()
-    .required("El campo es requerido")
-    .label("Folio")
-    .max(10, "Debe tener 10 caracteres como máximo"),
-  numeroPoliza: Yup.string().required("El campo es requerido").label("Asunto"),
-  patente: Yup.string()
-    .required("El campo es requerido")
-    .label("Mensaje")
-    .max(500, "Debe tener 500 caracteres como máximo"),
+const formulario = Yup.object().shape({
+      patente: Yup.string().required("Es obligatorio").label("Patente").test("yupIsPatente", "Patente ingresada no es valida", function (value) {
+          return patenteEsValido(value);
+        }),
+		  marca: Yup.string().required("Es obligatorio").label("Marca"),
+		  modelo: Yup.string().required("Es obligatorio").label("Modelo"),
+		  tipoVehiculo: Yup.string().required("Es obligatorio").label("Tipo Vehículo"),
+		  numeroMotor: Yup.string().required("Es obligatorio").label("numeroMotor"),
+           rut: Yup.string().required("Es obligatorio").label("Rut").test("yupIsRut", "Rut ingresado no es valido", function (value) {
+          return rutEsValido(value);
+        }),
+  nombre: Yup.string().required("Es obligatorio").label("Nombre"),
+  apellidoPaterno: Yup.string()
+    .required("Es obligatorio")
+    .label("Apellido Paterno"),
+  apellidoMaterno: Yup.string()
+    .required("Es obligatorio")
+    .label("Apellido Materno"),
+  email: Yup.string()
+    .required("Es obligatorio")
+    .email("Email inválido")
+    .label("Email"),
+});
+
+Yup.addMethod(Yup.string, "yupIsRut", function (mensaje) {
+  const { message } = mensaje;
+  return this.test("yupIsRut", message, function (value) {
+    const { path, createError } = this;
+    const { some, more, args } = mensaje;
+    // [value] - value of the property being tested
+    // [path]  - property name,
+    // ...
+    return rutEsValido(value);
+  });
 });
 
 const onSubmit = async (values) => {
-  await storeCotizacion
-    .getCotizacionModificarPoliza(
-      values.numeroFolio,
-      values.numeroPoliza,
-      values.patente
-    )
-    .then(() => {
-      console.log(storeCotizacion.currentCotizacion);
-      // router.push({ name: "modifica-tu-poliza" });
-    })
-    .catch(() => {
-      const [error] = Object.values(storeCotizacion.cotizacionErrors);
-      Swal.fire({
-        text: error,
-        icon: "error",
-        buttonsStyling: false,
-        confirmButtonText: "Ok",
-        heightAuto: false,
-        customClass: {
-          confirmButton: "btn fw-semobold btn-light-primary",
-        },
-      });
-    });
+
+    console.log(cotizacionDetails.value)
+//   await storeCotizacion
+//     .getCotizacionModificarPoliza(
+//       values.numeroFolio,
+//       values.numeroPoliza,
+//       values.patente
+//     )
+//     .then(() => {
+//       console.log(storeCotizacion.currentCotizacion);
+//       // router.push({ name: "modifica-tu-poliza" });
+//     })
+//     .catch(() => {
+//       const [error] = Object.values(storeCotizacion.cotizacionErrors);
+//       Swal.fire({
+//         text: error,
+//         icon: "error",
+//         buttonsStyling: false,
+//         confirmButtonText: "Ok",
+//         heightAuto: false,
+//         customClass: {
+//           confirmButton: "btn fw-semobold btn-light-primary",
+//         },
+//       });
+//     });
 };
 
 const cotizacionId = route.params.id;
@@ -167,31 +190,7 @@ const obtenerCotizacion = async (cotizacionId) => {
       });
     });
 };
-const obtenerPrima = async (tipoVehiculo) => {
-  await storePrima
-    .getPrimaSoap(cotizacionDetails.value.codigoConvenio, tipoVehiculo)
-    .then(() => {
-      loading.value = false;
-      cotizacionDetails.value.planPesos =
-        storePrima.currentPrimaSoap.primaTecnica;
-      cotizacionDetails.value.montoPago =
-        storePrima.currentPrimaSoap.primaTecnica +
-        cotizacionDetails.value.aporte;
-    })
-    .catch(() => {
-      const [error] = Object.values(storePrima.primaSoapErrors);
-      Swal.fire({
-        text: error,
-        icon: "error",
-        buttonsStyling: false,
-        confirmButtonText: "Ok",
-        heightAuto: false,
-        customClass: {
-          confirmButton: "btn fw-semobold btn-light-primary",
-        },
-      });
-    });
-};
+
 const obtenerVehiculo = async () => {
   await storeVehiculo
     .getVehiculo(cotizacionDetails.value.vehiculo.patente)
@@ -219,21 +218,21 @@ const obtenerVehiculo = async () => {
       });
     });
 };
-    const allMarcas = computed(() => {
-      return storeMarca.allMarcas;
-    });
-    const allModelos = computed(() => {
-      return storeModelo.allModelos;
-    });
-    const allTipos = computed(() => {
-      return storeTipo.allTipoVehiculos;
-    });
-    const allAnios = computed(() => {
-      return storeAnio.allAnios;
-    });
-    const currentCarroCompra = computed(() => {
-      return storeCarro.currentCarroCompra;
-    });
+const allMarcas = computed(() => {
+  return storeMarca.allMarcas;
+});
+const allModelos = computed(() => {
+  return storeModelo.allModelos;
+});
+const allTipos = computed(() => {
+  return storeTipo.allTipoVehiculos;
+});
+const allAnios = computed(() => {
+  return storeAnio.allAnios;
+});
+const currentCarroCompra = computed(() => {
+  return storeCarro.currentCarroCompra;
+});
 const cotizacionDetails = ref<ICotizacion>({
   cotizacionId: storeCotizacion.currentCotizacion.cotizacionId,
   carroId: storeCotizacion.currentCotizacion.carroId,
@@ -289,13 +288,7 @@ const cotizacionDetails = ref<ICotizacion>({
   <div class="d-flex justify-content-center align-items-center p-20">
     <div class="card card-white v-application border border-1">
       <div class="card-body" v-if="cotizacionDetails.vehiculo">
-        <Form
-          id="kt_account_edificio_details_form"
-          class="form d-flex flex-column flex-lg-row"
-          novalidate="novalidate"
-          @submit="saveChanges1()"
-          :validation-schema="cotizacionsValidator"
-        >
+        <Form @submit="onSubmit" class="" :validation-schema="formulario">
           <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="home3" role="tabpanel">
               <div class="row m-b-lg">
@@ -317,6 +310,7 @@ const cotizacionDetails = ref<ICotizacion>({
                         value="value"
                         v-mask="'AAAAAA'"
                         @change="obtenerVehiculo"
+                   
                       >
                         <Prime-InputText
                           class="form-control form-patente p-2"
@@ -327,6 +321,7 @@ const cotizacionDetails = ref<ICotizacion>({
                           :model-value="field.value"
                           placeholder="ABCD20"
                           v-model="cotizacionDetails.vehiculo.patente"
+                               :disabled="true"
                         />
                       </Field>
                       <div class="fv-plugins-message-container">
@@ -437,6 +432,142 @@ const cotizacionDetails = ref<ICotizacion>({
                         placeholder="Seleccione aAño"
                         class="w-100"
                       />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row m-b-lg">
+                <div class="col-md-12">
+                  <div class="d-flex align-items-center justify-content-center">
+                    <h2 class="py-5">
+                      Modificar datos del <span class="rosa">Propietario</span>
+                    </h2>
+                  </div>
+                  <h3 id="form-quote">Datos del propietario del vehículo</h3>
+
+                  <div class="row">
+                    <div class="form-group col-md-6">
+                      <label>*RUT</label>
+                      <Field
+                        v-slot="{ field, handleChange }"
+                        v-model="cotizacionDetails.cliente.rut"
+                        name="rut"
+                        value="value"
+                      >
+                        <Prime-InputText
+                          class="form-control form-rut"
+                          size="lg"
+                          id="rut"
+                          name="rut"
+                          maxlength="11"
+                          placeholder="Rut"
+                          v-bind="field"
+                          @update:modelValue="handleChange"
+                          :model-value="field.value"
+                          v-model="cotizacionDetails.cliente.rut"
+                        />
+                      </Field>
+                      <div class="fv-plugins-message-container">
+                        <div class="fv-help-block">
+                          <ErrorMessage name="rut" />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label>*Nombre / Razón Social</label>
+                      <Field
+                        v-slot="{ field, handleChange }"
+                        v-model="cotizacionDetails.cliente.nombre"
+                        name="nombre"
+                        value="value"
+                      >
+                        <Prime-InputText
+                          class="form-control form-patente"
+                          maxlength="75"
+                          placeholder="Ingrese Nombres"
+                          v-model="cotizacionDetails.cliente.nombre"
+                          v-bind="field"
+                          @update:modelValue="handleChange"
+                          :model-value="field.value"
+                      /></Field>
+                      <div class="fv-plugins-message-container">
+                        <div class="fv-help-block">
+                          <ErrorMessage name="nombre" />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label>*Apellido Paterno</label>
+                      <Field
+                        v-slot="{ field, handleChange }"
+                        v-model="cotizacionDetails.cliente.apellidoPaterno"
+                        name="apellidoPaterno"
+                        value="value"
+                      >
+                        <Prime-InputText
+                          class="form-control"
+                          maxlength="75"
+                          placeholder="Ingrese Apellido Paterno"
+                          v-model="cotizacionDetails.cliente.apellidoPaterno"
+                          v-bind="field"
+                          @update:modelValue="handleChange"
+                          :model-value="field.value"
+                      /></Field>
+                      <div class="fv-plugins-message-container">
+                        <div class="fv-help-block">
+                          <ErrorMessage name="apellidoPaterno" />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label>*Apellido Materno</label>
+                      <Field
+                        v-slot="{ field, handleChange }"
+                        v-model="cotizacionDetails.cliente.apellidoMaterno"
+                        name="apellidoMaterno"
+                        value="value"
+                      >
+                        <Prime-InputText
+                          class="form-control"
+                          maxlength="75"
+                          placeholder="Ingrese Apellido Materno"
+                          v-model="cotizacionDetails.cliente.apellidoMaterno"
+                          v-bind="field"
+                          @update:modelValue="handleChange"
+                          :model-value="field.value"
+                        />
+                      </Field>
+                      <div class="fv-plugins-message-container">
+                        <div class="fv-help-block">
+                          <ErrorMessage name="apellidoMaterno" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                      <label>*Correo electrónico</label>
+                      <Field
+                        v-slot="{ field, handleChange }"
+                        v-model="cotizacionDetails.cliente.email"
+                        name="email"
+                        value="value"
+                      >
+                        <Prime-InputText
+                          class="form-control"
+                          maxlength="75"
+                          placeholder="Ingrese Email"
+                          v-model="cotizacionDetails.cliente.email"
+                          v-bind="field"
+                          @update:modelValue="handleChange"
+                          :model-value="field.value"
+                        />
+                      </Field>
+                      <div class="fv-plugins-message-container">
+                        <div class="fv-help-block">
+                          <ErrorMessage name="email" />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
