@@ -285,7 +285,7 @@ const cotizacionDetails = ref<ICotizacion>({
 });
 </script>
 <template>
-  <div class="d-flex justify-content-center align-items-center p-20">
+  <div class="d-flex justify-content-center align-items-center">
     <div class="card card-white v-application border border-1">
       <div class="card-body" v-if="cotizacionDetails.vehiculo">
         <Form @submit="onSubmit" class="" :validation-schema="formulario">
@@ -321,7 +321,6 @@ const cotizacionDetails = ref<ICotizacion>({
                           :model-value="field.value"
                           placeholder="ABCD20"
                           v-model="cotizacionDetails.vehiculo.patente"
-                               :disabled="true"
                         />
                       </Field>
                       <div class="fv-plugins-message-container">
@@ -400,6 +399,7 @@ const cotizacionDetails = ref<ICotizacion>({
                           class="w-100"
                           @update:modelValue="handleChange"
                           :model-value="field.value"
+                          :disabled="true"
                         />
                       </Field>
                       <div class="fv-plugins-message-container">

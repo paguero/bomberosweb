@@ -55,6 +55,7 @@ export interface ICotizacion {
     vehiculo: IVehiculo;
     cliente: ICliente;
     comuna:string;
+    statusCode:number
 }
 
 export const useCotizacionStore = defineStore("cotizacion", () => {
