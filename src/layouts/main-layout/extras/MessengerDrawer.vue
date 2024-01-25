@@ -127,7 +127,7 @@
       <!--end::Card body-->
 
       <!--begin::Card footer-->
-      <div class="card-footer pt-4" id="kt_drawer_chat_messenger_footer">
+      <div class="card-footer pt-4" id="kt_drawer_chat_messenger_footer" v-if="carro.carroId">
        
         <!--begin:Toolbar-->
         <div class="d-flex flex-stack">
@@ -181,9 +181,13 @@ export default defineComponent({
     const carro = JSON.parse(store.getCarro());
     const confirm = useConfirm();
 
-    onMounted(async () => {     
-      obtenerCarro(carro.carroId);
-      obtenerCotizaciones(carro.carroId);
+    onMounted(async () => {  
+      console.log(carro.carroId)
+      if (carro.carroId != ""){
+        obtenerCarro(carro.carroId);
+        obtenerCotizaciones(carro.carroId);
+      }   
+
     });
     bus.on('actualiza-carro-compra', (id  ) => {
        console.log("RECIBIENDO CARRO COMPRA" + JSON.stringify(id)  );
