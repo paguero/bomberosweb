@@ -77,9 +77,18 @@ const routes: Array<RouteRecordRaw> = [
         },
       },
       {
+        path: "/info-error/:id?",
+        name: "info-error",
+        component: () => import("@/views/ErrorView.vue"),
+        meta: {
+          pageTitle: "Dashboard",
+          breadcrumbs: ["Dashboards"],
+        },
+      },
+      {
         path: "/info-reintento/:id",
         name: "info-reintento",
-        component: () => import("@/views/ConfirmacionView.vue"),
+        component: () => import("@/views/ErrorView.vue"),
         meta: {
           pageTitle: "Dashboard",
           breadcrumbs: ["Dashboards"],
