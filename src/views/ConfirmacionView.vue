@@ -119,21 +119,18 @@
                            </div>
                            <div class="d-grid mb-1 mt-4">
                               <!-- btn -->
-                              <button id="kt_account_edificio_details_submit"
-                              :disabled="currentCarroCompra.totalPagar==0"
-                                                      ref="submitButton1" class="btn btn-primary btn-lg d-flex justify-content-between align-items-center" type="submit">
-                                 Total Pago
-                                 <span class="fw-bold">{{$filters.formatCurrency(currentCarroCompra.totalPagar)}}</span>
-                              </button>
+                              <Prime-Button id="kt_account_edificio_details_submit"
+                              :disabled="!currentCarroCompra.totalPagar || currentCarroCompra.totalPagar==0"
+                               class="btn btn-primary btn-lg d-flex justify-content-between align-items-center" type="submit"
+                               :loading="loading">
+                                 Total a Pagar <span class="fw-bold">{{$filters.formatCurrency(currentCarroCompra.totalPagar)}}</span>
+                              </Prime-Button>
                            </div>
                            </Form>
                            <!-- text -->
                            <p>
                               <small>
-                                 By placing your order, you agree to be bound by the Freshcart
-                                 <a href="#!">Terms of Service</a>
-                                 and
-                                 <a href="#!">Privacy Policy.</a>
+                                 El pago es realizado a través de un sistema seguro de Mercado Pago
                               </small>
                            </p>
 
@@ -159,8 +156,6 @@ import { useConfirm } from "primevue/useconfirm";
 import { useRouter, useRoute} from "vue-router";
 import { useCarroCompraStore } from "@/stores/carroCompra";
 import { useCotizacionStore } from "@/stores/cotizacion";
-import type { ICotizacion } from "@/stores/cotizacion";
-import * as Yup from "yup";
 import { useBus } from "@/core/bus/bus";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import moment from "moment";
@@ -181,8 +176,7 @@ export default defineComponent({
     const router = useRouter();
     const store = useCotizacionStore();
     const storeCarro = useCarroCompraStore();
-    const datosConfirmados = ref(false);
-    const submitButton1 = ref<HTMLElement | null>(null);
+    const loading = ref(false);
     
      bus.on('actualiza-carro-compra', (id  ) => {
        console.log("RECIBIENDO CARRO COMPRA" + JSON.stringify(id)  );
@@ -195,25 +189,11 @@ export default defineComponent({
     });
 
     const saveChanges1 = () => {
-      if (submitButton1.value) {
-        // Activate indicator
-        submitButton1.value.setAttribute("data-kt-indicator", "on");
-       
+        loading.value = true;
         storeCarro.iniciarEmision(carroId)
           .then(() => {
-            loading = ref(false);
-            submitButton1.value?.removeAttribute("data-kt-indicator");
-            Swal.fire({
-              text: "Cotizacion se ha actualizado correctamente.",
-              icon: "success",
-              buttonsStyling: false,
-              confirmButtonText: "Ok!",
-              customClass: {
-                confirmButton: "btn fw-bold btn-light-primary",
-              },
-            }).then(function () {
-              location.href = storeCarro.currentCarroCompra.urlPago;
-            });
+            loading.value = false;
+            location.href = storeCarro.currentCarroCompra.urlPago;
           })
           .catch(() => {
             const [error] = Object.values(store.cotizacionErrors);
@@ -228,13 +208,13 @@ export default defineComponent({
                 },
             });
           });
-      }
     };
 
     const eliminarCotizacion = (cotizacionId) => {
+        loading.value = true;
         store.deleteCotizacion(cotizacionId)
           .then(() => {
-            loading = ref(false);
+            loading.value = false;
             Swal.fire({
               text: "El vehículo ha sido eliminado correctamente.",
               icon: "success",
@@ -273,10 +253,11 @@ export default defineComponent({
     });
     
     const obtenerCotizaciones = (carroId) =>{
+      loading.value = true;
       store
         .getCotizaciones(carroId)
         .then(() => {
-          loading = ref(false);
+          loading.value = false;
         })
         .catch(() => {
           const [error] = Object.values(store.cotizacionErrors);
@@ -296,9 +277,6 @@ export default defineComponent({
     const obtenerCarro = (carroId) =>{
       storeCarro
         .getCarroCompra(carroId)
-        .then(() => {
-          loading = ref(false);
-        })
         .catch(() => {
           const [error] = Object.values(storeCarro.carroCompraErrors);
           Swal.fire({
@@ -319,8 +297,6 @@ export default defineComponent({
     const currentCarroCompra = computed(() => {
       return storeCarro.currentCarroCompra;
     });
-    let loading = ref(true);
-
     const confirmarEliminarCotizacion = (cotizacionId) => {
       confirm.require({
           message: '¿Está seguro de eliminar el vehículo?',
@@ -335,7 +311,7 @@ export default defineComponent({
       });
     }
     return {
-      submitButton1,
+      loading,
       saveChanges1,
       allCotizaciones,
       currentCarroCompra,

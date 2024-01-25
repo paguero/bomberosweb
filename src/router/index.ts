@@ -68,7 +68,7 @@ const routes: Array<RouteRecordRaw> = [
         },
       },
       {
-        path: "/info-confirmacion/:id",
+        path: "/info-confirmacion/:id?",
         name: "info-confirmacion",
         component: () => import("@/views/ConfirmacionView.vue"),
         meta: {

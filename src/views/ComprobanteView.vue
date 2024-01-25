@@ -50,9 +50,10 @@
                   >
                     <div class="row m-b-lg">
                       <div class="col-md-12">
-                        <div class="buySuccess-form">
+                        <div v-if="!currentCarroCompra.exitoso">ERROR</div>
+                        <div class="buySuccess-form" v-else>
                              <h1 style="text-align: center;">Contratación de SOAP 2024</h1>
-                          <div class="container-lg  animated fadeInLeft">
+                            <div class="container-lg  animated fadeInLeft">
                               <div class="row align-items-center ticket">
                                 <div class="col-md-9 offset-md-n3 order-md-1">
 
@@ -192,7 +193,6 @@ import { useConfirm } from "primevue/useconfirm";
 import { useRouter, useRoute} from "vue-router";
 import { useCarroCompraStore } from "@/stores/carroCompra";
 import { useCotizacionStore } from "@/stores/cotizacion";
-import type { ICotizacion } from "@/stores/cotizacion";
 import * as Yup from "yup";
 import { useBus } from "@/core/bus/bus";
 import Swal from "sweetalert2/dist/sweetalert2.js";
@@ -214,8 +214,7 @@ export default defineComponent({
     const router = useRouter();
     const store = useCotizacionStore();
     const storeCarro = useCarroCompraStore();
-    const datosConfirmados = ref(false);
-    const submitButton1 = ref<HTMLElement | null>(null);
+    const loading = ref(false);
     
      bus.on('actualiza-carro-compra', (id  ) => {
        console.log("RECIBIENDO CARRO COMPRA" + JSON.stringify(id)  );
@@ -228,16 +227,12 @@ export default defineComponent({
     });
 
     const saveChanges1 = () => {
-      if (submitButton1.value) {
-        // Activate indicator
-        submitButton1.value.setAttribute("data-kt-indicator", "on");
-       
+      loading.value=true;
         storeCarro.iniciarEmision(carroId)
           .then(() => {
-            loading = ref(false);
-            submitButton1.value?.removeAttribute("data-kt-indicator");
+            loading.value = false;
             Swal.fire({
-              text: "Cotizacion se ha actualizado correctamente.",
+              text: "Se inicia el proceso de pago. Serás redirigido a Mercado Pago.",
               icon: "success",
               buttonsStyling: false,
               confirmButtonText: "Ok!",
@@ -261,13 +256,13 @@ export default defineComponent({
                 },
             });
           });
-      }
     };
 
     const eliminarCotizacion = (cotizacionId) => {
+        loading.value = true;
         store.deleteCotizacion(cotizacionId)
           .then(() => {
-            loading = ref(false);
+            loading.value = false;
             Swal.fire({
               text: "El vehículo ha sido eliminado correctamente.",
               icon: "success",
@@ -307,10 +302,11 @@ export default defineComponent({
     });
     
     const obtenerCotizaciones = (carroId) =>{
+      loading.value = true;
       store
         .getCotizaciones(carroId)
         .then(() => {
-          loading = ref(false);
+          loading.value = false;
         })
         .catch(() => {
           const [error] = Object.values(store.cotizacionErrors);
@@ -330,9 +326,6 @@ export default defineComponent({
     const obtenerCarro = (carroId) =>{
       storeCarro
         .getCarroCompra(carroId)
-        .then(() => {
-          loading = ref(false);
-        })
         .catch(() => {
           const [error] = Object.values(storeCarro.carroCompraErrors);
           Swal.fire({
@@ -353,7 +346,6 @@ export default defineComponent({
     const currentCarroCompra = computed(() => {
       return storeCarro.currentCarroCompra;
     });
-    let loading = ref(true);
 
     const confirmarEliminarCotizacion = (cotizacionId) => {
       confirm.require({
@@ -369,7 +361,7 @@ export default defineComponent({
       });
     }
     return {
-      submitButton1,
+      loading,
       saveChanges1,
       allCotizaciones,
       currentCarroCompra,

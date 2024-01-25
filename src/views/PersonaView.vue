@@ -205,24 +205,11 @@
                                               <router-link :to="{ name: 'info-vehiculo', params: { id: cotizacionDetails.cotizacionId }}" class="btn btn-secondary">
                                               Volver</router-link>
                                             
-                                                   <button :disabled="!datosConfirmados"
+                                                   <Prime-Button :disabled="!datosConfirmados"
                                                       type="submit"
-                                                      id="kt_account_edificio_details_submit"
-                                                      ref="submitButton1"
                                                       class="btn btn-primary"
-                                                      >
-                                                      <span class="indicator-label"> Continuar </span>
-                                                      <span class="indicator-progress">
-                                                        Espere ...
-                                                        <span
-                                                        class="
-                                                          spinner-border spinner-border-sm
-                                                          align-middle
-                                                          ms-2
-                                                        "
-                                                        ></span>
-                                                      </span>
-                                                    </button>
+                                                      label="Continuar"
+                                                      :loading="loading"/>
                                             </div>
                                            
                                         </div>
@@ -272,13 +259,10 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const store = useCotizacionStore();
-    const storeMarca = useMarcaStore();
-    const storeModelo = useModeloStore();
-    const storeTipo = useTipoVehiculoStore();
     const storeCliente = useClienteStore();
     const storeCarro = useCarroCompraStore();
     const datosConfirmados = ref(false);
-    const submitButton1 = ref<HTMLElement | null>(null);
+    const loading = ref(false);
     const cotizacionsValidator = Yup.object().shape({
       rut: Yup.string().required("Es obligatorio").label("Rut").test("yupIsRut", "Rut ingresado no es valido", function (value) {
           return rutEsValido(value);
@@ -303,25 +287,11 @@ export default defineComponent({
     });
     
     const saveChanges1 = () => {
-      if (submitButton1.value) {
-        // Activate indicator
-        submitButton1.value.setAttribute("data-kt-indicator", "on");
-       
+        loading.value=true;
         storeCliente.updateCliente(cotizacionDetails.value.cliente)
           .then(() => {
-            loading = ref(false);
-            submitButton1.value?.removeAttribute("data-kt-indicator");
-            Swal.fire({
-              text: "Cotizacion se ha actualizado correctamente.",
-              icon: "success",
-              buttonsStyling: false,
-              confirmButtonText: "Ok!",
-              customClass: {
-                confirmButton: "btn fw-bold btn-light-primary",
-              },
-            }).then(function () {
-              router.push({ name: "info-aporte", params:{id:cotizacionDetails.value.cotizacionId} });
-            });
+            loading.value = false;
+            router.push({ name: "info-aporte", params:{id:cotizacionDetails.value.cotizacionId} });
           })
           .catch(() => {
             const [error] = Object.values(store.cotizacionErrors);
@@ -335,26 +305,21 @@ export default defineComponent({
                 confirmButton: "btn fw-semobold btn-light-primary",
                 },
             });
-          });
-      }
-    };
+          });    };
    
     const route = useRoute();
     const cotizacionId = route.params.id;
     const carro = JSON.parse(store.getCarro());
 
     onMounted(async () => {     
-      console.log('paso 1');
       obtenerCotizacion(cotizacionId);
       obtenerCarro(carro.carroId);
-
     });
     
     const obtenerCotizacion = (cotizacionId) =>{
       store
         .getCotizacion(cotizacionId)
         .then(() => {
-          loading = ref(false);
           cotizacionDetails.value = store.currentCotizacion;
         })
         .catch(() => {
@@ -375,9 +340,6 @@ export default defineComponent({
     const obtenerCarro = (carroId) =>{
       storeCarro
         .getCarroCompra(carroId)
-        .then(() => {
-          loading = ref(false);
-        })
         .catch(() => {
           const [error] = Object.values(storeCarro.carroCompraErrors);
           Swal.fire({
@@ -447,9 +409,8 @@ export default defineComponent({
     
   });
 
-    let loading = ref(true);
     return {
-      submitButton1,
+      loading,
       saveChanges1,
       cotizacionDetails,
       cotizacionsValidator,

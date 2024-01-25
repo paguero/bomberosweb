@@ -43,8 +43,7 @@
                     
                 </div>
                 <div class="sr-soap-header-patente__btn">
-                    <button type="submit" ref="submitButton1" class="btn banner-form__button btn-quotation">COMPRAR</button> 
-                   
+                    <Prime-Button :loading="loading" type="submit" label="COMPRAR"  class="btn banner-form__button btn-quotation"/> 
                 </div>
                 </Form>
             </div>
@@ -131,11 +130,10 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const store = useCotizacionStore();
-    let loading = ref(true);
+    let loading = ref(false);
     const { bus } = useBus();
     const mostrarChatBot = ref(false);
     const botonChatBot = ref(false);
-    const submitButton1 = ref<HTMLElement | null>(null);
     const cotizacionValidator = Yup.object().shape({
       patente: Yup.string().required("Es obligatorio").label("Patente")
     });
@@ -151,22 +149,19 @@ export default defineComponent({
     }});
 
     const saveChanges1 = () => {
-      if (submitButton1.value) {
-        console.log('enviando');
+        loading.value = true;
         // Activate indicator
-        submitButton1.value.setAttribute("data-kt-indicator", "on");
         store.createCotizacion(cotizacionDetails.value)
           .then(() => {
             loading = ref(false);
-            submitButton1.value?.removeAttribute("data-kt-indicator");
             bus.emit("actualiza-carro-compra", store.currentCotizacion.carroId);
             store.setCarro(JSON.stringify({carroId:store.currentCotizacion.carroId, cotizacionId:store.currentCotizacion.cotizacionId}));
             router.push({ name: "info-vehiculo", params:{id:store.currentCotizacion.cotizacionId} });
           })
           .catch(() => {
-            const [error] = Object.values(store.cotizacionErrors) as any;
+            const [error] = Object.values(store.cotizacionErrors);
             Swal.fire({
-                text: error?.descripcion,
+                text: error,
                 icon: "error",
                 buttonsStyling: false,
                 confirmButtonText: "Ok",
@@ -176,17 +171,16 @@ export default defineComponent({
                 },
             });
           });
-      }
     };
 
     
     return {
-      submitButton1,
       saveChanges1,
       cotizacionDetails,
       cotizacionValidator,
       mostrarChatBot,
-      botonChatBot
+      botonChatBot,
+      loading
     };
   },
 });

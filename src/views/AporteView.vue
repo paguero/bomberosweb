@@ -185,38 +185,27 @@
                   <div class="ml-pay"></div>
                   
                   <div class="col-12 m-t-20 mt-20">
-                    <router-link
+                    <router-link v-if="cotizacionDetails.cotizacionId  "
                       :to="{
-                        name: 'home'
+                        name: 'info-persona', params:{id:cotizacionDetails.cotizacionId }
                       }"
                       class="btn btn-secondary"
                     >
                       Volver</router-link
                     >
 
-                    <button 
+                    <Prime-Button 
                                                       type="submit"
                                                       id="kt_account_edificio_details_submit"
-                                                      ref="submitButton1"
+                                                      :loading="loading"
                                                       class="btn btn-primary"
-                                                      >
-                                                      <span class="indicator-label"> Continuar </span>
-                                                      <span class="indicator-progress">
-                                                        Espere ...
-                                                        <span
-                                                        class="
-                                                          spinner-border spinner-border-sm
-                                                          align-middle
-                                                          ms-2
-                                                        "
-                                                        ></span>
-                                                      </span>
-                                                    </button>
+                                                      label="Continuar"
+                                                      />
                   </div>
 
                   <div class="mt-20 alert alert-secondary ml-pago">
                       <img src="/media/img/wp-mercadopago.png" style="max-width:213px"/>
-                      <div>Ahora puedes pagar con la confianza de Mercado Pago. 
+                      <div class="text-black">Ahora puedes pagar con la confianza de Mercado Pago. 
                       Usa tus tarjetas de débito, crédito o prepago.
                       <p>Recuerda. Si tu tarjeta de débito tiene los 3 números en el reverso de la tarjeta, usa la opción <strong>con CVV</strong></p></div>
                   </div>
@@ -242,8 +231,7 @@ import { useCotizacionStore } from "@/stores/cotizacion";
 import { useMontoAporteStore } from "@/stores/montoAporte";
 import { useComunaStore } from "@/stores/comuna";
 import { useDestinoAporteStore } from "@/stores/destinoAporte";
-import { useTipoVehiculoStore } from "@/stores/tipoVehiculo";
-import { useClienteStore } from "@/stores/cliente";
+
 import type { ICotizacion } from "@/stores/cotizacion";
 import * as Yup from "yup";
 import Swal from "sweetalert2/dist/sweetalert2.js";
@@ -263,12 +251,11 @@ export default defineComponent({
     const router = useRouter();
     const store = useCotizacionStore();
     const storeMontoAporte = useMontoAporteStore();
-    const storeTipo = useTipoVehiculoStore();
     const storeComuna = useComunaStore();
     const storeDestinoAporte = useDestinoAporteStore();
     const storeCarro = useCarroCompraStore();
     const datosConfirmados = ref(false);
-    const submitButton1 = ref<HTMLElement | null>(null);
+    const loading = ref(false);
     const cotizacionsValidator = Yup.object().shape({
       comuna: Yup.string().required("Es obligatorio").label("Comuna"),
       compania: Yup.string().required("Es obligatorio").label("Compañía"),
@@ -276,25 +263,11 @@ export default defineComponent({
 
     
     const saveChanges1 = () => {
-      if (submitButton1.value) {
-        // Activate indicator
-        submitButton1.value.setAttribute("data-kt-indicator", "on");
-       
+       loading.value = true;
         store.updateCotizacion(cotizacionDetails.value)
           .then(() => {
-            loading = ref(false);
-            submitButton1.value?.removeAttribute("data-kt-indicator");
-            Swal.fire({
-              text: "Cotizacion se ha actualizado correctamente.",
-              icon: "success",
-              buttonsStyling: false,
-              confirmButtonText: "Ok!",
-              customClass: {
-                confirmButton: "btn fw-bold btn-light-primary",
-              },
-            }).then(function () {
+            loading.value = false;
               router.push({ name: "info-confirmacion", params:{id:cotizacionDetails.value.carroId} });
-            });
           })
           .catch(() => {
             const [error] = Object.values(store.cotizacionErrors);
@@ -309,7 +282,6 @@ export default defineComponent({
                 },
             });
           });
-      }
     };
    
     const route = useRoute();
@@ -320,16 +292,12 @@ export default defineComponent({
       obtenerMontos();
       obtenerComunas();
       await obtenerCotizacion(cotizacionId);
-      obtenerTipos(store.currentCotizacion.codigoConvenio);
       await obtenerCarro(carro.carroId);
       if(storeCarro.currentCarroCompra.comuna)
         obtenerCompanias(storeCarro.currentCarroCompra.comuna);
     });
     const obtenerMontos =async  () => {
       await storeMontoAporte.getMontoAportes()
-        .then(() => {
-          loading.value = false;
-        })
         .catch(() => {
           const [error] = Object.values(storeMontoAporte.montoAporteErrors);
           Swal.fire({
@@ -347,9 +315,6 @@ export default defineComponent({
     
     const obtenerComunas = () => {
       storeComuna.getComunas()
-        .then(() => {
-          loading.value = false;
-        })
         .catch(() => {
           const [error] = Object.values(storeComuna.comunaErrors);
           Swal.fire({
@@ -366,9 +331,6 @@ export default defineComponent({
     };
     const obtenerCompanias = (comuna) => {
       storeDestinoAporte.getDestinoAportes(comuna)
-        .then(() => {
-          loading.value = false;
-        })
         .catch(() => {
           const [error] = Object.values(storeDestinoAporte.destinoAporteErrors);
           Swal.fire({
@@ -384,31 +346,11 @@ export default defineComponent({
         });
     };
 
-    const obtenerTipos = (campania:string) => {
-      storeTipo.getTipoVehiculos(campania)
-        .then(() => {
-          loading.value = false;
-        })
-        .catch(() => {
-          const [error] = Object.values(storeTipo.tipoVehiculoErrors);
-          Swal.fire({
-            text: error,
-            icon: "error",
-            buttonsStyling: false,
-            confirmButtonText: "Ok",
-            heightAuto: false,
-            customClass: {
-              confirmButton: "btn fw-semobold btn-light-primary",
-            },
-          })
-        });
-    };
     
     const obtenerCotizacion = async (cotizacionId) =>{
       await store
         .getCotizacion(cotizacionId)
         .then(() => {
-          loading = ref(false);
           cotizacionDetails.value = store.currentCotizacion;
         })
         .catch(() => {
@@ -429,9 +371,6 @@ export default defineComponent({
     const obtenerCarro = async (carroId) =>{
       await storeCarro
         .getCarroCompra(carroId)
-        .then(() => {
-          loading = ref(false);
-        })
         .catch(() => {
           const [error] = Object.values(storeCarro.carroCompraErrors);
           Swal.fire({
@@ -450,9 +389,6 @@ export default defineComponent({
       return storeMontoAporte.allMontoAportes;
     });
     
-    const allTipos = computed(() => {
-      return storeTipo.allTipoVehiculos;
-    });
     const allComunas = computed(() => {
       return storeComuna.allComunas;
     });
@@ -523,19 +459,17 @@ export default defineComponent({
       if(cotizacionDetails.value.comuna)
         obtenerCompanias(newValue);
     });
-    let loading = ref(true);
     return {
-      submitButton1,
       saveChanges1,
       actualizarAporte,
       cotizacionDetails,
       cotizacionsValidator,
       allMontosAporte,
-      allTipos,
+      loading,
       currentCarroCompra,
       datosConfirmados,
-      allComunas,
-      allCompanias
+      allCompanias,
+      allComunas
     };
   },
 });

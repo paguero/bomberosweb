@@ -189,31 +189,19 @@
                                                    <Prime-Checkbox id="chbx" v-model="datosConfirmados" :class="{ 'p-invalid': errorMessage }" binary aria-describedby="chbx-error" />
                                                 </div>
                                                 <div>
-                                                   <p class="mb-0 small">*Acepto las políticas, terminos y condiciones</p>
+                                                   <p class="mb-0 small">*Acepto las políticas, <a href="#;" @click="visible=true">terminos y condiciones</a></p>
                                                 </div>
                                              </div>
                                           </div>
                                        </div>                                               
-                                                <div class="row col-12">
+                                                <div class="d-flex flex-row">
                                                   
-                                                    <button :disabled="!datosConfirmados"
+                                                    <Prime-Button 
+                                                    :disabled="!datosConfirmados"
                                                       type="submit"
-                                                      id="kt_account_edificio_details_submit"
-                                                      ref="submitButton1"
                                                       class="btn btn-primary"
-                                                      >
-                                                      <span class="indicator-label"> Continuar </span>
-                                                      <span class="indicator-progress">
-                                                        Espere ...
-                                                        <span
-                                                        class="
-                                                          spinner-border spinner-border-sm
-                                                          align-middle
-                                                          ms-2
-                                                        "
-                                                        ></span>
-                                                      </span>
-                                                    </button>
+                                                      label="Continuar" :loading="loading"/>
+                                                      <div></div>
                                                 </div>
                                                 
                                         </div>
@@ -225,6 +213,40 @@
                     <!-- Row -->
                 </div>
                 <!-- end page main wrapper -->
+                <Prime-Dialog v-model:visible="visible" modal header="Términos y condiciones" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+                    <p class="mb-5">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </p>
+                    <p class="mb-5">
+                        "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim
+                        ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur,
+                        adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid
+                        ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
+                    </p>
+                    <p class="mb-5">
+                        At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa
+                        qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod
+                        maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae
+                        non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.
+                    </p>
+                    <p class="mb-5">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </p>
+                    <p class="mb-5">
+                        "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim
+                        ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur,
+                        adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid
+                        ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
+                    </p>
+                    <p>
+                        At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa
+                        qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod
+                        maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae
+                        non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.
+                    </p>
+                </Prime-Dialog>
   </div>
 </template>
 
@@ -273,7 +295,9 @@ export default defineComponent({
     const storeVehiculo = useVehiculoStore();
     const storePrima = usePrimaSoapStore();
     const datosConfirmados = ref(false);
-    const submitButton1 = ref<HTMLElement | null>(null);
+    const loading = ref(true);
+    const visible = ref(false);
+
     const cotizacionsValidator = Yup.object().shape({
       patente: Yup.string().required("Es obligatorio").label("Patente").test("yupIsPatente", "Patente ingresada no es valida", function (value) {
           return patenteEsValido(value);
@@ -297,25 +321,11 @@ export default defineComponent({
       });
     });
     const saveChanges1 = () => {
-      if (submitButton1.value) {
-        // Activate indicator
-        submitButton1.value.setAttribute("data-kt-indicator", "on");
-       
+      loading.value = true;
         storeVehiculo.updateVehiculo(cotizacionDetails.value.vehiculo)
           .then(() => {
-            loading = ref(false);
-            submitButton1.value?.removeAttribute("data-kt-indicator");
-            Swal.fire({
-              text: "Cotizacion se ha actualizado correctamente.",
-              icon: "success",
-              buttonsStyling: false,
-              confirmButtonText: "Ok!",
-              customClass: {
-                confirmButton: "btn fw-bold btn-light-primary",
-              },
-            }).then(function () {
-              router.push({ name: "info-persona", params:{id:cotizacionDetails.value.cotizacionId} });
-            });
+            loading.value = false;
+            router.push({ name: "info-persona", params:{id:cotizacionDetails.value.cotizacionId} });
           })
           .catch(() => {
             const [error] = Object.values(store.cotizacionErrors);
@@ -330,7 +340,6 @@ export default defineComponent({
                 },
             });
           });
-      }
     };
    
     const route = useRoute();
@@ -338,23 +347,17 @@ export default defineComponent({
     const carro = JSON.parse(store.getCarro());
 
     onMounted(async () => {     
-      console.log('paso 1');
+      obtenerAnios();
+      loading.value = true;
       await obtenerCotizacion(cotizacionId);
-      console.log('paso 2');
       obtenerMarcas(store.currentCotizacion.codigoConvenio);
-      console.log('paso 3');
       obtenerModelos(store.currentCotizacion.codigoConvenio, store.currentCotizacion.vehiculo.marca, store.currentCotizacion.vehiculo.tipoVehiculo);
       obtenerTipos(store.currentCotizacion.codigoConvenio);
-      obtenerAnios();
-      console.log(carro);
       obtenerCarro(carro.carroId);
-
+      loading.value=false;
     });
     const obtenerMarcas =async  (campania:string) => {
       await storeMarca.getMarcas(campania)
-        .then(() => {
-          loading.value = false;
-        })
         .catch(() => {
           const [error] = Object.values(storeMarca.marcaErrors);
           Swal.fire({
@@ -371,9 +374,6 @@ export default defineComponent({
     };
     const obtenerModelos = (campania:string, marca: string, tipoVehiculo: string) => {
       storeModelo.getModelos(campania, marca, tipoVehiculo)
-        .then(() => {
-          loading.value = false;
-        })
         .catch(() => {
           const [error] = Object.values(storeMarca.marcaErrors);
           Swal.fire({
@@ -390,11 +390,8 @@ export default defineComponent({
     };
     const obtenerTipos = (campania:string) => {
       storeTipo.getTipoVehiculos(campania)
-        .then(() => {
-          loading.value = false;
-        })
         .catch(() => {
-          const [error] = Object.values(storeMarca.marcaErrors);
+          const [error] = Object.values(storeTipo.tipoVehiculoErrors);
           Swal.fire({
             text: error,
             icon: "error",
@@ -408,16 +405,12 @@ export default defineComponent({
         });
     };
     const obtenerAnios = () => {
-      storeAnio.getAnios()
-        .then(() => {
-          loading.value = false;
-        });
+      storeAnio.getAnios();
     };
     const obtenerCotizacion = async (cotizacionId) =>{
       await store
         .getCotizacion(cotizacionId)
         .then(() => {
-          loading = ref(false);
           cotizacionDetails.value = store.currentCotizacion;
           cotizacionDetails.value.patente = store.currentCotizacion.vehiculo?.patente
         })
@@ -439,7 +432,7 @@ export default defineComponent({
       await storePrima
         .getPrimaSoap(cotizacionDetails.value.codigoConvenio, tipoVehiculo)
         .then(() => {
-          loading = ref(false);
+          loading.value = false;
           cotizacionDetails.value.planPesos = storePrima.currentPrimaSoap.primaTecnica;
           cotizacionDetails.value.montoPago = storePrima.currentPrimaSoap.primaTecnica + cotizacionDetails.value.aporte;
         })
@@ -461,7 +454,6 @@ export default defineComponent({
       await storeVehiculo
         .getVehiculo(cotizacionDetails.value.vehiculo.patente)
         .then(() => {
-          loading = ref(false);
           cotizacionDetails.value.patente = cotizacionDetails.value.vehiculo.patente;
           cotizacionDetails.value.vehiculo = storeVehiculo.currentVehiculo;
           obtenerModelos(store.currentCotizacion.codigoConvenio, storeVehiculo.currentVehiculo.marca, storeVehiculo.currentVehiculo.tipoVehiculo);
@@ -483,9 +475,6 @@ export default defineComponent({
     const obtenerCarro = async (carroId) =>{
       await storeCarro
         .getCarroCompra(carroId)
-        .then(() => {
-          loading = ref(false);
-        })
         .catch(() => {
           const [error] = Object.values(storeCarro.carroCompraErrors);
           Swal.fire({
@@ -574,9 +563,7 @@ export default defineComponent({
       if(cotizacionDetails.value.vehiculo)
         obtenerVehiculo(newValue);
     });*/
-    let loading = ref(true);
     return {
-      submitButton1,
       saveChanges1,
       cotizacionDetails,
       cotizacionsValidator,
@@ -586,7 +573,9 @@ export default defineComponent({
       allAnios,
       currentCarroCompra,
       obtenerVehiculo,
-      datosConfirmados
+      datosConfirmados,
+      loading,
+      visible
     };
   },
 });
