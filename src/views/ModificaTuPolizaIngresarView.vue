@@ -9,9 +9,9 @@ import * as Yup from "yup";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import moment from "moment";
 const router = useRouter();
-const numeroFolio = ref("");
-const numeroPoliza = ref("");
-const patente = ref("");
+const numeroFolio = ref("123456");
+const numeroPoliza = ref("1000200302");
+const patente = ref("JLBH34");
 const loading = ref(false);
 
 const formulario = Yup.object().shape({

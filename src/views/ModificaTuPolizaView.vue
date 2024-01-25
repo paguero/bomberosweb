@@ -603,7 +603,7 @@ const cotizacionDetails = ref<ICotizacion>({
                 :disabled="!datosConfirmados"
                 type="submit"
                 class="btn btn-primary"
-                label="Continuar"
+                label="Modificar"
                 :loading="loading"
               />
               <div></div>
