@@ -94,6 +94,15 @@ const routes: Array<RouteRecordRaw> = [
           breadcrumbs: ["Dashboards"],
         },
       },
+      {
+        path: "/info-documento",
+        name: "info-documento",
+        component: () => import("@/views/DocumentoView.vue"),
+        meta: {
+          pageTitle: "Dashboard",
+          breadcrumbs: ["Dashboards"],
+        },
+      },
       
     ],
   },

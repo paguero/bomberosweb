@@ -1,6 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "\\src",
+    "\\src\\layouts",
+    "\\src\\layouts\\main-layout",
+    "\\src\\layouts\\main-layout\\extras"
   ],
   "PreviewInSolutionExplorer": false
 }

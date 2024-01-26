@@ -29,7 +29,7 @@
               <div class="buySuccess">
               <Form
                                       id="kt_account_edificio_details_form"
-                                      class="form d-flex flex-column flex-lg-row"
+                                      class="form"
                                       novalidate="novalidate"
                                       @submit="saveChanges1()"
                                       :validation-schema="cotizacionsValidator"
@@ -55,11 +55,11 @@
                           </div-->
                           <div class="panel-buscar-polizas mt-5">
                             <div class="row">
-                                                            <div class="form-group col-md-4">
+                           <div class="form-group col-md-6">
                             <label for="rut">Rut</label>
                               <Field 
                                                                 v-slot="{ field,handleChange }"
-                                                                v-model="cotizacionDetails.cliente.rut"
+                                                                v-model="cotizacionDetails.rut"
                                                                 name="rut"
                                                                value="value"
                                                               >
@@ -72,7 +72,7 @@
                                                               placeholder="Rut"
                                                               v-bind="field"
                                                               @update:modelValue="handleChange" :model-value="field.value"
-                                                              v-model="cotizacionDetails.cliente.rut"
+                                                              v-model="cotizacionDetails.rut"
                                                               />
                                                               </Field>    
                                                                 <div class="fv-plugins-message-container">
@@ -81,12 +81,12 @@
                                                                   </div>
                                                                 </div>
                             </div>
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-6">
                               <label for="patente">Patente</label>
 
                               <Field 
                                                                 v-slot="{ field,handleChange }"
-                                                                v-model="cotizacionDetails.vehiculo.patente"
+                                                                v-model="cotizacionDetails.patente"
                                                                 name="patente"
                                                                value="value"
                                                                v-mask="'AAAAAA'"
@@ -99,7 +99,7 @@
                                                               v-bind="field"
                                                               @update:modelValue="handleChange" :model-value="field.value"
                                                               placeholder="ABCD20"
-                                                              v-model="cotizacionDetails.vehiculo.patente"
+                                                              v-model="cotizacionDetails.patente"
                                                               />
                                                               </Field>    
                                                                 <div class="fv-plugins-message-container">
@@ -108,6 +108,7 @@
                                                                   </div>
                                                                 </div> 
                             </div>
+                            </div><div class="row">
                             <div class="form-group col-md-2">
                               <Prime-Button 
                                                       type="submit"
@@ -117,13 +118,46 @@
                             </div>
                             </div>
                           </div>
-                          <DataTableCotizacion
-                            :item="allCotizaciones"
-                            hide-default-footer
-                            :isLoading="isLoading"
-                            :buscando="buscando"
-                          >
-                          </DataTableCotizacion>
+                          <div class="card-body p-2">
+                              <ul class="list-unstyled" v-if="currentCotizacion">
+                                <!-- Notif item -->
+                                <li>
+                                  <div class="rounded badge-unread d-sm-flex border-0 mb-1 p-3 position-relative">
+                                    <!-- Avatar -->
+                                    <div class="avatar text-center">
+                                      <img class="avatar-img rounded-circle" src="assets/images/avatar/01.jpg" alt="">
+                                    </div>
+                                    <!-- Info -->
+                                    <div class="mx-sm-3 my-2 my-sm-0">
+                                      <p class="small mb-2"><b>{{currentCotizacion.vehiculo.patente}}</b>, tiene una póliza vigente.</p>
+                                    <!-- Button -->
+                                    <div class="d-flex">
+                                      <span class="btn btn-sm py-1 btn-primary me-2">{{currentCotizacion.vehiculo.marca}} / {{currentCotizacion.vehiculo.modelo}} / {{currentCotizacion.vehiculo.anio}}</span>
+                                      <span class="btn btn-sm py-1 btn-danger">Nº póliza: {{currentCotizacion.numeroPoliza}} </span>
+
+                                    </div>
+                                  </div>
+                                  <!-- Action -->
+                                  <div class="d-flex ms-auto align-items-center flex-row">
+                                    <p class="small me-5 text-nowrap">Acciones</p>
+                                    <!-- Notification action START -->
+                                    <div class="dropdown position-absolute end-0 top-0 mt-3 me-3">
+                                      <a href="#" class="z-index-1 text-secondary btn position-relative py-0 px-2" id="cardNotiAction1" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-three-dots"></i>
+                                      </a>
+                                      <!-- Card share action dropdown menu -->
+                                      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cardNotiAction1">
+                                        <li><a class="dropdown-item" href="#"> <i class="bi bi-trash fa-fw pe-2"></i>Modificar</a></li>
+                                        <li><a class="dropdown-item" :href="currentCotizacion.urlPoliza"> <i class="bi bi-download fa-fw pe-2"></i>Descargar PDF</a></li>
+                                      </ul>
+                                    </div>
+                                    <!-- Notification action END -->
+                                    </div>
+                                  </div>
+                                </li>
+                                <!-- Notif item -->                                
+                              </ul>
+                            </div>
                         </div>
                       </div>
                     </div>
@@ -145,15 +179,9 @@ import { ref, defineComponent, onMounted, computed, watch} from "vue";
 import { ErrorMessage, Field, Form } from "vee-validate";
 import _ from "lodash";
 import { useRouter, useRoute} from "vue-router";
-import { useCarroCompraStore } from "@/stores/carroCompra";
 import { useCotizacionStore } from "@/stores/cotizacion";
-import { useMarcaStore } from "@/stores/marca";
-import { useModeloStore } from "@/stores/modelo";
-import { useTipoVehiculoStore } from "@/stores/tipoVehiculo";
+import type {IConsultaCotizacion} from "@/stores/cotizacion";
 import { useVehiculoStore } from "@/stores/vehiculo";
-import { useAnioStore } from "@/stores/anio";
-import { usePrimaSoapStore } from "@/stores/primaSoap";
-import type { ICotizacion } from "@/stores/cotizacion";
 import * as Yup from "yup";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import moment from "moment";
@@ -172,32 +200,22 @@ export default defineComponent({
     Form,
     MixedWidgetImage,
     Editor
-
   },
   
   setup() {
     const router = useRouter();
     const store = useCotizacionStore();
-    const storeMarca = useMarcaStore();
-    const storeModelo = useModeloStore();
-    const storeTipo = useTipoVehiculoStore();
-    const storeAnio = useAnioStore();
-    const storeCarro = useCarroCompraStore();
     const storeVehiculo = useVehiculoStore();
-    const storePrima = usePrimaSoapStore();
-    const datosConfirmados = ref(false);
-    const loading = ref(true);
+    const loading = ref(false);
     const visible = ref(false);
 
     const cotizacionsValidator = Yup.object().shape({
       patente: Yup.string().required("Es obligatorio").label("Patente").test("yupIsPatente", "Patente ingresada no es valida", function (value) {
           return patenteEsValido(value);
         }),
-		  marca: Yup.string().required("Es obligatorio").label("Marca"),
-		  modelo: Yup.string().required("Es obligatorio").label("Modelo"),
-		  tipoVehiculo: Yup.string().required("Es obligatorio").label("Tipo Vehículo"),
-		  numeroMotor: Yup.string().required("Es obligatorio").label("numeroMotor")
-
+		  rut: Yup.string().required("Es obligatorio").label("Marca").test("yupIsRut", "Rut ingresado no es valido", function (value) {
+          return rutEsValido(value);
+        }),
     });
 
     Yup.addMethod(Yup.string, "yupIsRut", function (mensaje) {
@@ -227,12 +245,13 @@ export default defineComponent({
 
     const saveChanges1 = () => {
       loading.value = true;
-        storeVehiculo.updateVehiculo(cotizacionDetails.value.vehiculo)
+        store.getEmision(cotizacionDetails.value)
           .then(() => {
             loading.value = false;
-            router.push({ name: "info-persona", params:{id:cotizacionDetails.value.cotizacionId} });
+            //router.push({ name: "info-persona", params:{id:cotizacionDetails.value} });
           })
           .catch(() => {
+            loading.value = false;
             const [error] = Object.values(store.cotizacionErrors);
             Swal.fire({
                 text: error,
@@ -248,231 +267,34 @@ export default defineComponent({
     };
    
     const route = useRoute();
-    const cotizacionId = route.params.id;
-    const carro = JSON.parse(store.getCarro());
-    const obtenerMarcas =async  (campania:string) => {
-      await storeMarca.getMarcas(campania)
-        .catch(() => {
-          const [error] = Object.values(storeMarca.marcaErrors);
-          Swal.fire({
-            text: error,
-            icon: "error",
-            buttonsStyling: false,
-            confirmButtonText: "Ok",
-            heightAuto: false,
-            customClass: {
-              confirmButton: "btn fw-semobold btn-light-primary",
-            },
-          })
-        });
-    };
-    const obtenerModelos = (campania:string, marca: string, tipoVehiculo: string) => {
-      storeModelo.getModelos(campania, marca, tipoVehiculo)
-        .catch(() => {
-          const [error] = Object.values(storeMarca.marcaErrors);
-          Swal.fire({
-            text: error,
-            icon: "error",
-            buttonsStyling: false,
-            confirmButtonText: "Ok",
-            heightAuto: false,
-            customClass: {
-              confirmButton: "btn fw-semobold btn-light-primary",
-            },
-          })
-        });
-    };
-    const obtenerTipos = (campania:string) => {
-      storeTipo.getTipoVehiculos(campania)
-        .catch(() => {
-          const [error] = Object.values(storeTipo.tipoVehiculoErrors);
-          Swal.fire({
-            text: error,
-            icon: "error",
-            buttonsStyling: false,
-            confirmButtonText: "Ok",
-            heightAuto: false,
-            customClass: {
-              confirmButton: "btn fw-semobold btn-light-primary",
-            },
-          })
-        });
-    };
-    const obtenerAnios = () => {
-      storeAnio.getAnios();
-    };
-    const obtenerCotizacion = async (cotizacionId) =>{
-      await store
-        .getCotizacion(cotizacionId)
-        .then(() => {
-          cotizacionDetails.value = store.currentCotizacion;
-          cotizacionDetails.value.patente = store.currentCotizacion.vehiculo?.patente
-        })
-        .catch(() => {
-          const [error] = Object.values(store.cotizacionErrors);
-          Swal.fire({
-            text: error,
-            icon: "error",
-            buttonsStyling: false,
-            confirmButtonText: "Ok",
-            heightAuto: false,
-            customClass: {
-              confirmButton: "btn fw-semobold btn-light-primary",
-            },
-          })
-        });
-    }
-    const obtenerPrima= async (tipoVehiculo) =>{
-      await storePrima
-        .getPrimaSoap(cotizacionDetails.value.codigoConvenio, tipoVehiculo)
-        .then(() => {
-          loading.value = false;
-          cotizacionDetails.value.planPesos = storePrima.currentPrimaSoap.primaTecnica;
-          cotizacionDetails.value.montoPago = storePrima.currentPrimaSoap.primaTecnica + cotizacionDetails.value.aporte;
-        })
-        .catch(() => {
-          const [error] = Object.values(storePrima.primaSoapErrors);
-          Swal.fire({
-            text: error,
-            icon: "error",
-            buttonsStyling: false,
-            confirmButtonText: "Ok",
-            heightAuto: false,
-            customClass: {
-              confirmButton: "btn fw-semobold btn-light-primary",
-            },
-          })
-        });
-    }
-    const obtenerVehiculo= async () =>{
-      await storeVehiculo
-        .getVehiculo(cotizacionDetails.value.vehiculo.patente)
-        .then(() => {
-          cotizacionDetails.value.patente = cotizacionDetails.value.vehiculo.patente;
-          cotizacionDetails.value.vehiculo = storeVehiculo.currentVehiculo;
-          obtenerModelos(store.currentCotizacion.codigoConvenio, storeVehiculo.currentVehiculo.marca, storeVehiculo.currentVehiculo.tipoVehiculo);
-        })
-        .catch(() => {
-          const [error] = Object.values(storeVehiculo.vehiculoErrors);
-          Swal.fire({
-            text: error,
-            icon: "error",
-            buttonsStyling: false,
-            confirmButtonText: "Ok",
-            heightAuto: false,
-            customClass: {
-              confirmButton: "btn fw-semobold btn-light-primary",
-            },
-          })
-        });
-    }
-    const obtenerCarro = async (carroId) =>{
-      await storeCarro
-        .getCarroCompra(carroId)
-        .catch(() => {
-          const [error] = Object.values(storeCarro.carroCompraErrors);
-          Swal.fire({
-            text: error,
-            icon: "error",
-            buttonsStyling: false,
-            confirmButtonText: "Ok",
-            heightAuto: false,
-            customClass: {
-              confirmButton: "btn fw-semobold btn-light-primary",
-            },
-          })
-        });
-    }
-    const allMarcas = computed(() => {
-      return storeMarca.allMarcas;
-    });
-    const allModelos = computed(() => {
-      return storeModelo.allModelos;
-    });
-    const allTipos = computed(() => {
-      return storeTipo.allTipoVehiculos;
-    });
-    const allAnios = computed(() => {
-      return storeAnio.allAnios;
-    });
-    const currentCarroCompra = computed(() => {
-      return storeCarro.currentCarroCompra;
-    });
-    const cotizacionDetails = ref<ICotizacion>({
-       			cotizacionId : store.currentCotizacion.cotizacionId,
-            carroId : store.currentCotizacion.carroId,
-            numeroCotizacion : store.currentCotizacion.numeroCotizacion,
-            codigoConvenio : store.currentCotizacion.codigoConvenio,
-            codigoTipoSeguro : store.currentCotizacion.codigoTipoSeguro,
-            tipoSeguro : store.currentCotizacion.tipoSeguro,
-            grupoId : store.currentCotizacion.grupoId,
-            vendedorId : store.currentCotizacion.vendedorId,
-            fechaCreacion : store.currentCotizacion.fechaCreacion,
-            estado : store.currentCotizacion.estado,
-            contratado : store.currentCotizacion.contratado,
-            fechaContratacion : store.currentCotizacion.fechaContratacion,
-            usuario : store.currentCotizacion.usuario,
-            nombrePlan : store.currentCotizacion.nombrePlan,
-            planContratado : store.currentCotizacion.planContratado,
-            planUf : store.currentCotizacion.planUf,
-            planPesos : store.currentCotizacion.planPesos,
-            comision : store.currentCotizacion.comision,
-            valorUf : store.currentCotizacion.valorUf,
-            aporte : store.currentCotizacion.aporte,
-            numeroFolio : store.currentCotizacion.numeroFolio,
-            numeroPoliza : store.currentCotizacion.numeroPoliza,
-            fechaActualizacion : store.currentCotizacion.fechaActualizacion,
-            usuarioActualizacion : store.currentCotizacion.usuarioActualizacion,
-            tokenMedioPago : store.currentCotizacion.tokenMedioPago,
-            codigoMedioPago : store.currentCotizacion.codigoMedioPago,
-            montoPago : store.currentCotizacion.montoPago,
-            fechaTransaccion : store.currentCotizacion.fechaTransaccion,
-            exitoso : store.currentCotizacion.exitoso,
-            emitida : store.currentCotizacion.emitida,
-            anulada : store.currentCotizacion.anulada,
-            pdfEnProceso : store.currentCotizacion.pdfEnProceso,
-            codigoAutorizacion : store.currentCotizacion.codigoAutorizacion,
-            fechaPago : store.currentCotizacion.fechaPago,
-            mesPago : store.currentCotizacion.mesPago,
-            anioPago : store.currentCotizacion.anioPago,
-            numeroTarjeta : store.currentCotizacion.numeroTarjeta,
-            notificado : store.currentCotizacion.notificado,
-            codigoNotificacion : store.currentCotizacion.codigoNotificacion,
-            cotizacionCompania : store.currentCotizacion.cotizacionCompania,
-            urlPoliza : store.currentCotizacion.urlPoliza,
-            fechaEmision : store.currentCotizacion.fechaEmision,
-            fechaInicio : store.currentCotizacion.fechaInicio,
-            fechaTermino : store.currentCotizacion.fechaTermino,
-            compania : store.currentCotizacion.compania,
-            vehiculo:store.currentCotizacion.vehiculo,
-            cliente:store.currentCotizacion.cliente,
-            patente:store.currentCotizacion?.vehiculo?.patente
+    
+    const cotizacionDetails = ref<IConsultaCotizacion>({
+       			rut:'',
+            patente:''
     
   });
-    watch(() => cotizacionDetails.value.vehiculo?.tipoVehiculo, (newValue) =>  {
-      if(cotizacionDetails.value.vehiculo)
-        obtenerPrima(newValue);
+    const currentCotizacion = computed(() => {
+      return store.currentCotizacion;
     });
-    /*watch(() => cotizacionDetails.value.vehiculo?.patente, (newValue) =>  {
-      if(cotizacionDetails.value.vehiculo)
-        obtenerVehiculo(newValue);
-    });*/
+
     return {
       saveChanges1,
-      cotizacionDetails,
-      cotizacionsValidator,
-      allMarcas,
-      allModelos,
-      allTipos,
-      allAnios,
-      currentCarroCompra,
-      obtenerVehiculo,
-      datosConfirmados,
+      currentCotizacion,
       loading,
-      visible
+      visible,
+      cotizacionDetails,
+      cotizacionsValidator
     };
   },
 });
 
 
 </script>
+<style scoped>
+.badge-unread:hover {
+    /* background: var(--bs-light); */
+}
+.badge-unread {
+    background: #eef0f2;
+}
+</style>

@@ -5,6 +5,10 @@ import JwtService from "@/core/services/JwtService";
 import type { IVehiculo } from "./vehiculo";
 import type { ICliente } from "./cliente";
 
+export interface IConsultaCotizacion {
+  patente:string;
+  rut:string;
+}
 export interface ICotizacion {
 		cotizacionId: string;
     carroId: string;
@@ -107,6 +111,17 @@ export const useCotizacionStore = defineStore("cotizacion", () => {
       });
   }
 
+  function getEmision(params: IConsultaCotizacion) {
+    return ApiService.post("soap/cotizacion/emision/consulta", params)
+      .then(({ data }) => {
+        setCotizacion(data);
+      })
+      .catch(({ response }) => {
+        setCotizacionError(response.data.errores);
+		throw new Error();
+      });
+  }
+
   function createCotizacion(params: ICotizacion|any) {
     return ApiService.post("soap/cotizacion", params)
       .then(({ data }) => {
@@ -153,7 +168,8 @@ export const useCotizacionStore = defineStore("cotizacion", () => {
     updateCotizacion,
     deleteCotizacion,
     setCarro,
-    getCarro
+    getCarro,
+    getEmision
   };
 });
 
