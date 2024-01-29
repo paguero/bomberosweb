@@ -111,9 +111,16 @@
                                  <!-- list group item -->
                                  <li class="list-group-item d-flex justify-content-between align-items-start">
                                     <div class="me-auto">
-                                       <div class="fw-bold">Aportes</div>
+                                       <div>Aportes</div>
                                     </div>
-                                    <span class="fw-bold">{{$filters.formatCurrency(currentCarroCompra.aporte)}}</span>
+                                    <span>{{$filters.formatCurrency(currentCarroCompra.aporte)}}</span>
+                                 </li>
+
+                                 <li class="list-group-item d-flex justify-content-between align-items-start">
+                                    <div class="me-auto">
+                                       <div class="fw-bold">Total a Pagar</div>
+                                    </div>
+                                    <span class="fw-bold">{{$filters.formatCurrency(currentCarroCompra.totalPagar)}}</span>
                                  </li>
                               </ul>
                            </div>
@@ -122,8 +129,8 @@
                               <Prime-Button id="kt_account_edificio_details_submit"
                               :disabled="!currentCarroCompra.totalPagar || currentCarroCompra.totalPagar==0"
                                class="btn btn-primary btn-lg d-flex justify-content-between align-items-center" type="submit"
-                               :loading="loading">
-                                 Total a Pagar <span class="fw-bold">{{$filters.formatCurrency(currentCarroCompra.totalPagar)}}</span>
+                               :loading="loading" label="Ir a Pagar">
+                                 
                               </Prime-Button>
                            </div>
                            </Form>
