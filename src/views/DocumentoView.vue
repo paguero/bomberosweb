@@ -136,7 +136,7 @@
                                   <div class="rounded badge-unread d-sm-flex border-0 mb-1 p-3 position-relative">
                                     <!-- Avatar -->
                                     <div class="avatar text-center">
-                                      <img class="avatar-img rounded-circle" src="assets/images/avatar/01.jpg" alt="">
+                                      <img class="avatar-img rounded-circle" src="/img/tarifas/auto.png" alt="">
                                     </div>
                                     <!-- Info -->
                                     <div class="mx-sm-3 my-2 my-sm-0">
