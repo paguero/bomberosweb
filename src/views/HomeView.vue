@@ -55,16 +55,28 @@
     <section class="aliados">
       <div class="container p-5 align-items-center text-center">
         <h2>Nuestros Aliados</h2>
-        <div class="d-flex align-items-center justify-content-around">
-            <img src="/media/img/content/saca-tu-permiso.png"/>
-            <img src="/media/img/content/south.png"/>
-            <img src="/media/img/content/tarjetaliderbci1.png"/>
-            <img src="/media/img/content/logo-aseguraonline-horizontal-1-1.png"/>
-        </div>
-        <div class="d-flex align-items-center justify-content-around mt-4">
-            <img src="/media/img/content/logos-stpr_Mesa_de_trabajo.png"/>
-            <img src="/media/img/content/logo-seguro-las-condes.png"/>
-            <img src="/media/img/content/mercado_pago.png"/>
+        <div class="row align-items-center">
+          <div class="col-6 col-md-4 col-xl-3">
+              <img src="/media/img/content/saca-tu-permiso.png" class="img-fluid"/>
+          </div>
+          <div class="col-6 col-md-4 col-xl-3">
+              <img src="/media/img/content/south.png" class="img-fluid"/>
+          </div>
+          <div class="col-6 col-md-4 col-xl-3">
+              <img src="/media/img/content/tarjetaliderbci1.png" class="img-fluid"/>
+            </div>
+          <div class="col-6 col-md-4 col-xl-3">
+              <img src="/media/img/content/logo-aseguraonline-horizontal-1-1.png" class="img-fluid"/>
+</div>
+          <div class="col-6 col-md-4 col-xl-3">
+                          <img src="/media/img/content/logos-stpr_Mesa_de_trabajo.png" class="img-fluid"/>
+                          </div>
+          <div class="col-6 col-md-4 col-xl-3">
+              <img src="/media/img/content/logo-seguro-las-condes.png" class="img-fluid"/>
+              </div>
+          <div class="col-6 col-md-4 col-xl-3">
+              <img src="/media/img/content/mercado_pago.png" class="img-fluid"/>
+          </div>
         </div>
       </div>
     </section>

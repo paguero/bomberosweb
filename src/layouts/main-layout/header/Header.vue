@@ -42,13 +42,14 @@
                 </a>
               </div>
             <div class="navbar-end navbar-menu">
-              <router-link :to="{ name: 'modifica-tu-poliza-ingresar'}" class="banner-form__button-secondary text-nowrap mx-2">
+              <div>
+                <router-link :to="{ name: 'modifica-tu-poliza-ingresar'}" class="banner-form__button-secondary text-nowrap mx-2">
                                               Modifica tu póliza</router-link>
-              <router-link :to="{ name: 'info-documento'}" class="banner-form__button-secondary text-nowrap mx-2">
+                <router-link :to="{ name: 'info-documento'}" class="banner-form__button-secondary text-nowrap mx-2">
                                               Descarga tu póliza</router-link>
-              
+              </div>
             
-            <div class="list-inline-item">
+              <div class="list-inline-item">
                        <!--begin::Chat-->
                         <div  class="app-navbar-item ms-1 ms-lg-3">
                           <!--begin::Menu wrapper-->
@@ -144,7 +145,8 @@ nav {
   z-index: 99;
   width: 100%;
   @media screen and (max-width: 1024px) {
-    grid-template-columns: 150px auto;
+    padding: 20px 2.5%;
+    grid-template-columns: 120px auto;
   }
   img {
     max-height: none !important;
@@ -185,6 +187,10 @@ nav {
     column-gap: 10px;
     justify-content: center;
     align-items: center;
+    @media screen and (max-width: 1024px) {
+      grid-template-columns: repeat(6, 40px);
+      grid-template-rows: 40px;
+    }
     a {
       width: 100%;
       color: #fff;
@@ -207,7 +213,7 @@ nav {
 .navbar-end {
   z-index: 99;
   display: flex;
-  grid-template-columns: 50% auto;
+  grid-template-columns: 40% 40% auto;
   max-width: fit-content;
   margin: 0;
   justify-content: flex-end;
@@ -216,6 +222,7 @@ nav {
   @media screen and (max-width: 1025px) {
     grid-column: 1/3;
     justify-self: center;
+    margin-top: 10px;
   }
   .banner-form__button-secondary {
     width: 100%;
@@ -234,6 +241,9 @@ nav {
     &:hover {
       background: #a51e2c;
       color: #fff;
+    }
+    @media screen and (max-width: 1024px) {
+      font-size: 0.75rem;
     }
   }
   

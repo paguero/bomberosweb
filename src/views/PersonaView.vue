@@ -268,7 +268,6 @@ export default defineComponent({
         }),
 		  nombre: Yup.string().required("Es obligatorio").label("Nombre"),
 		  apellidoPaterno: Yup.string().label("Rut").test("requiredIsPersona", "Es obligatorio", function (value) {
-          console.log('esPersona.value '  + esPersona.value);
           return  (esPersona.value && value!='')|| !esPersona.value;
         }),
 		  apellidoMaterno: Yup.string().label("Rut").test("requiredIsPersona", "Es obligatorio", function (value) {
@@ -332,6 +331,7 @@ export default defineComponent({
         .getCotizacion(cotizacionId)
         .then(() => {
           cotizacionDetails.value = store.currentCotizacion;
+          esPersona.value = parseInt(store.currentCotizacion.cliente.rut.split('-')[0])<50000000;
         })
         .catch(() => {
           const [error] = Object.values(store.cotizacionErrors);
@@ -421,8 +421,9 @@ export default defineComponent({
             patente:'',
     
   });
-     watch(() => cotizacionDetails.value.cliente?.rut, (newValue) =>  {
-      esPersona.value = parseInt(cotizacionDetails.value.cliente?.rut.split('-')[0])<50000000;
+     watch(() => cotizacionDetails.value.cliente.rut, (newValue) =>  {
+      console.log('watch' + newValue);
+      esPersona.value = parseInt(newValue.split('-')[0])<50000000;
     });
 
     return {
