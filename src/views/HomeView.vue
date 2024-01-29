@@ -21,19 +21,21 @@
                 <div class="sr-soap-header-patente__input" style="margin:auto; align-items:center">
                     
                         <div class="form" style="margin:auto; align-items:center">
-                                
-                            <Field
-                                  v-maska data-maska="#### ##"
-                                  type="text"
-                                  maxlength="7"
-                                  name="patente" v-mask="'AAAA AA'"
-                                  class="
-                                    form-control form-control-lg form-control-solid
-                                    mb-3 mb-lg-0
-                                  "
-                                  placeholder="SOAP 24"
-                                  v-model="cotizacionDetails.vehiculo.patente"
-                                />
+                                <Field 
+                                      v-slot="{ field,handleChange }"
+                                      v-model="cotizacionDetails.vehiculo.patente"
+                                      name="patente"
+                                      value="value"
+                                    >
+                                      <Prime-InputMask slotChar='' :unstyled="true"
+                                                   mask="**** **"
+                                                  class="form-control form-control-lg form-control-solid patente mb-3 mb-lg-0"
+                                                  maxlength="75"
+                                                  placeholder="SOAP 24"
+                                                  v-model="cotizacionDetails.vehiculo.patente"
+                                                  v-bind="field"
+                                                  @update:modelValue="handleChange" :model-value="field.value"
+                                                  /></Field>
                            <div class="fv-plugins-message-container">
                                   <div class="fv-help-block">
                                     <ErrorMessage name="patente" />
@@ -107,7 +109,7 @@ import { useAuthStore } from "@/stores/auth";
 import { useCotizacionStore } from "@/stores/cotizacion";
 import { vMaska } from "maska"
 import Swal from "sweetalert2/dist/sweetalert2.js";
-import moment from "moment";
+import { patenteEsValido } from "@/core/validators/YupPatente";
 
 export interface IVehiculo {
   patente: string
@@ -135,7 +137,9 @@ export default defineComponent({
     const mostrarChatBot = ref(false);
     const botonChatBot = ref(false);
     const cotizacionValidator = Yup.object().shape({
-      patente: Yup.string().required("Es obligatorio").label("Patente")
+      patente: Yup.string().required("Es obligatorio").label("Patente").test("yupIsPatente", "Patente ingresada no es valida", function (value) {
+          return patenteEsValido(value);
+        }),
     });
     var jsonCarro = store.getCarro();
     let carro = {carroId:''};
@@ -147,7 +151,17 @@ export default defineComponent({
       vehiculo : {
         patente : store.currentCotizacion?.patente    
     }});
-
+    Yup.addMethod(Yup.string, "yupIsPatente", function (mensaje) {
+      const { message } = mensaje;
+      return this.test("yupIsPatente", message, function (value) {
+        const { path, createError } = this;
+        const { some, more, args } = mensaje;
+        // [value] - value of the property being tested
+        // [path]  - property name,
+        // ...
+        return patenteEsValido(value);
+      });
+    });
     const saveChanges1 = () => {
         loading.value = true;
         // Activate indicator

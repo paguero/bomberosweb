@@ -111,7 +111,7 @@
                                                                   </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="form-group col-md-6">
+                                                            <div class="form-group col-md-6" v-if="esPersona">
                                                                 <label>*Apellido Paterno</label>
                                                                 <Field 
                                                                 v-slot="{ field,handleChange }"
@@ -133,7 +133,7 @@
                                                                   </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="form-group col-md-6">
+                                                            <div class="form-group col-md-6" v-if="esPersona">
                                                                 <label>*Apellido Materno</label>
                                                                 <Field 
                                                                 v-slot="{ field,handleChange }"
@@ -196,6 +196,7 @@
                                                 <div>
                                                    <!-- title -->
                                                    <h5 class="mb-1 h6">He revisado la información</h5>
+                                                   *{{esPersona}}
                                                    <p class="mb-0 small">La información que aparece es correcta.</p>
                                                 </div>
                                              </div>
@@ -226,15 +227,12 @@
 </template>
 
 <script lang="ts">
-import { ref, defineComponent, onMounted, computed } from "vue";
+import { ref, defineComponent, onMounted, computed, watch } from "vue";
 import { ErrorMessage, Field, Form } from "vee-validate";
 import _ from "lodash";
 import { useRouter, useRoute} from "vue-router";
 import { useCarroCompraStore } from "@/stores/carroCompra";
 import { useCotizacionStore } from "@/stores/cotizacion";
-import { useMarcaStore } from "@/stores/marca";
-import { useModeloStore } from "@/stores/modelo";
-import { useTipoVehiculoStore } from "@/stores/tipoVehiculo";
 import { useClienteStore } from "@/stores/cliente";
 import type { ICotizacion } from "@/stores/cotizacion";
 import * as Yup from "yup";
@@ -263,17 +261,30 @@ export default defineComponent({
     const storeCarro = useCarroCompraStore();
     const datosConfirmados = ref(false);
     const loading = ref(false);
+    const esPersona= ref(false);
     const cotizacionsValidator = Yup.object().shape({
       rut: Yup.string().required("Es obligatorio").label("Rut").test("yupIsRut", "Rut ingresado no es valido", function (value) {
           return rutEsValido(value);
         }),
 		  nombre: Yup.string().required("Es obligatorio").label("Nombre"),
-		  apellidoPaterno: Yup.string().required("Es obligatorio").label("Apellido Paterno"),
-		  apellidoMaterno: Yup.string().required("Es obligatorio").label("Apellido Materno"),
+		  apellidoPaterno: Yup.string().label("Rut").test("requiredIsPersona", "Es obligatorio", function (value) {
+          console.log('esPersona.value '  + esPersona.value);
+          return  (esPersona.value && value!='')|| !esPersona.value;
+        }),
+		  apellidoMaterno: Yup.string().label("Rut").test("requiredIsPersona", "Es obligatorio", function (value) {
+          return  (esPersona.value && value!='')|| !esPersona.value;
+        }),
 		  email: Yup.string().required("Es obligatorio").email("Email inválido").label("Email")
 
     });
-
+    Yup.addMethod(Yup.string, "requiredIsPersona", function (mensaje) {
+      const { message } = mensaje;
+      return this.test("requiredIsPersona", message, function (value) {
+        const { path, createError } = this;
+        const { some, more, args } = mensaje;
+        return esPersona.value && value!='';
+      });
+    });
     Yup.addMethod(Yup.string, "yupIsRut", function (mensaje) {
       const { message } = mensaje;
       return this.test("yupIsRut", message, function (value) {
@@ -357,6 +368,8 @@ export default defineComponent({
     const currentCarroCompra = computed(() => {
       return storeCarro.currentCarroCompra;
     });
+
+   
     const cotizacionDetails = ref<ICotizacion>({
        			cotizacionId : store.currentCotizacion.cotizacionId,
             carroId : store.currentCotizacion.carroId,
@@ -405,9 +418,12 @@ export default defineComponent({
             compania : store.currentCotizacion.compania,
             vehiculo:store.currentCotizacion.vehiculo,
             cliente:store.currentCotizacion.cliente,
-            patente:''
+            patente:'',
     
   });
+     watch(() => cotizacionDetails.value.cliente?.rut, (newValue) =>  {
+      esPersona.value = parseInt(cotizacionDetails.value.cliente?.rut.split('-')[0])<50000000;
+    });
 
     return {
       loading,
@@ -415,7 +431,8 @@ export default defineComponent({
       cotizacionDetails,
       cotizacionsValidator,
       currentCarroCompra,
-      datosConfirmados
+      datosConfirmados,
+      esPersona
     };
   },
 });

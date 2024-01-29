@@ -9,8 +9,14 @@
                           <div class="buyPatent-info lift lift-lg sticky-top" style="min-height:230px;background: url('/media/img/latfirefighter.png');background-position: center 0; background-size: cover;">
 
                               <div><span>
-                               <input type="text" v-mask="'AAAA AA'" v-if="cotizacionDetails.vehiculo" disabled="disabled" maxlength="7" v-model="cotizacionDetails.patente" placeholder="ABCD 20" class="form-control valor-patente">
-                                
+                               <Prime-InputMask slotChar='' :unstyled="true" v-if="cotizacionDetails.vehiculo"
+                                                  mask="**** **"
+                                                  class="form-control valor-patente"
+                                                  maxlength="75"
+                                                  :disabled="true"
+                                                  placeholder="SOAP 24"
+                                                  v-model="cotizacionDetails.vehiculo.patente"
+                                                  />
                                 {{cotizacionDetails.vehiculo?.marca}} / {{cotizacionDetails.vehiculo?.modelo}} / {{cotizacionDetails.vehiculo?.anio}}</span></div>
                                       <div class="donation-info__model">
                                        <div class="donation-soap">
@@ -214,38 +220,46 @@
                 </div>
                 <!-- end page main wrapper -->
                 <Prime-Dialog v-model:visible="visible" modal header="Términos y condiciones" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
-                    <p class="mb-5">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </p>
-                    <p class="mb-5">
-                        "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim
-                        ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur,
-                        adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid
-                        ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
-                    </p>
-                    <p class="mb-5">
-                        At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa
-                        qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod
-                        maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae
-                        non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.
-                    </p>
-                    <p class="mb-5">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </p>
-                    <p class="mb-5">
-                        "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim
-                        ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur,
-                        adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid
-                        ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
-                    </p>
-                    <p>
-                        At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa
-                        qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod
-                        maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae
-                        non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.
-                    </p>
+                    <h3>TÉRMINOS Y CONDICIONES DEL SOAP ELECTRÓNICO SOAPBOMBERO</h3>
+
+<p>ASUMIDO EL RIESGO POR SOUTHBRIDGE COMPAÑÍA DE SEGUROS GENERALES S.A. E INTERMEDIADO POR PRODUCTORA DE SEGUROS LAS CONDES BAJO SU MARCA SOAPBOMBEROS.</p>
+
+<p>La cobertura de riesgo está a cargo de Southbridge Compañía de Seguros Generales S.A. y es intermediada por Productora de Seguros Las Condes Ltda. Los detalles de las condiciones y exclusiones se encuentran especificados en la póliza, la cual está registrada en el depósito de pólizas de la CMF bajo el código POL 3 2013 0487, así como en las condiciones particulares del contrato. La contratación de este seguro cumple con la Circular 1.864 del 21.01.08 de la CMF, la cual regula la venta del SOAP por Internet. Cabe destacar que la responsabilidad exclusiva sobre la exactitud de los datos ingresados recae en el contratante, quien asumirá las consecuencias derivadas de posibles errores o inexactitudes de información.</p>
+
+<h5>Sobre el Uso y Veracidad de la Información</h5>
+
+<p>El solicitante es responsable de los datos ingresados, tanto del vehículo como del propietario. Estos deben concordar con la información registrada en el Registro Nacional de Vehículos Motorizados, obtenible del padrón o certificado de dominio del vehículo. Cualquier error o inexactitud en la información será responsabilidad exclusiva del solicitante, liberando de responsabilidad a la compañía, al corredor de seguros y al canal de ventas.</p>
+
+<h5>Autorización para Contacto y Uso de Datos</h5>
+
+<p>El contratante autoriza conscientemente a Productora de Seguros Las Condes -o alguna de sus marcas relacionadas- a contactarlo a través de los medios indicados al proporcionar sus datos. Este contacto tiene como objetivo informar sobre nuevos productos y servicios, evaluar la calidad del servicio o productos contratados, y podrá ser realizado por la propia Productora de Seguros Las Condes Ltda. o terceros autorizados.</p>
+
+<h5>Cláusula de uso de datos</h5>
+
+<p>En cumplimiento de los principios de Conducta de Mercado, transparencia y protección de datos, Productora de Seguros Las Condes Ltda. solicita la autorización del contratante para almacenar y tratar sus datos personales. Estos datos se utilizarán para la tramitación, seguimiento y actualización de solicitudes de información, la gestión de la actividad aseguradora, el cumplimiento del contrato de seguro y el envío de información y publicidad. Además, se acepta que estos datos puedan ser entregados a entidades específicas, exclusivamente para los fines mencionados anteriormente.</p>
+
+<h5>Condiciones de Pago</h5>
+
+<p>Para el pago del Seguro Obligatorio de Accidentes Personales (SOAP), Productora de Seguros Las Condes Ltda., a través de sus marcas SOAPBOMBEROS y ASEGURAONLINE, ofrece la plataforma de pago online Mercado Pago y/o sus asociadas. La prima del seguro se considerará pagada solo cuando el sistema de pago apruebe la transacción y Productora de Seguros Las Condes Ltda. haya recibido el monto correspondiente.
+
+En caso de duplicidad de pago por parte del cliente, este podrá solicitar la devolución del excedente mediante los sistemas previstos por SOAPBOMBEROS, siempre que los fondos estén disponibles en Productora de Seguros Las Condes Ltda. El plazo para las devoluciones será máximo de 30 días corridos.
+
+Para consultas sobre el proceso de reembolso, el cliente puede contactar al centro de soporte Web a devoluciones@soapbomberos.cl durante el horario de atención de lunes a viernes de 09:00 hrs. a 18:00 hrs.</P>
+
+<h5>Información de los Vehículos</h5>
+
+<p>Según la normativa vigente, los datos del vehículo no pueden ser modificados a través de este medio. En caso de discrepancia o dudas sobre la exactitud de los datos, se insta al cliente a comunicarse con el centro de soporte Web a conecta@soapbomberos.cl.</p>
+
+<h5>Despacho a Domicilio</h5>
+<p>
+De acuerdo con la normativa de la CMF, si el contratante lo solicita al momento de la contratación, Southbridge Compañía de Seguros Generales S.A. enviará el certificado SOAP a su domicilio. El despacho se realizará por un servicio de correo fehaciente y expedito dentro de los 3 días hábiles siguientes a la solicitud. El despacho a domicilio tiene un recargo de $5.000 pesos en la Región Metropolitana y de $8.000 en otras regiones.
+
+El certificado enviado por correo postal es una impresión del mismo SOAP electrónico, comparable a la que el cliente puede imprimir con su impresora particular. Todos los SOAP se enviarán a un mismo domicilio.</p>
+
+<h5>Consultas</h5>
+
+<p>Para resolver dudas o recibir apoyo en el proceso de contratación del seguro, visite www.soapbomberos.cl o escriba al centro de soporte Web a conecta@soapbomberos.cl. El horario de atención es de lunes a viernes de 09:00 hrs. a 18:00 hrs.</p>
+
                 </Prime-Dialog>
   </div>
 </template>
