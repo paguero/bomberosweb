@@ -40,8 +40,8 @@
           <h5>De interés</h5>
           <div class="d-flex flex-column">
             <div class="footer-interes__links">
-              <a href="#" class="text-white">
-                Términos y condiciones</a
+              <router-link :to="{name:'info-condiciones'}" class="text-white">
+                Términos y condiciones</router-link
               >
             </div>
             <div class="footer-interes__links"><a class="text-white" href="https://www.bomberos.cl">
