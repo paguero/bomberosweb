@@ -196,7 +196,7 @@
                                                 <div>
                                                    <!-- title -->
                                                    <h5 class="mb-1 h6">He revisado la información</h5>
-                                                   *{{esPersona}}
+                                                 
                                                    <p class="mb-0 small">La información que aparece es correcta.</p>
                                                 </div>
                                              </div>
