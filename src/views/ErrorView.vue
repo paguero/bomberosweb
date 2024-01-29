@@ -203,7 +203,7 @@ export default defineComponent({
             location.href = storeCarro.currentCarroCompra.urlPago;
           })
           .catch(() => {
-            const [error] = Object.values(store.cotizacionErrors);
+            const [error] = Object.values(storeCarro.carroCompraErrors);
             Swal.fire({
                 text: error,
                 icon: "error",
