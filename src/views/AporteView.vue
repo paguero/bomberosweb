@@ -198,6 +198,7 @@
                                                       type="submit"
                                                       id="kt_account_edificio_details_submit"
                                                       :loading="loading"
+                                                      :disabled="loading"
                                                       class="btn btn-primary"
                                                       label="Continuar"
                                                       />

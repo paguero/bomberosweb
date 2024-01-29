@@ -159,6 +159,7 @@ export default defineComponent({
             router.push({ name: "info-vehiculo", params:{id:store.currentCotizacion.cotizacionId} });
           })
           .catch(() => {
+            loading = ref(false);
             const [error] = Object.values(store.cotizacionErrors);
             Swal.fire({
                 text: error,

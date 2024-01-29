@@ -9,14 +9,25 @@
         <div
           data-aos="fade-right fade-left"
           data-aos-delay="100"
-          class="buyPatent donation-info col-lg-4 aos-init aos-animate text-center d-lg-block mx-auto resume-content" style="min-height:230px;background: url('/media/img/latfirefighter.png');background-position: center 0; background-size: cover;">
+          class="buyPatent donation-info col-lg-4 aos-init aos-animate text-center d-lg-block mx-auto resume-content"
         >
-          <div class="buyPatent-info lift lift-lg sticky-top">
+          <div class="buyPatent-info lift lift-lg sticky-top" style="min-height:230px;background: url('/media/img/latfirefighter.png');background-position: center 0; background-size: cover;">
+            <div class="donation-info__model">
+              
+            <div class="buySuccess-pay__item">
+              <label for=""> </label>
+              <p> </p>
+            </div>
+            <div class="buySuccess-pay__item">
+              <label for=""> </label>
+              <p> </p>
+            </div>
+            </div>
             <div class="donation-info__price">
               <h3>¡Gracias por convertirte en un héroe de verdad!</h3>
             </div>
             <div class="donation-info__img">
-              
+             
             </div>
           </div>
         </div>
@@ -119,7 +130,7 @@
                             </div>
                           </div>
                           <div class="card-body p-2">
-                              <ul class="list-unstyled" v-if="currentCotizacion">
+                              <ul class="list-unstyled" v-if="currentCotizacion.vehiculo">
                                 <!-- Notif item -->
                                 <li>
                                   <div class="rounded badge-unread d-sm-flex border-0 mb-1 p-3 position-relative">

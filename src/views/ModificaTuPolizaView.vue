@@ -1,289 +1,3 @@
-<script setup lang="ts">
-import { ref, onMounted, nextTick, computed } from "vue";
-import { ErrorMessage, Field, Form } from "vee-validate";
-import { useRouter, useRoute } from "vue-router";
-import { useCotizacionStore } from "@/stores/cotizacion";
-const storeCotizacion = useCotizacionStore();
-import * as Yup from "yup";
-import Swal from "sweetalert2/dist/sweetalert2.js";
-import moment from "moment";
-const router = useRouter();
-const route = useRoute();
-
-import { useCarroCompraStore } from "@/stores/carroCompra";
-
-import { useMarcaStore } from "@/stores/marca";
-import { useModeloStore } from "@/stores/modelo";
-import { useTipoVehiculoStore } from "@/stores/tipoVehiculo";
-import { useVehiculoStore } from "@/stores/vehiculo";
-import { useAnioStore } from "@/stores/anio";
-import { usePrimaSoapStore } from "@/stores/primaSoap";
-import type { ICotizacion } from "@/stores/cotizacion";
-import { rutEsValido } from "@/core/validators/YupRut";
-import { vMaska } from "maska";
-import { patenteEsValido } from "@/core/validators/YupPatente";
-import MixedWidgetImage from "@/components/widgets/mixed/WidgetImage.vue";
-import Editor from "primevue/editor";
-moment.locale("es");
-
-const storeMarca = useMarcaStore();
-const storeModelo = useModeloStore();
-const storeTipo = useTipoVehiculoStore();
-const storeAnio = useAnioStore();
-const storeCarro = useCarroCompraStore();
-const storeVehiculo = useVehiculoStore();
-const storePrima = usePrimaSoapStore();
-const datosConfirmados = ref(false);
-const loading = ref(true);
-const visible = ref(false);
-
-const formulario = Yup.object().shape({
-      patente: Yup.string().required("Es obligatorio").label("Patente").test("yupIsPatente", "Patente ingresada no es valida", function (value) {
-          return patenteEsValido(value);
-        }),
-		  marca: Yup.string().required("Es obligatorio").label("Marca"),
-		  modelo: Yup.string().required("Es obligatorio").label("Modelo"),
-		  tipoVehiculo: Yup.string().required("Es obligatorio").label("Tipo Vehículo"),
-		  numeroMotor: Yup.string().required("Es obligatorio").label("numeroMotor"),
-           rut: Yup.string().required("Es obligatorio").label("Rut").test("yupIsRut", "Rut ingresado no es valido", function (value) {
-          return rutEsValido(value);
-        }),
-  nombre: Yup.string().required("Es obligatorio").label("Nombre"),
-  apellidoPaterno: Yup.string()
-    .required("Es obligatorio")
-    .label("Apellido Paterno"),
-  apellidoMaterno: Yup.string()
-    .required("Es obligatorio")
-    .label("Apellido Materno"),
-  email: Yup.string()
-    .required("Es obligatorio")
-    .email("Email inválido")
-    .label("Email"),
-});
-
-Yup.addMethod(Yup.string, "yupIsRut", function (mensaje) {
-  const { message } = mensaje;
-  return this.test("yupIsRut", message, function (value) {
-    const { path, createError } = this;
-    const { some, more, args } = mensaje;
-    // [value] - value of the property being tested
-    // [path]  - property name,
-    // ...
-    return rutEsValido(value);
-  });
-});
-
-const onSubmit = async (values) => {
-
-    console.log(cotizacionDetails.value)
-//   await storeCotizacion
-//     .getCotizacionModificarPoliza(
-//       values.numeroFolio,
-//       values.numeroPoliza,
-//       values.patente
-//     )
-//     .then(() => {
-//       console.log(storeCotizacion.currentCotizacion);
-//       // router.push({ name: "modifica-tu-poliza" });
-//     })
-//     .catch(() => {
-//       const [error] = Object.values(storeCotizacion.cotizacionErrors);
-//       Swal.fire({
-//         text: error,
-//         icon: "error",
-//         buttonsStyling: false,
-//         confirmButtonText: "Ok",
-//         heightAuto: false,
-//         customClass: {
-//           confirmButton: "btn fw-semobold btn-light-primary",
-//         },
-//       });
-//     });
-};
-
-const cotizacionId = route.params.id;
-onMounted(async () => {
-  obtenerAnios();
-  loading.value = true;
-  await obtenerCotizacion(cotizacionId);
-  obtenerMarcas(storeCotizacion.currentCotizacion.codigoConvenio);
-  obtenerModelos(
-    storeCotizacion.currentCotizacion.codigoConvenio,
-    storeCotizacion.currentCotizacion.vehiculo.marca,
-    storeCotizacion.currentCotizacion.vehiculo.tipoVehiculo
-  );
-  obtenerTipos(storeCotizacion.currentCotizacion.codigoConvenio);
-
-  loading.value = false;
-});
-const obtenerMarcas = async (campania: string) => {
-  await storeMarca.getMarcas(campania).catch(() => {
-    const [error] = Object.values(storeMarca.marcaErrors);
-    Swal.fire({
-      text: error,
-      icon: "error",
-      buttonsStyling: false,
-      confirmButtonText: "Ok",
-      heightAuto: false,
-      customClass: {
-        confirmButton: "btn fw-semobold btn-light-primary",
-      },
-    });
-  });
-};
-const obtenerModelos = (
-  campania: string,
-  marca: string,
-  tipoVehiculo: string
-) => {
-  storeModelo.getModelos(campania, marca, tipoVehiculo).catch(() => {
-    const [error] = Object.values(storeMarca.marcaErrors);
-    Swal.fire({
-      text: error,
-      icon: "error",
-      buttonsStyling: false,
-      confirmButtonText: "Ok",
-      heightAuto: false,
-      customClass: {
-        confirmButton: "btn fw-semobold btn-light-primary",
-      },
-    });
-  });
-};
-const obtenerTipos = (campania: string) => {
-  storeTipo.getTipoVehiculos(campania).catch(() => {
-    const [error] = Object.values(storeTipo.tipoVehiculoErrors);
-    Swal.fire({
-      text: error,
-      icon: "error",
-      buttonsStyling: false,
-      confirmButtonText: "Ok",
-      heightAuto: false,
-      customClass: {
-        confirmButton: "btn fw-semobold btn-light-primary",
-      },
-    });
-  });
-};
-const obtenerAnios = () => {
-  storeAnio.getAnios();
-};
-const obtenerCotizacion = async (cotizacionId) => {
-  await storeCotizacion
-    .getCotizacion(cotizacionId)
-    .then(() => {
-      cotizacionDetails.value = storeCotizacion.currentCotizacion;
-      cotizacionDetails.value.patente =
-        storeCotizacion.currentCotizacion.vehiculo?.patente;
-    })
-    .catch(() => {
-      const [error] = Object.values(storeCotizacion.cotizacionErrors);
-      Swal.fire({
-        text: error,
-        icon: "error",
-        buttonsStyling: false,
-        confirmButtonText: "Ok",
-        heightAuto: false,
-        customClass: {
-          confirmButton: "btn fw-semobold btn-light-primary",
-        },
-      });
-    });
-};
-
-const obtenerVehiculo = async () => {
-  await storeVehiculo
-    .getVehiculo(cotizacionDetails.value.vehiculo.patente)
-    .then(() => {
-      cotizacionDetails.value.patente =
-        cotizacionDetails.value.vehiculo.patente;
-      cotizacionDetails.value.vehiculo = storeVehiculo.currentVehiculo;
-      obtenerModelos(
-        storeCotizacion.currentCotizacion.codigoConvenio,
-        storeVehiculo.currentVehiculo.marca,
-        storeVehiculo.currentVehiculo.tipoVehiculo
-      );
-    })
-    .catch(() => {
-      const [error] = Object.values(storeVehiculo.vehiculoErrors);
-      Swal.fire({
-        text: error,
-        icon: "error",
-        buttonsStyling: false,
-        confirmButtonText: "Ok",
-        heightAuto: false,
-        customClass: {
-          confirmButton: "btn fw-semobold btn-light-primary",
-        },
-      });
-    });
-};
-const allMarcas = computed(() => {
-  return storeMarca.allMarcas;
-});
-const allModelos = computed(() => {
-  return storeModelo.allModelos;
-});
-const allTipos = computed(() => {
-  return storeTipo.allTipoVehiculos;
-});
-const allAnios = computed(() => {
-  return storeAnio.allAnios;
-});
-const currentCarroCompra = computed(() => {
-  return storeCarro.currentCarroCompra;
-});
-const cotizacionDetails = ref<ICotizacion>({
-  cotizacionId: storeCotizacion.currentCotizacion.cotizacionId,
-  carroId: storeCotizacion.currentCotizacion.carroId,
-  numeroCotizacion: storeCotizacion.currentCotizacion.numeroCotizacion,
-  codigoConvenio: storeCotizacion.currentCotizacion.codigoConvenio,
-  codigoTipoSeguro: storeCotizacion.currentCotizacion.codigoTipoSeguro,
-  tipoSeguro: storeCotizacion.currentCotizacion.tipoSeguro,
-  grupoId: storeCotizacion.currentCotizacion.grupoId,
-  vendedorId: storeCotizacion.currentCotizacion.vendedorId,
-  fechaCreacion: storeCotizacion.currentCotizacion.fechaCreacion,
-  estado: storeCotizacion.currentCotizacion.estado,
-  contratado: storeCotizacion.currentCotizacion.contratado,
-  fechaContratacion: storeCotizacion.currentCotizacion.fechaContratacion,
-  usuario: storeCotizacion.currentCotizacion.usuario,
-  nombrePlan: storeCotizacion.currentCotizacion.nombrePlan,
-  planContratado: storeCotizacion.currentCotizacion.planContratado,
-  planUf: storeCotizacion.currentCotizacion.planUf,
-  planPesos: storeCotizacion.currentCotizacion.planPesos,
-  comision: storeCotizacion.currentCotizacion.comision,
-  valorUf: storeCotizacion.currentCotizacion.valorUf,
-  aporte: storeCotizacion.currentCotizacion.aporte,
-  numeroFolio: storeCotizacion.currentCotizacion.numeroFolio,
-  numeroPoliza: storeCotizacion.currentCotizacion.numeroPoliza,
-  fechaActualizacion: storeCotizacion.currentCotizacion.fechaActualizacion,
-  usuarioActualizacion: storeCotizacion.currentCotizacion.usuarioActualizacion,
-  tokenMedioPago: storeCotizacion.currentCotizacion.tokenMedioPago,
-  codigoMedioPago: storeCotizacion.currentCotizacion.codigoMedioPago,
-  montoPago: storeCotizacion.currentCotizacion.montoPago,
-  fechaTransaccion: storeCotizacion.currentCotizacion.fechaTransaccion,
-  exitoso: storeCotizacion.currentCotizacion.exitoso,
-  emitida: storeCotizacion.currentCotizacion.emitida,
-  anulada: storeCotizacion.currentCotizacion.anulada,
-  pdfEnProceso: storeCotizacion.currentCotizacion.pdfEnProceso,
-  codigoAutorizacion: storeCotizacion.currentCotizacion.codigoAutorizacion,
-  fechaPago: storeCotizacion.currentCotizacion.fechaPago,
-  mesPago: storeCotizacion.currentCotizacion.mesPago,
-  anioPago: storeCotizacion.currentCotizacion.anioPago,
-  numeroTarjeta: storeCotizacion.currentCotizacion.numeroTarjeta,
-  notificado: storeCotizacion.currentCotizacion.notificado,
-  codigoNotificacion: storeCotizacion.currentCotizacion.codigoNotificacion,
-  cotizacionCompania: storeCotizacion.currentCotizacion.cotizacionCompania,
-  urlPoliza: storeCotizacion.currentCotizacion.urlPoliza,
-  fechaEmision: storeCotizacion.currentCotizacion.fechaEmision,
-  fechaInicio: storeCotizacion.currentCotizacion.fechaInicio,
-  fechaTermino: storeCotizacion.currentCotizacion.fechaTermino,
-  compania: storeCotizacion.currentCotizacion.compania,
-  vehiculo: storeCotizacion.currentCotizacion.vehiculo,
-  cliente: storeCotizacion.currentCotizacion.cliente,
-  patente: storeCotizacion.currentCotizacion?.vehiculo?.patente,
-});
-</script>
 <template>
   <div class="d-flex justify-content-center align-items-center">
     <div class="card card-white v-application border border-1">
@@ -614,7 +328,301 @@ const cotizacionDetails = ref<ICotizacion>({
     </div>
   </div>
 </template>
+<script setup lang="ts">
+import { ref, onMounted, nextTick, computed } from "vue";
+import { ErrorMessage, Field, Form } from "vee-validate";
+import { useRouter, useRoute } from "vue-router";
+import { useCotizacionStore } from "@/stores/cotizacion";
+const storeCotizacion = useCotizacionStore();
+import * as Yup from "yup";
+import Swal from "sweetalert2/dist/sweetalert2.js";
+import moment from "moment";
+const router = useRouter();
+const route = useRoute();
 
+import { useCarroCompraStore } from "@/stores/carroCompra";
+
+import { useMarcaStore } from "@/stores/marca";
+import { useModeloStore } from "@/stores/modelo";
+import { useTipoVehiculoStore } from "@/stores/tipoVehiculo";
+import { useVehiculoStore } from "@/stores/vehiculo";
+import { useAnioStore } from "@/stores/anio";
+import { usePrimaSoapStore } from "@/stores/primaSoap";
+import type { ICotizacion } from "@/stores/cotizacion";
+import { rutEsValido } from "@/core/validators/YupRut";
+import { vMaska } from "maska";
+import { patenteEsValido } from "@/core/validators/YupPatente";
+import MixedWidgetImage from "@/components/widgets/mixed/WidgetImage.vue";
+import Editor from "primevue/editor";
+moment.locale("es");
+
+const storeMarca = useMarcaStore();
+const storeModelo = useModeloStore();
+const storeTipo = useTipoVehiculoStore();
+const storeAnio = useAnioStore();
+const storeCarro = useCarroCompraStore();
+const storeVehiculo = useVehiculoStore();
+const storePrima = usePrimaSoapStore();
+const datosConfirmados = ref(false);
+const loading = ref(true);
+const visible = ref(false);
+
+const formulario = Yup.object().shape({
+      patente: Yup.string().required("Es obligatorio").label("Patente").test("yupIsPatente", "Patente ingresada no es valida", function (value) {
+          return patenteEsValido(value);
+        }),
+		  marca: Yup.string().required("Es obligatorio").label("Marca"),
+		  modelo: Yup.string().required("Es obligatorio").label("Modelo"),
+		  tipoVehiculo: Yup.string().required("Es obligatorio").label("Tipo Vehículo"),
+		  numeroMotor: Yup.string().required("Es obligatorio").label("numeroMotor"),
+           rut: Yup.string().required("Es obligatorio").label("Rut").test("yupIsRut", "Rut ingresado no es valido", function (value) {
+          return rutEsValido(value);
+        }),
+  nombre: Yup.string().required("Es obligatorio").label("Nombre"),
+  apellidoPaterno: Yup.string()
+    .required("Es obligatorio")
+    .label("Apellido Paterno"),
+  apellidoMaterno: Yup.string()
+    .required("Es obligatorio")
+    .label("Apellido Materno"),
+  email: Yup.string()
+    .required("Es obligatorio")
+    .email("Email inválido")
+    .label("Email"),
+});
+
+Yup.addMethod(Yup.string, "yupIsRut", function (mensaje) {
+  const { message } = mensaje;
+  return this.test("yupIsRut", message, function (value) {
+    const { path, createError } = this;
+    const { some, more, args } = mensaje;
+    // [value] - value of the property being tested
+    // [path]  - property name,
+    // ...
+    return rutEsValido(value);
+  });
+});
+
+const onSubmit = async (values) => {
+
+    console.log(cotizacionDetails.value)
+  await storeCotizacion
+    .endoso(cotizacionDetails.value
+    )
+    .then(() => {
+      Swal.fire({
+            text: 'Tu póliza ha sido modificada. Llegará pronto a tu correo electrónico.',
+            icon: "info",
+            buttonsStyling: false,
+            confirmButtonText: "Ok",
+            heightAuto: false,
+            customClass: {
+              confirmButton: "btn fw-semobold btn-light-primary",
+            },
+          }).then(function () {
+              router.push({ name: "info-comprobante", params: {id:cotizacionDetails.value.carroId} });
+            });
+      
+    })
+    .catch(() => {
+      const [error] = Object.values(storeCotizacion.cotizacionErrors);
+      Swal.fire({
+        text: error,
+        icon: "error",
+        buttonsStyling: false,
+        confirmButtonText: "Ok",
+        heightAuto: false,
+        customClass: {
+          confirmButton: "btn fw-semobold btn-light-primary",
+        },
+      });
+    });
+};
+
+const cotizacionId = route.params.id;
+onMounted(async () => {
+  obtenerAnios();
+  loading.value = true;
+  await obtenerCotizacion(cotizacionId);
+  obtenerMarcas(storeCotizacion.currentCotizacion.codigoConvenio);
+  obtenerModelos(
+    storeCotizacion.currentCotizacion.codigoConvenio,
+    storeCotizacion.currentCotizacion.vehiculo.marca,
+    storeCotizacion.currentCotizacion.vehiculo.tipoVehiculo
+  );
+  obtenerTipos(storeCotizacion.currentCotizacion.codigoConvenio);
+
+  loading.value = false;
+});
+const obtenerMarcas = async (campania: string) => {
+  await storeMarca.getMarcas(campania).catch(() => {
+    const [error] = Object.values(storeMarca.marcaErrors);
+    Swal.fire({
+      text: error,
+      icon: "error",
+      buttonsStyling: false,
+      confirmButtonText: "Ok",
+      heightAuto: false,
+      customClass: {
+        confirmButton: "btn fw-semobold btn-light-primary",
+      },
+    });
+  });
+};
+const obtenerModelos = (
+  campania: string,
+  marca: string,
+  tipoVehiculo: string
+) => {
+  storeModelo.getModelos(campania, marca, tipoVehiculo).catch(() => {
+    const [error] = Object.values(storeMarca.marcaErrors);
+    Swal.fire({
+      text: error,
+      icon: "error",
+      buttonsStyling: false,
+      confirmButtonText: "Ok",
+      heightAuto: false,
+      customClass: {
+        confirmButton: "btn fw-semobold btn-light-primary",
+      },
+    });
+  });
+};
+const obtenerTipos = (campania: string) => {
+  storeTipo.getTipoVehiculos(campania).catch(() => {
+    const [error] = Object.values(storeTipo.tipoVehiculoErrors);
+    Swal.fire({
+      text: error,
+      icon: "error",
+      buttonsStyling: false,
+      confirmButtonText: "Ok",
+      heightAuto: false,
+      customClass: {
+        confirmButton: "btn fw-semobold btn-light-primary",
+      },
+    });
+  });
+};
+const obtenerAnios = () => {
+  storeAnio.getAnios();
+};
+const obtenerCotizacion = async (cotizacionId) => {
+  await storeCotizacion
+    .getCotizacion(cotizacionId)
+    .then(() => {
+      cotizacionDetails.value = storeCotizacion.currentCotizacion;
+      cotizacionDetails.value.patente =
+        storeCotizacion.currentCotizacion.vehiculo?.patente;
+    })
+    .catch(() => {
+      const [error] = Object.values(storeCotizacion.cotizacionErrors);
+      Swal.fire({
+        text: error,
+        icon: "error",
+        buttonsStyling: false,
+        confirmButtonText: "Ok",
+        heightAuto: false,
+        customClass: {
+          confirmButton: "btn fw-semobold btn-light-primary",
+        },
+      });
+    });
+};
+
+const obtenerVehiculo = async () => {
+  await storeVehiculo
+    .getVehiculo(cotizacionDetails.value.vehiculo.patente)
+    .then(() => {
+      cotizacionDetails.value.patente =
+        cotizacionDetails.value.vehiculo.patente;
+      cotizacionDetails.value.vehiculo = storeVehiculo.currentVehiculo;
+      obtenerModelos(
+        storeCotizacion.currentCotizacion.codigoConvenio,
+        storeVehiculo.currentVehiculo.marca,
+        storeVehiculo.currentVehiculo.tipoVehiculo
+      );
+    })
+    .catch(() => {
+      const [error] = Object.values(storeVehiculo.vehiculoErrors);
+      Swal.fire({
+        text: error,
+        icon: "error",
+        buttonsStyling: false,
+        confirmButtonText: "Ok",
+        heightAuto: false,
+        customClass: {
+          confirmButton: "btn fw-semobold btn-light-primary",
+        },
+      });
+    });
+};
+const allMarcas = computed(() => {
+  return storeMarca.allMarcas;
+});
+const allModelos = computed(() => {
+  return storeModelo.allModelos;
+});
+const allTipos = computed(() => {
+  return storeTipo.allTipoVehiculos;
+});
+const allAnios = computed(() => {
+  return storeAnio.allAnios;
+});
+const currentCarroCompra = computed(() => {
+  return storeCarro.currentCarroCompra;
+});
+const cotizacionDetails = ref<ICotizacion>({
+  cotizacionId: storeCotizacion.currentCotizacion.cotizacionId,
+  carroId: storeCotizacion.currentCotizacion.carroId,
+  numeroCotizacion: storeCotizacion.currentCotizacion.numeroCotizacion,
+  codigoConvenio: storeCotizacion.currentCotizacion.codigoConvenio,
+  codigoTipoSeguro: storeCotizacion.currentCotizacion.codigoTipoSeguro,
+  tipoSeguro: storeCotizacion.currentCotizacion.tipoSeguro,
+  grupoId: storeCotizacion.currentCotizacion.grupoId,
+  vendedorId: storeCotizacion.currentCotizacion.vendedorId,
+  fechaCreacion: storeCotizacion.currentCotizacion.fechaCreacion,
+  estado: storeCotizacion.currentCotizacion.estado,
+  contratado: storeCotizacion.currentCotizacion.contratado,
+  fechaContratacion: storeCotizacion.currentCotizacion.fechaContratacion,
+  usuario: storeCotizacion.currentCotizacion.usuario,
+  nombrePlan: storeCotizacion.currentCotizacion.nombrePlan,
+  planContratado: storeCotizacion.currentCotizacion.planContratado,
+  planUf: storeCotizacion.currentCotizacion.planUf,
+  planPesos: storeCotizacion.currentCotizacion.planPesos,
+  comision: storeCotizacion.currentCotizacion.comision,
+  valorUf: storeCotizacion.currentCotizacion.valorUf,
+  aporte: storeCotizacion.currentCotizacion.aporte,
+  numeroFolio: storeCotizacion.currentCotizacion.numeroFolio,
+  numeroPoliza: storeCotizacion.currentCotizacion.numeroPoliza,
+  fechaActualizacion: storeCotizacion.currentCotizacion.fechaActualizacion,
+  usuarioActualizacion: storeCotizacion.currentCotizacion.usuarioActualizacion,
+  tokenMedioPago: storeCotizacion.currentCotizacion.tokenMedioPago,
+  codigoMedioPago: storeCotizacion.currentCotizacion.codigoMedioPago,
+  montoPago: storeCotizacion.currentCotizacion.montoPago,
+  fechaTransaccion: storeCotizacion.currentCotizacion.fechaTransaccion,
+  exitoso: storeCotizacion.currentCotizacion.exitoso,
+  emitida: storeCotizacion.currentCotizacion.emitida,
+  anulada: storeCotizacion.currentCotizacion.anulada,
+  pdfEnProceso: storeCotizacion.currentCotizacion.pdfEnProceso,
+  codigoAutorizacion: storeCotizacion.currentCotizacion.codigoAutorizacion,
+  fechaPago: storeCotizacion.currentCotizacion.fechaPago,
+  mesPago: storeCotizacion.currentCotizacion.mesPago,
+  anioPago: storeCotizacion.currentCotizacion.anioPago,
+  numeroTarjeta: storeCotizacion.currentCotizacion.numeroTarjeta,
+  notificado: storeCotizacion.currentCotizacion.notificado,
+  codigoNotificacion: storeCotizacion.currentCotizacion.codigoNotificacion,
+  cotizacionCompania: storeCotizacion.currentCotizacion.cotizacionCompania,
+  urlPoliza: storeCotizacion.currentCotizacion.urlPoliza,
+  fechaEmision: storeCotizacion.currentCotizacion.fechaEmision,
+  fechaInicio: storeCotizacion.currentCotizacion.fechaInicio,
+  fechaTermino: storeCotizacion.currentCotizacion.fechaTermino,
+  compania: storeCotizacion.currentCotizacion.compania,
+  vehiculo: storeCotizacion.currentCotizacion.vehiculo,
+  cliente: storeCotizacion.currentCotizacion.cliente,
+  patente: storeCotizacion.currentCotizacion?.vehiculo?.patente,
+  tokenModificacion : storeCotizacion.getCarro().tokenModificacion
+});
+</script>
 <style scoped>
 .login form {
   width: 300px;

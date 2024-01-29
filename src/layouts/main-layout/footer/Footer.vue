@@ -2,7 +2,7 @@
   <!--begin::Footer-->
   <div>
   <footer id="footer">
-      <div class="footer-container container">
+      <div class="footer-container container align-items-start">
         <div class="footer-contact">
           <h5>Contacto</h5>
           <div class="footer-contact__items">
@@ -36,15 +36,15 @@
 
 
 
-        <div class="footer-contact">
+        <div class="footer-interes">
           <h5>De interés</h5>
-          <div class="footer-contact__items">
-            <div class="footer-contact__links">
-              <a href="#">
+          <div class="d-flex flex-column">
+            <div class="footer-interes__links">
+              <a href="#" class="text-white">
                 Términos y condiciones</a
               >
             </div>
-            <div class="footer-contact__links"><a href="https://www.bomberos.cl">
+            <div class="footer-interes__links"><a class="text-white" href="https://www.bomberos.cl">
                 Bomberos.cl</a
               ></div>
             
@@ -75,7 +75,7 @@
                   ><img src="/media/logos/linkedin.png" />
                 </a>
               </div>
-              <router-link :to="{ name: 'home'}" class="banner-form__button-secondary">
+              <router-link :to="{ name: 'home'}" class="banner-form__button-secondary btn btn-primary">
                                              Denuncia tu Siniestro</router-link>
         </div>
         
@@ -139,4 +139,8 @@ footer.footer .frame-11 {
     margin:0 1rem;
     padding: 1rem 0.5rem;
 }
+.rrss-icons a{
+    margin:10px;
+  }
+
 </style>

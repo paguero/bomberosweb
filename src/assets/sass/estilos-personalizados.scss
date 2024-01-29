@@ -442,6 +442,33 @@
               }
             }
           }
+          .footer-interes {
+            display: grid;
+            text-align: left;
+            @media screen and (max-width: 769px) {
+              text-align: center;
+            }
+            h5 {
+              color: #fff;
+            }
+            .footer-interes__items {
+              display: grid;
+              @media screen and (max-width: 769px) {
+                text-align: center;
+                margin: auto;
+              }
+              .footer-interes__links {
+                a {
+                  display: grid;
+                  grid-template-columns: 10px max-content;
+                  justify-items: center;
+                  column-gap: 10px;
+                  color: #fff;
+                  align-items: center;
+                }
+              }
+            }
+          }
           .footer-rrss {
             display: grid;
             text-align: left;
@@ -561,6 +588,32 @@
                 a {
                   display: grid;
                   grid-template-columns: 10px max-content;
+                  justify-items: center;
+                  column-gap: 10px;
+                  color: #fff;
+                  align-items: center;
+                }
+              }
+            }
+          }
+          .footer-interes {
+            display: grid;
+            text-align: left;
+            @media screen and (max-width: 769px) {
+              text-align: center;
+            }
+            h5 {
+              color: #fff;
+            }
+            .footer-interes__items {
+              display: grid;
+              @media screen and (max-width: 769px) {
+                text-align: center;
+                margin: auto;
+              }
+              .footer-interes__links {
+                a {
+                  display: grid;
                   justify-items: center;
                   column-gap: 10px;
                   color: #fff;

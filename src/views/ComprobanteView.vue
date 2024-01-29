@@ -74,10 +74,12 @@
                                   </p>
 
                                   <template v-for="(cotizacion, x) in allCotizaciones" v-bind:key="x">
+                                    <div class="body border border-1">
                                   <p class="font-size-lg">
                                     {{cotizacion.vehiculo.patente}} {{cotizacion.vehiculo.modelo}} / {{cotizacion.vehiculo.anio}}<br/>
                                     Su poliza <strong>n°{{ cotizacion.numeroPoliza }}</strong> está lista e informada a las municipalidades. Estamos generando su PDF para enviarselo por correo en un tiempo aproximado de 2 horas.
                                   </p>
+                                    </div>
                                   </template>
                                   <!-- Buttons -->
                                   <!--<a class="btn btn-primary" target="_blank" v-if="budget.documentoPdf!=null" v-bind:href="budget.documentoPdf"
@@ -151,20 +153,6 @@
                               </v-btn>
                               
                             </div>
-                          </div>
-                          <hr class="separator"/>   
-                          <div class="buySuccess-form__soap mt-4">
-                         
-                            <div class="buySuccess-form__soap-item item-ty">
-                              <h5>
-                              <strong><span  class="aporte-breath">¡Tu SOAP ya está listo!</span></strong> <br /><br />Enviaremos
-                              una copia de tu póliza <strong>n°{{  }}</strong> al correo
-                              registrado en menos de 48 horas.<br /><br />Gracias por
-                              contratar tu seguro obligatorio de accidentes personales.
-                            </h5>
-                            
-                            </div>
-                            
                           </div>
 
                         <hr class="separator"/>

@@ -153,6 +153,7 @@
 <script lang="ts">
 import { getAssetPath } from "@/core/helpers/assets";
 import { defineComponent, ref, computed, onMounted } from "vue";
+import { useRouter, useRoute} from "vue-router";
 import { useCarroCompraStore } from "@/stores/carroCompra";
 import { useCotizacionStore } from "@/stores/cotizacion";
 import Dropdown4 from "@/components/dropdown/Dropdown4.vue";
@@ -174,6 +175,7 @@ export default defineComponent({
     Dropdown4,
   },
   setup() {
+    const router = useRouter();
     const { bus } = useBus();
     const store = useCotizacionStore();
     const storeCarro = useCarroCompraStore();
@@ -200,8 +202,8 @@ export default defineComponent({
     bus.on('limpia-carro-compra', () => {       
        obtenerCarro(0);   
     });
-    const obtenerCotizaciones = (carroId) =>{
-      store
+    const obtenerCotizaciones = async(carroId) =>{
+      await store
         .getCotizaciones(carroId).then(()=>{
           bus.emit("unidades-carro-compra", store.allCotizacions.length);
         });
@@ -230,9 +232,13 @@ export default defineComponent({
               customClass: {
                 confirmButton: "btn fw-bold btn-light-primary",
               },
-            }).then(function () {
+            }).then(async function () {
               obtenerCarro(currentCarroCompra.value.carroId);
-              obtenerCotizaciones(currentCarroCompra.value.carroId);
+              await obtenerCotizaciones(currentCarroCompra.value.carroId);
+              if(store.allCotizacions.length==0){
+                store.setCarro(JSON.stringify({carroId:null, cotizacionId:null}));
+                router.push({ name: "home"});
+              }
             });
           })
           .catch(() => {
