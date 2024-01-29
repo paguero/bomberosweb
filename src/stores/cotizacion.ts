@@ -59,6 +59,7 @@ export interface ICotizacion {
     vehiculo: IVehiculo;
     cliente: ICliente;
     comuna:string;
+    statusCode:number
 }
 
 export const useCotizacionStore = defineStore("cotizacion", () => {
@@ -102,6 +103,16 @@ export const useCotizacionStore = defineStore("cotizacion", () => {
 
   function getCotizacion(id: string) {
     return ApiService.get("soap/cotizacion", id)
+      .then(({ data }) => {
+        setCotizacion(data);
+      })
+      .catch(({ response }) => {
+        setCotizacionError(response.data.errores);
+		throw new Error();
+      });
+  }
+  function getCotizacionModificarPoliza(numeroFolio: string,numeroPoliza:string,patente:string) {
+    return ApiService.get(`soap/cotizacion/${numeroFolio}/${numeroPoliza}/${patente}`)
       .then(({ data }) => {
         setCotizacion(data);
       })

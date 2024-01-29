@@ -42,7 +42,7 @@
                 </a>
               </div>
             <div class="navbar-end navbar-menu">
-              <router-link :to="{ name: 'home'}" class="banner-form__button-secondary text-nowrap mx-2">
+              <router-link :to="{ name: 'modifica-tu-poliza-ingresar'}" class="banner-form__button-secondary text-nowrap mx-2">
                                               Modifica tu póliza</router-link>
               <router-link :to="{ name: 'home'}" class="banner-form__button-secondary text-nowrap mx-2">
                                               Descarga tu póliza</router-link>
