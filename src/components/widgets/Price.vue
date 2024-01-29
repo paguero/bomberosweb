@@ -93,10 +93,10 @@ export default defineComponent({
       });
     });
     const patentes = ref([
-            { id:"item0", name: "Auto", price: "5290", icon: "auto.png", buy: false, patente:null, placeholder:'SOAP 24' },
-            { id:"item1", name: "Camioneta", price: "7290", icon: "camioneta.png", buy: false, patente:null, placeholder:'SOAP 24' },
-            { id:"item2", name: "Moto", price: "35490", icon: "moto.png", buy: false, patente:null, placeholder:'SOAP 23' },
-            { id:"item3", name: "Minibús", price: "17990", icon: "minibus.png", buy: false, patente:null, placeholder:'SOAP 24' },
+            { id:"item0", name: "Auto", price: "$5.290", icon: "auto.png", buy: false, patente:null, placeholder:'SOAP 24' },
+            { id:"item1", name: "Camioneta", price: "$7.290", icon: "camioneta.png", buy: false, patente:null, placeholder:'SOAP 24' },
+            { id:"item2", name: "Moto", price: "$35.490", icon: "moto.png", buy: false, patente:null, placeholder:'SOAP 23' },
+            { id:"item3", name: "Minibús", price: "$17.990", icon: "minibus.png", buy: false, patente:null, placeholder:'SOAP 24' },
             {
             id:"item4", name: "Carro de Arrastre",
             price: "3400",

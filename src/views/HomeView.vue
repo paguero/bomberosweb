@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <main  class="content-wrapper flex-row-fluid ">
+  <main  class="content-wrapper flex-row-fluid position-relative">
      <section style="padding-left: 0px; padding-right: 0px;" class="banner container-fluid">
         <div class="banner-container container">
         <div class="banner-text">
@@ -69,7 +69,7 @@
       </div>
     </section>
 
-    <div show class="sticky-alert"><router-link :to="{ name: 'home'}"><i class="fas fa-link"></i> Conoce Aquí lo recaudado hasta el momento y ayudanos a compartir y seguir ayudando a nuestros #HEROESDEVERDAD</router-link></div>
+    <div show class="sticky-alert py-4"><router-link :to="{ name: 'home'}"><i class="fas fa-link"></i> Conoce Aquí lo recaudado hasta el momento y ayudanos a compartir y seguir ayudando a nuestros #HEROESDEVERDAD</router-link></div>
     <!--div class="notification-box">
     <router-link :to="{ name: 'indicators'}">
                                               <i v-b-tooltip.hover title="Conocer los aportes recaudados" class="fas fa-chart-bar"></i></router-link>
@@ -200,3 +200,11 @@ export default defineComponent({
   },
 });
 </script>
+<style scoped>
+.sticky-alert{text-align:center;position:absolute; top:0; left:0;width:100%;border-radius: 0;
+background-color:rgba(255, 0, 130, 0.72)!important; 
+border:0!important;
+color:#fff;}
+.sticky-alert a{opacity:1; color:#fff!important;font-size: 1.2rem;}
+.sticky-alert i{color:#fff!important;}
+</style>

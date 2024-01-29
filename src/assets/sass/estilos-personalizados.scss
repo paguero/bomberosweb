@@ -114,7 +114,7 @@
                   max-width: 140px;
                 }
               }
-              input[type="text"] {
+              input[type="text"], .patente-precio {
                 background: url("/media/img/patente-bg.png") no-repeat;
                 background-size: 100%;
                 font-family: "Ubuntu Mono", monospace;
@@ -131,6 +131,7 @@
                 border-radius: 5px;
                 text-align: left;
                 font-weight: bold;
+                background-position: 0 10px;
                 @media screen and (max-width: 769px) {
                   width: 160px;
                   max-width: 140px;

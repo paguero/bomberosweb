@@ -222,9 +222,9 @@ nav {
     text-align: center;
     height: fit-content;
     text-transform: uppercase;
-    background: #FF0082;
+    background: #FF002B;
     color: #fff;
-    border: solid 1px #FF0082;
+    border: solid 1px #FF002B;
     font-weight: 500;
     border-radius: 5px;
     padding: 10px;

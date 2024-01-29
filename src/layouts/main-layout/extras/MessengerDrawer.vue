@@ -258,7 +258,7 @@ export default defineComponent({
 
     const confirmarEliminarCotizacionCarro = (cotizacionId) => {
       confirm.require({
-          message: '1 ¿Está seguro de eliminar el vehículo?',
+          message: '¿Está seguro de eliminar el vehículo?',
           header: 'Confirmación',
           icon: 'pi pi-exclamation-triangle',
           accept: () => {
