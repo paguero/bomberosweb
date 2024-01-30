@@ -130,7 +130,7 @@
                             </div>
                           </div>
                           <div class="card-body p-2">
-                              <ul class="list-unstyled" v-if="currentCotizacion.vehiculo">
+                              <ul class="list-unstyled" v-if="currentCotizacion.vehiculo && currentCotizacion.emitida">
                                 <!-- Notif item -->
                                 <li>
                                   <div class="rounded badge-unread d-sm-flex border-0 mb-1 p-3 position-relative">
