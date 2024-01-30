@@ -118,7 +118,7 @@ export const useCotizacionStore = defineStore("cotizacion", () => {
       });
   }
   function getEmisionValidacion(params:IConsultaCotizacionValidacion) {
-    return ApiService.get(`soap/cotizacion/emision/consulta/validacion`)
+    return ApiService.post(`soap/cotizacion/emision/consulta/validacion`,params)
       .then(({ data }) => {
         setCotizacion(data);
       })
