@@ -179,13 +179,13 @@ export default defineComponent({
         // Activate indicator
         store.createCotizacion(cotizacionDetails.value)
           .then(() => {
-            loading = ref(false);
+            loading.value = false;
             bus.emit("actualiza-carro-compra", store.currentCotizacion.carroId);
             store.setCarro(JSON.stringify({carroId:store.currentCotizacion.carroId, cotizacionId:store.currentCotizacion.cotizacionId}));
             router.push({ name: "info-vehiculo", params:{id:store.currentCotizacion.cotizacionId} });
           })
           .catch(() => {
-            loading = ref(false);
+            loading.value = false;
             const [error] = Object.values(store.cotizacionErrors);
             Swal.fire({
                 text: error,
