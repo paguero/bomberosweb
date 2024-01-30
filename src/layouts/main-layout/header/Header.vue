@@ -22,22 +22,22 @@
               <img src="/media/img/logotipo.png" />
             </div>
             <div class="rrss-icons">
-                <a href="https://www.instagram.com/soapbomberos/"
+                <a target="_blank" href="https://www.instagram.com/soapbomberos/"
                   ><img src="/media/logos/instagram.png"
                 /></a>
-                <a href="https://www.facebook.com/SOAPbomberos"
+                <a target="_blank" href="https://web.facebook.com/soapbomberosoficial/?_rdc=1"
                   ><img src="/media/logos/facebook.png"
                 /></a>
-                <a href="https://twitter.com/SoapBomberos"
+                <a target="_blank" href="https://twitter.com/SoapBomberos"
                   ><img src="/media/logos/twitter.png"
                 /></a>
-                <a href="https://www.tiktok.com/@soapbomberos?lang=es"
+                <a target="_blank" href="https://www.tiktok.com/@soapbomberos?lang=es"
                   ><img src="/media/logos/tik-tok.png"
                 /></a>
-                <a href="https://www.youtube.com/channel/UCX5HLqeLRbNt-87GzSfZSVA"
+                <a target="_blank" href="https://www.youtube.com/channel/UCX5HLqeLRbNt-87GzSfZSVA"
                   ><img src="/media/logos/youtube.png"
                 /></a>
-                <a href="https://www.linkedin.com/company/soap-bomberos/"
+                <a target="_blank" href="https://www.linkedin.com/company/soap-bomberos/"
                   ><img src="/media/logos/linkedin.png" />
                 </a>
               </div>
