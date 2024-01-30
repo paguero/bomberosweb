@@ -211,7 +211,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-6" v-if="esPersona">
                       <label>*Apellido Paterno</label>
                       <Field
                         v-slot="{ field, handleChange }"
@@ -234,7 +234,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-6" v-if="esPersona">
                       <label>*Apellido Materno</label>
                       <Field
                         v-slot="{ field, handleChange }"
@@ -303,10 +303,7 @@
                   </div>
                   <div>
                     <p class="mb-0 small">
-                      *Acepto las políticas,
-                      <a href="#;" @click="visible = true"
-                        >terminos y condiciones</a
-                      >
+                     He revisado la información a modificar.
                     </p>
                   </div>
                 </div>
@@ -329,7 +326,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, onMounted, nextTick, computed } from "vue";
+import { ref, onMounted, nextTick, computed, watch } from "vue";
 import { ErrorMessage, Field, Form } from "vee-validate";
 import { useRouter, useRoute } from "vue-router";
 import { useCotizacionStore } from "@/stores/cotizacion";
@@ -359,14 +356,14 @@ moment.locale("es");
 const storeMarca = useMarcaStore();
 const storeModelo = useModeloStore();
 const storeTipo = useTipoVehiculoStore();
-const storeAnio = useAnioStore();
+const storeAnio = useAnioStore(); 
 const storeCarro = useCarroCompraStore();
 const storeVehiculo = useVehiculoStore();
 const storePrima = usePrimaSoapStore();
 const datosConfirmados = ref(false);
 const loading = ref(true);
 const visible = ref(false);
-
+const esPersona= ref(false);
 const formulario = Yup.object().shape({
       patente: Yup.string().required("Es obligatorio").label("Patente").test("yupIsPatente", "Patente ingresada no es valida", function (value) {
           return patenteEsValido(value);
@@ -379,12 +376,12 @@ const formulario = Yup.object().shape({
           return rutEsValido(value);
         }),
   nombre: Yup.string().required("Es obligatorio").label("Nombre"),
-  apellidoPaterno: Yup.string()
-    .required("Es obligatorio")
-    .label("Apellido Paterno"),
-  apellidoMaterno: Yup.string()
-    .required("Es obligatorio")
-    .label("Apellido Materno"),
+  apellidoPaterno: Yup.string().label("Rut").test("requiredIsPersona", "Es obligatorio", function (value) {
+          return  (esPersona.value && value!='')|| !esPersona.value;
+        }),
+		  apellidoMaterno: Yup.string().label("Rut").test("requiredIsPersona", "Es obligatorio", function (value) {
+          return  (esPersona.value && value!='')|| !esPersona.value;
+        }),
   email: Yup.string()
     .required("Es obligatorio")
     .email("Email inválido")
@@ -622,6 +619,11 @@ const cotizacionDetails = ref<ICotizacion>({
   patente: storeCotizacion.currentCotizacion?.vehiculo?.patente,
   tokenModificacion : storeCotizacion.getCarro().tokenModificacion
 });
+watch(() => cotizacionDetails.value.cliente.rut, (newValue) =>  {
+      console.log('watch' + newValue);
+      esPersona.value = parseInt(newValue.split('-')[0])<50000000;
+    });
+
 </script>
 <style scoped>
 .login form {

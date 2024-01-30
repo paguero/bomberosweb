@@ -135,7 +135,7 @@
                            </div>
                            </Form>
                            <!-- text -->
-                           <p>
+                           <p> 
                               <small>
                                  El pago es realizado a través de un sistema seguro de Mercado Pago
                               </small>
