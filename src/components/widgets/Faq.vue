@@ -3,7 +3,7 @@
       <div class="faq-container container">
         <div class="faq-items" :class="faqOpen == false ? 'open' : ''">
           <div class="faq-item__column">
-            <div class="faq-item__container" v-bind:class="{ 'faq-full': isOpen }">
+            <div class="faq-item__container px-5" v-bind:class="{ 'faq-full': isOpen }">
               <h1 class="faq-title">Aprende sobre el <span>SOAP</span></h1>
               <Accordion :activeIndex="0">
                     <AccordionTab 
