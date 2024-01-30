@@ -5,6 +5,12 @@ import JwtService from "@/core/services/JwtService";
 import type { IVehiculo } from "./vehiculo";
 import type { ICliente } from "./cliente";
 
+export interface IConsultaCotizacionValidacion{
+  numeroFolio:string,
+  numeroPoliza:string,
+  patente:string
+}
+
 export interface IConsultaCotizacion {
   patente:string;
   rut:string;
@@ -111,8 +117,8 @@ export const useCotizacionStore = defineStore("cotizacion", () => {
 		throw new Error();
       });
   }
-  function getCotizacionModificarPoliza(numeroFolio: string,numeroPoliza:string,patente:string) {
-    return ApiService.get(`soap/cotizacion/${numeroFolio}/${numeroPoliza}/${patente}`)
+  function getEmisionValidacion(params:IConsultaCotizacionValidacion) {
+    return ApiService.get(`soap/cotizacion/emision/consulta/validacion`)
       .then(({ data }) => {
         setCotizacion(data);
       })
@@ -144,6 +150,19 @@ export const useCotizacionStore = defineStore("cotizacion", () => {
 		throw new Error();
       });
   }
+
+  function endoso(params: ICotizacion|any) {
+    return ApiService.post("soap/cotizacion/endoso", params)
+      .then(({ data }) => {
+        setCotizacion(data);
+
+      })
+      .catch(({ response }) => {
+        setCotizacionError(response.data.errores);
+		throw new Error();
+      });
+  }
+
 
   function updateCotizacion(params: ICotizacion) {
     return ApiService.put(`soap/cotizacion/${params.cotizacionId}`, params)
@@ -180,7 +199,9 @@ export const useCotizacionStore = defineStore("cotizacion", () => {
     deleteCotizacion,
     setCarro,
     getCarro,
-    getEmision
+    getEmision,
+    getEmisionValidacion,
+    endoso
   };
 });
 

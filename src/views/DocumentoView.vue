@@ -158,7 +158,6 @@
                                       </a>
                                       <!-- Card share action dropdown menu -->
                                       <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cardNotiAction1">
-                                        <li><a class="dropdown-item" href="#"> <i class="bi bi-trash fa-fw pe-2"></i>Modificar</a></li>
                                         <li><a class="dropdown-item" :href="currentCotizacion.urlPoliza"> <i class="bi bi-download fa-fw pe-2"></i>Descargar PDF</a></li>
                                       </ul>
                                     </div>
