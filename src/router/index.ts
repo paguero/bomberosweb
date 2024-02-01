@@ -171,7 +171,7 @@ router.beforeEach((to, from, next) => {
   const configStore = useConfigStore();
 
   // current page view title
-  document.title = `${to.meta.pageTitle} - ${import.meta.env.VITE_APP_NAME}`;
+  document.title = `${import.meta.env.VITE_APP_NAME}`;
 
   // reset config to initial state
   configStore.resetLayoutConfig();

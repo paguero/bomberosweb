@@ -275,7 +275,7 @@ import { useMarcaStore } from "@/stores/marca";
 import { useModeloStore } from "@/stores/modelo";
 import { useTipoVehiculoStore } from "@/stores/tipoVehiculo";
 import { useVehiculoStore } from "@/stores/vehiculo";
-import { useAnioStore } from "@/stores/anio";
+import { useAnioStore } from "@/stores/anio"; 
 import { usePrimaSoapStore } from "@/stores/primaSoap";
 import type { ICotizacion } from "@/stores/cotizacion";
 import * as Yup from "yup";

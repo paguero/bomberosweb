@@ -510,6 +510,7 @@ const obtenerCotizacion = async (cotizacionId) => {
       cotizacionDetails.value = storeCotizacion.currentCotizacion;
       cotizacionDetails.value.patente =
         storeCotizacion.currentCotizacion.vehiculo?.patente;
+      esPersona.value = parseInt(storeCotizacion.currentCotizacion.cliente.rut.split('-')[0])<50000000;
     })
     .catch(() => {
       const [error] = Object.values(storeCotizacion.cotizacionErrors);
@@ -519,7 +520,7 @@ const obtenerCotizacion = async (cotizacionId) => {
         buttonsStyling: false,
         confirmButtonText: "Ok",
         heightAuto: false,
-        customClass: {
+        customClass: { 
           confirmButton: "btn fw-semobold btn-light-primary",
         },
       });
