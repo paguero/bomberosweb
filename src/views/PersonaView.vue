@@ -421,8 +421,7 @@ export default defineComponent({
             patente:'',
     
   });
-     watch(() => cotizacionDetails.value.cliente.rut, (newValue) =>  {
-      console.log('watch' + newValue);
+     watch(() => cotizacionDetails.value.cliente?.rut, (newValue) =>  {
       esPersona.value = parseInt(newValue.split('-')[0])<50000000;
     });
 

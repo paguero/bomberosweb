@@ -257,6 +257,7 @@ export default defineComponent({
     const storeCarro = useCarroCompraStore();
     const datosConfirmados = ref(false);
     const loading = ref(false);
+    const campania = import.meta.env.VITE_APP_CONVENIO;
     const cotizacionsValidator = Yup.object().shape({
       comuna: Yup.string().required("Es obligatorio").label("Comuna"),
       compania: Yup.string().required("Es obligatorio").label("Compañía"),
@@ -290,15 +291,15 @@ export default defineComponent({
     const carro = JSON.parse(store.getCarro());
 
     onMounted(async () => {     
-      obtenerMontos();
+      obtenerMontos(campania);
       obtenerComunas();
       await obtenerCotizacion(cotizacionId);
       await obtenerCarro(carro.carroId);
       if(storeCarro.currentCarroCompra.comuna)
         obtenerCompanias(storeCarro.currentCarroCompra.comuna);
     });
-    const obtenerMontos =async  () => {
-      await storeMontoAporte.getMontoAportes()
+    const obtenerMontos = (canal:string) => {
+      storeMontoAporte.getMontoAportes(canal)
         .catch(() => {
           const [error] = Object.values(storeMontoAporte.montoAporteErrors);
           Swal.fire({
