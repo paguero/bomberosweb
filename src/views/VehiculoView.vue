@@ -342,7 +342,7 @@ export default defineComponent({
             router.push({ name: "info-persona", params:{id:cotizacionDetails.value.cotizacionId} });
           })
           .catch(() => {
-            const [error] = Object.values(store.cotizacionErrors);
+            const [error] = Object.values(storeVehiculo.vehiculoErrors);
             Swal.fire({
                 text: error,
                 icon: "error",

@@ -119,7 +119,7 @@ export default defineComponent({
     });
 
 
-    const saveChanges1 = () => {
+    const saveChanges1 = () => { 
       loading.value = true;
         store.getEmisionValidacion(cotizacionDetails.value)
           .then(() => {
