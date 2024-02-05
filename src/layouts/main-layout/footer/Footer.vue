@@ -25,9 +25,9 @@
               >
             </div>
             <div class="footer-contact__links">
-              <a href="mailto:devolucionesh@soapbomberos.cl">
+              <a href="mailto:devoluciones@soapbomberos.cl">
                 <i class="fas fa-envelope"
-                />devolucionesh@soapbomberos.cl</a
+                />devoluciones@soapbomberos.cl</a
               >
             </div>
             
