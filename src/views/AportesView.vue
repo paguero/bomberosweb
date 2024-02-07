@@ -32,7 +32,7 @@
                      <div class="card-body py-4">
                         <div class="media">
                            <div class="d-inline-block mr-3">
-                                 <img src="/media/img/cash-payment 1.png"/>
+                                 <img src="/media/img/cash-payment.png"/>
                            </div>
                            <div class="media-body">
                               <h3 class="mb-2 aporte">{{$filters.formatCurrency(currentAporte.montoAporte)}}</h3>
