@@ -159,7 +159,7 @@
 import { ref, defineComponent, onMounted, computed, watch } from "vue";
 import { ErrorMessage, Field, Form } from "vee-validate";
 import _ from "lodash";
-import { useConfirm } from "primevue/useconfirm";
+import { useConfirm } from "primevue/useconfirm"; 
 import { useRouter, useRoute} from "vue-router";
 import { useCarroCompraStore } from "@/stores/carroCompra";
 import { useCotizacionStore } from "@/stores/cotizacion";

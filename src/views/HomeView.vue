@@ -81,7 +81,7 @@
       </div>
     </section>
 
-    <div show class="sticky-alert py-4"><router-link :to="{ name: 'home'}"><i class="fas fa-link"></i> Conoce Aquí lo recaudado hasta el momento y ayudanos a compartir y seguir ayudando a nuestros #HEROESDEVERDAD</router-link></div>
+    <div show class="sticky-alert py-4"><router-link :to="{ name: 'aportes'}"><i class="fas fa-link"></i> Conoce Aquí lo recaudado hasta el momento y ayudanos a compartir y seguir ayudando a nuestros #HEROESDEVERDAD</router-link></div>
     <!--div class="notification-box">
     <router-link :to="{ name: 'indicators'}">
                                               <i v-b-tooltip.hover title="Conocer los aportes recaudados" class="fas fa-chart-bar"></i></router-link>
