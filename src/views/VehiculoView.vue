@@ -88,6 +88,8 @@
                                                                value="value"
                                                                v-mask="'AAAAAA'"
                                                                @change="obtenerVehiculo"
+                                                               aria-readonly="readonly"
+                                                               readonly
                                                               >
                                                               <Prime-InputText
                                                               class="form-control form-patente p-2"
@@ -371,36 +373,10 @@ export default defineComponent({
       loading.value=false;
     });
     const obtenerMarcas =async  (campania:string) => {
-      await storeMarca.getMarcas(campania)
-        .catch(() => {
-          const [error] = Object.values(storeMarca.marcaErrors);
-          Swal.fire({
-            text: error,
-            icon: "error",
-            buttonsStyling: false,
-            confirmButtonText: "Ok",
-            heightAuto: false,
-            customClass: {
-              confirmButton: "btn fw-semobold btn-light-primary",
-            },
-          })
-        });
+      await storeMarca.getMarcas(campania);
     };
     const obtenerModelos = (campania:string, marca: string, tipoVehiculo: string) => {
-      storeModelo.getModelos(campania, marca, tipoVehiculo)
-        .catch(() => {
-          const [error] = Object.values(storeMarca.marcaErrors);
-          Swal.fire({
-            text: error,
-            icon: "error",
-            buttonsStyling: false,
-            confirmButtonText: "Ok",
-            heightAuto: false,
-            customClass: {
-              confirmButton: "btn fw-semobold btn-light-primary",
-            },
-          })
-        });
+      storeModelo.getModelos(campania, marca, tipoVehiculo);
     };
     const obtenerTipos = (campania:string) => {
       storeTipo.getTipoVehiculos(campania)
@@ -572,6 +548,11 @@ export default defineComponent({
     watch(() => cotizacionDetails.value.vehiculo?.tipoVehiculo, (newValue) =>  {
       if(cotizacionDetails.value.vehiculo)
         obtenerPrima(newValue);
+        obtenerModelos(store.currentCotizacion.codigoConvenio, store.currentCotizacion.vehiculo.marca, newValue);
+    });
+    watch(() => cotizacionDetails.value.vehiculo?.marca, (newValue) =>  {
+      if(cotizacionDetails.value.vehiculo)
+        obtenerModelos(store.currentCotizacion.codigoConvenio, newValue, store.currentCotizacion.vehiculo.tipoVehiculo);
     });
     /*watch(() => cotizacionDetails.value.vehiculo?.patente, (newValue) =>  {
       if(cotizacionDetails.value.vehiculo)

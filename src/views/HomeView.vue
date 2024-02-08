@@ -182,7 +182,23 @@ export default defineComponent({
             loading.value = false;
             bus.emit("actualiza-carro-compra", store.currentCotizacion.carroId);
             store.setCarro(JSON.stringify({carroId:store.currentCotizacion.carroId, cotizacionId:store.currentCotizacion.cotizacionId}));
-            router.push({ name: "info-vehiculo", params:{id:store.currentCotizacion.cotizacionId} });
+
+            if(store.currentCotizacion.Propietario.rut=='1-9'){
+              //No hemos encontrado la información del vehículo. Si desea emitir, debe proporcionarla al momento de emitir.
+              Swal.fire({
+                text: "No hemos encontrado la información del vehículo. Si desea emitir, debe proporcionarla en los siguientes pasos",
+                icon: "success",
+                buttonsStyling: false,
+                confirmButtonText: "Ok!",
+                customClass: {
+                  confirmButton: "btn fw-bold btn-light-primary",
+                },
+              }).then(function () {
+                router.push({ name: "info-vehiculo", params:{id:store.currentCotizacion.cotizacionId} });
+              });
+            } else {
+              router.push({ name: "info-vehiculo", params:{id:store.currentCotizacion.cotizacionId} });
+            }
           })
           .catch(() => {
             loading.value = false;

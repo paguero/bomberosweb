@@ -2,6 +2,7 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import ApiService from "@/core/services/ApiService";
 import JwtService from "@/core/services/JwtService";
+import { boolean } from "yup";
 
 
 export interface ICarroCompra {
@@ -12,6 +13,8 @@ export interface ICarroCompra {
     compania:string|undefined;
     totalPagar?: string|undefined;
     urlPago:string|undefined;
+    procesado?:boolean;
+    exitoso?:boolean;
 }
 
 export const useCarroCompraStore = defineStore("carroCompra", () => {
