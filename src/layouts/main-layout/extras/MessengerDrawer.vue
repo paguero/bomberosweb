@@ -211,7 +211,11 @@ export default defineComponent({
 
     const obtenerCarro = (carroId) =>{
       storeCarro
-        .getCarroCompra(carroId);
+        .getCarroCompra(carroId).then(()=>{
+          if(storeCarro.currentCarroCompra.procesado && storeCarro.currentCarroCompra.exitoso){
+            store.setCarro(JSON.stringify({carroId:null, cotizacionId:null}));   
+          }
+        });
     }
     const allCotizaciones = computed(() => {
       return store.allCotizacions;
