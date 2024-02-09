@@ -166,7 +166,7 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: "/:pathMatch(.*)*",
-    redirect: "/404",
+    redirect: "/home",
   },
 ];
 
