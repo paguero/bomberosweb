@@ -146,7 +146,7 @@ nav {
   width: 100%;
   @media screen and (max-width: 1024px) {
     padding: 20px 2.5%;
-    grid-template-columns: 120px auto;
+    grid-template-columns: 110px auto;
   }
   img {
     max-height: none !important;
@@ -188,7 +188,7 @@ nav {
     justify-content: center;
     align-items: center;
     @media screen and (max-width: 1024px) {
-      grid-template-columns: repeat(6, 40px);
+      grid-template-columns: repeat(6, 30px);
       grid-template-rows: 40px;
     }
     a {

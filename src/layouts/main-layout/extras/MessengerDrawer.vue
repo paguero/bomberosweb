@@ -79,7 +79,7 @@
                            <li class="list-group-item py-3 ps-0 border-top" v-for="(cotizacion, x) in allCotizaciones" v-bind:key="x">
                               <!-- row -->
                               <div class="row align-items-center p-4">
-                                 <div class="col-6 col-md-6 col-lg-7">
+                                 <div class="col-8 col-md-6 col-lg-7">
                                     <div class="d-flex">
                                         <i class="fa-solid fa-car-side"></i>
                                        
@@ -107,13 +107,13 @@
                                     </div>
                                  </div>
                                  <!-- input group -->
-                                 <div class="col-4 col-md-3 col-lg-3">
+                                 <div class="col-1 col-md-3 col-lg-3">
                                     <!-- input -->
                                     <!-- input -->
                                     
                                  </div>
                                  <!-- price -->
-                                 <div class="col-2 text-lg-end text-start text-md-end col-md-2">
+                                 <div class="col-3 text-lg-end text-start text-md-end col-md-2">
                                     <span class="fw-bold">{{$filters.formatCurrency(cotizacion.montoPago)}}</span>
                                  </div>
                               </div>

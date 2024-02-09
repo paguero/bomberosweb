@@ -6,7 +6,7 @@
                     <div class="row">
                         <div data-aos="fade-right fade-left" data-aos-delay="100" class="buyPatent donation-info col-lg-4 aos-init aos-animate text-center d-lg-block mx-auto resume-content">
 
-                          <div class="buyPatent-info lift lift-lg sticky-top" style="min-height:230px;background: url('/media/img/latfirefighter.png');background-position: center 0; background-size: cover;">
+                          <div class="buyPatent-info lift lift-lg sticky-top z-index-2" style="min-height:230px;background: url('/media/img/latfirefighter.png');background-position: center 0; background-size: cover;">
 
                               <div><span>
                                <Prime-InputMask slotChar='' :unstyled="true" v-if="cotizacionDetails.vehiculo"
@@ -88,8 +88,6 @@
                                                                value="value"
                                                                v-mask="'AAAAAA'"
                                                                @change="obtenerVehiculo"
-                                                               aria-readonly="readonly"
-                                                               readonly
                                                               >
                                                               <Prime-InputText
                                                               class="form-control form-patente p-2"
