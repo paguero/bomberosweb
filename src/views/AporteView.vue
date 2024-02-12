@@ -155,13 +155,15 @@
                                                                       </div>
                                                                     </div> 
                               </div>
-                              <div v-else>
+                              <div v-else class="form-group col-md-6">
                                 <Field  type="hidden"
                                                                     v-model="cotizacionDetails.compania"
                                                                     name="comuna"
                                                                  />
                               </div>
-                              <div v-if="!currentConvenio || currentConvenio.esComuna"
+
+                              
+                              <div v-if="currentConvenio && !currentConvenio.esComuna"
                                 class="form-group col-md-6"
                               >
                                 <label>*Compañía </label>
@@ -184,7 +186,7 @@
                                                                     </div> 
                               </div>
                               <div v-else>
-                                  <Field  type="hidden"
+                                 <Field  type="hidden"
                                                                     v-model="cotizacionDetails.compania"
                                                                     name="compania"
                                                                  />
