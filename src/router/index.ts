@@ -23,6 +23,15 @@ const routes: Array<RouteRecordRaw> = [
         },
       },
       {
+        path: "/yo-apoyo/:id",
+        name: "yo-apoyo",
+        component: () => import("@/views/HomeView.vue"),
+        meta: {
+          pageTitle: "Dashboard",
+          breadcrumbs: ["Dashboards"],
+        },
+      },
+      {
         path: "/aportes",
         name: "aportes",
         component: () => import("@/views/AportesView.vue"),

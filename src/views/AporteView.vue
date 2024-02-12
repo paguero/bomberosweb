@@ -125,58 +125,71 @@
                               </template>
                             </div>
                           </div>
-                          <div class="form-group col-md-12">
-                            <h5>
-                              ¿A cuál compañía de bomberos quieres realizar el
-                              aporte?:
-                            </h5>
+                          <div class="row">
+                              <div class="form-group col-md-12">
+                                <h5>
+                                  ¿A cuál compañía de bomberos quieres realizar el
+                                  aporte?:
+                                </h5>
+                              </div>
+                              <div class="alert alert-primary">{{currentConvenio.mensaje}}</div>
+                              <div
+                                class="form-group col-md-6"
+                                v-if="!currentConvenio.nombre"
+                              >
+                                <label>*Comuna</label>
+                                <Field 
+                                                                    v-slot="{ field,handleChange }"
+                                                                    v-model="cotizacionDetails.comuna"
+                                                                    name="comuna"
+                                                                    value="value"
+                                                                  >
+                                                                  <Prime-Dropdown filter v-model="cotizacionDetails.comuna" :options="allComunas" 
+                                                                    optionLabel="nombre" optionValue="codigoComuna" placeholder="Seleccione Comuna" class="w-100"
+                                                                    
+                                                                    @update:modelValue="handleChange" :model-value="field.value" />
+                                                                  </Field>
+                                                                  <div class="fv-plugins-message-container">
+                                                                      <div class="fv-help-block">
+                                                                        <ErrorMessage name="comuna" />
+                                                                      </div>
+                                                                    </div> 
+                              </div>
+                              <div v-else>
+                                <Field  type="hidden"
+                                                                    v-model="cotizacionDetails.compania"
+                                                                    name="comuna"
+                                                                 />
+                              </div>
+                              <div v-if="currentConvenio.esComuna"
+                                class="form-group col-md-6"
+                              >
+                                <label>*Compañía </label>
+                                <Field 
+                                                                    v-slot="{ field,handleChange }"
+                                                                    v-model="cotizacionDetails.compania"
+                                                                    name="compania"
+                                                                    value="value"
+                                                                    disabled="currentConvenio.nombre!='' && !currentConvenio.esComuna"
+                                                                  >
+                                                                  <Prime-Dropdown filter v-model="cotizacionDetails.compania" :options="allCompanias" 
+                                                                    optionLabel="nombre" optionValue="nombre" placeholder="Seleccione Compañía" class="w-100"
+                                                                    
+                                                                    @update:modelValue="handleChange" :model-value="field.value" />
+                                                                  </Field>
+                                                                  <div class="fv-plugins-message-container">
+                                                                      <div class="fv-help-block">
+                                                                        <ErrorMessage name="compania" />
+                                                                      </div>
+                                                                    </div> 
+                              </div>
+                              <div v-else>
+                                  <Field  type="hidden"
+                                                                    v-model="cotizacionDetails.compania"
+                                                                    name="compania"
+                                                                 />
+                              </div>
                           </div>
-                          <div
-                            class="form-group col-md-6"
-                            
-                          >
-                            <label>*Comuna</label>
-                            <Field 
-                                                                v-slot="{ field,handleChange }"
-                                                                v-model="cotizacionDetails.comuna"
-                                                                name="comuna"
-                                                                value="value"
-                                                              >
-                                                               <Prime-Dropdown filter v-model="cotizacionDetails.comuna" :options="allComunas" 
-                                                                optionLabel="nombre" optionValue="codigoComuna" placeholder="Seleccione Comuna" class="w-100"
-                                                                
-                                                                @update:modelValue="handleChange" :model-value="field.value" />
-                                                               </Field>
-                                                               <div class="fv-plugins-message-container">
-                                                                  <div class="fv-help-block">
-                                                                    <ErrorMessage name="comuna" />
-                                                                  </div>
-                                                                </div> 
-                          </div>
-
-                          <div
-                            class="form-group col-md-6"
-                          >
-                            <label>*Compañía</label>
-                            <Field 
-                                                                v-slot="{ field,handleChange }"
-                                                                v-model="cotizacionDetails.compania"
-                                                                name="compania"
-                                                                value="value"
-                                                              >
-                                                               <Prime-Dropdown filter v-model="cotizacionDetails.compania" :options="allCompanias" 
-                                                                optionLabel="nombre" optionValue="nombre" placeholder="Seleccione Compañía" class="w-100"
-                                                                
-                                                                @update:modelValue="handleChange" :model-value="field.value" />
-                                                               </Field>
-                                                               <div class="fv-plugins-message-container">
-                                                                  <div class="fv-help-block">
-                                                                    <ErrorMessage name="compania" />
-                                                                  </div>
-                                                                </div> 
-                          </div>
-
-                         
                         </div>
                       </div>
                     </div>
@@ -232,7 +245,7 @@ import { useCotizacionStore } from "@/stores/cotizacion";
 import { useMontoAporteStore } from "@/stores/montoAporte";
 import { useComunaStore } from "@/stores/comuna";
 import { useDestinoAporteStore } from "@/stores/destinoAporte";
-
+import { useConvenioStore } from "@/stores/convenio";
 import type { ICotizacion } from "@/stores/cotizacion";
 import * as Yup from "yup";
 import Swal from "sweetalert2/dist/sweetalert2.js";
@@ -255,6 +268,7 @@ export default defineComponent({
     const storeComuna = useComunaStore();
     const storeDestinoAporte = useDestinoAporteStore();
     const storeCarro = useCarroCompraStore();
+    const storeConvenio = useConvenioStore();
     const datosConfirmados = ref(false);
     const loading = ref(false);
     const campania = import.meta.env.VITE_APP_CONVENIO;
@@ -295,9 +309,22 @@ export default defineComponent({
       obtenerComunas();
       await obtenerCotizacion(cotizacionId);
       await obtenerCarro(carro.carroId);
+      if(storeCarro.currentCarroCompra.convenioAporte)
+        await obtenerConvenio(storeCarro.currentCarroCompra.convenioAporte);
       if(storeCarro.currentCarroCompra.comuna)
         obtenerCompanias(storeCarro.currentCarroCompra.comuna);
+      
     });
+    const obtenerConvenio = async (codigo) => {
+      await storeConvenio
+        .getConvenio(codigo).then(()=>{
+            if(storeConvenio.currentConvenio.esComuna){
+              storeCarro.currentCarroCompra.comuna = storeConvenio.currentConvenio.nombre;
+            } else {
+              cotizacionDetails.value.compania = storeConvenio.currentConvenio.nombre;
+            }
+        });
+    }
     const obtenerMontos = (canal:string) => {
       storeMontoAporte.getMontoAportes(canal)
         .catch(() => {
@@ -400,6 +427,10 @@ export default defineComponent({
     const currentCarroCompra = computed(() => {
       return storeCarro.currentCarroCompra;
     });
+    const currentConvenio = computed(() => {
+      return storeConvenio.currentConvenio;
+    });
+    
     const cotizacionDetails = ref<ICotizacion>({
        			cotizacionId : store.currentCotizacion.cotizacionId,
             carroId : store.currentCotizacion.carroId,
@@ -471,7 +502,8 @@ export default defineComponent({
       currentCarroCompra,
       datosConfirmados,
       allCompanias,
-      allComunas
+      allComunas,
+      currentConvenio
     };
   },
 });

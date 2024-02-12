@@ -78,6 +78,7 @@
     <!--begin::Body-->
     <div class="card-body pt-5">                 
          <!--begin::Item-->
+         <Toast />
          <template v-for="compania in allAportes" :key="compania.compania">
             <div class="d-flex flex-stack">
                 <div class="text-gray-700 fw-semibold fs-6 me-2">{{compania.compania}}</div>                   
@@ -86,6 +87,8 @@
                   <span class="text-gray-900 fw-bolder fs-6">{{$filters.formatCurrency(compania.montoAporte)}}</span> 
                   </div>  
             </div>
+            <div v-if="compania.codigo" class="d-flex text-left align-items-start justify-content-start">
+              <a :href="`https://www.soapbomberos.cl/yo-apoyo/${compania.codigo}`" @click="copyClip(this.href)">https://www.soapbomberos.cl/yo-apoyo/{{compania.codigo}}</a></div>
             <div class="separator separator-dashed my-3"></div>
          </template>
              
@@ -118,6 +121,8 @@ import { useComunaStore } from "@/stores/comuna";
 import type { IAporte } from "@/stores/aporte";
 import * as Yup from "yup";
 import Swal from "sweetalert2/dist/sweetalert2.js";
+import { useToast } from 'primevue/usetoast';
+
 import moment from "moment";
 moment.locale("es");
 
@@ -131,6 +136,7 @@ export default defineComponent({
     const aporte = ref<IAporte>();
     const store = useAporteStore();
     const storeComuna = useComunaStore();
+    const toast = useToast();
     const comuna = ref('');
     onMounted(() => {
       buscarAportes();
@@ -200,6 +206,11 @@ export default defineComponent({
     const allComunas = computed(() => {
       return storeComuna.allComunas;
     });
+
+    const copyClip = (url)=>{
+      navigator.clipboard.writeText(url),
+      toast.add({ severity: 'info', summary: 'Info', detail: 'Url copiada al porta papeles', life: 3000 });
+    }
     const loading = ref(true);
     return {
       loading,
@@ -207,7 +218,7 @@ export default defineComponent({
       allAportes,
       comuna,
       aporte, currentAporte, buscarAporte,
-      allComunas
+      allComunas, toast, copyClip
     };
   },
 });

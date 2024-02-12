@@ -261,7 +261,7 @@ export default defineComponent({
     const storeCarro = useCarroCompraStore();
     const datosConfirmados = ref(false);
     const loading = ref(false);
-    const esPersona= ref(false);
+    const esPersona= ref(false); 
     const cotizacionsValidator = Yup.object().shape({
       rut: Yup.string().required("Es obligatorio").label("Rut").test("yupIsRut", "Rut ingresado no es valido", function (value) {
           return rutEsValido(value);

@@ -10,6 +10,7 @@ export interface ICarroCompra {
     montoPago?: string|undefined;
     aporte: string|undefined;
     comuna?:string|undefined;
+    convenioAporte?:string|undefined;
     compania:string|undefined;
     totalPagar?: string|undefined;
     urlPago:string|undefined;

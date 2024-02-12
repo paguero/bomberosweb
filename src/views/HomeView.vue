@@ -15,11 +15,11 @@
                 <Form autocomplete="off" class="form-signinx d-flex align-items-stretch flex-column" novalidate="novalidate"
                       @submit="saveChanges1()"
                       :validation-schema="cotizacionValidator">
-       
+                <div class="apoyo" v-if="currentConvenio.slogan"><h5><i class="fas fa-engine-warning"></i> {{currentConvenio.slogan}}</h5></div>
                 <img src="/media/img/banner/soap-2023.png" style="width: 107px;margin:auto" />
                 <h5>Ingresa tu patente</h5>
                 <div class="sr-soap-header-patente__input" style="margin:auto; align-items:center">
-                    
+
                         <div class="form" style="margin:auto; align-items:center">
                                 <Field 
                                       v-slot="{ field,handleChange }"
@@ -107,7 +107,7 @@
 
 
 <script lang="ts">
-import { ref, defineComponent } from "vue";
+import { ref, defineComponent, computed, onMounted } from "vue";
 import { useBus } from  "@/core/bus/bus";
 import { ErrorMessage, Field, Form } from "vee-validate";
 import Price from "@/components/widgets/Price.vue";
@@ -117,7 +117,7 @@ import ChatBot from "@/components/widgets/ChatBot.vue";
 import _ from "lodash";
 import * as Yup from "yup";
 import { useRouter, useRoute} from "vue-router";
-import { useAuthStore } from "@/stores/auth";
+import { useConvenioStore } from "@/stores/convenio";
 import { useCotizacionStore } from "@/stores/cotizacion";
 import { vMaska } from "maska"
 import Swal from "sweetalert2/dist/sweetalert2.js";
@@ -128,7 +128,8 @@ export interface IVehiculo {
 }
 export interface ICotizacion {
   vehiculo: IVehiculo,
-  carroId:string
+  carroId:string,
+  convenioAporte:string;
 }
 export default defineComponent({
   name: "main-dashboard",
@@ -140,10 +141,11 @@ export default defineComponent({
     ErrorMessage,
     Field,
     Form,
-  },
+  }, 
   setup() {
     const router = useRouter();
     const store = useCotizacionStore();
+    const storeConvenio = useConvenioStore();
     let loading = ref(false);
     const { bus } = useBus();
     const mostrarChatBot = ref(false);
@@ -153,6 +155,8 @@ export default defineComponent({
           return patenteEsValido(value);
         }),
     });
+    const route = useRoute();
+    const convenioAporte = route.params.id;
     var jsonCarro = store.getCarro();
     let carro = {carroId:''};
     if(jsonCarro){
@@ -160,8 +164,9 @@ export default defineComponent({
     }
     const cotizacionDetails= ref<ICotizacion>({
       carroId : carro.carroId,
+      convenioAporte:'',
       vehiculo : {
-        patente : store.currentCotizacion?.patente    
+        patente : store.currentCotizacion?.patente
     }});
     Yup.addMethod(Yup.string, "yupIsPatente", function (mensaje) {
       const { message } = mensaje;
@@ -174,6 +179,16 @@ export default defineComponent({
         return patenteEsValido(value);
       });
     });
+    onMounted(() => {
+      if(convenioAporte)
+        obtenerConvenio(convenioAporte);
+    });
+    const obtenerConvenio = (codigo) =>{
+      storeConvenio
+        .getConvenio(codigo).then(()=>{
+          cotizacionDetails.value.convenioAporte =storeConvenio.currentConvenio.codigo; 
+        });
+    }
     const saveChanges1 = () => {
         loading.value = true;
         // Activate indicator
@@ -215,7 +230,9 @@ export default defineComponent({
             });
           });
     };
-
+    const currentConvenio = computed(() => {
+      return storeConvenio.currentConvenio;
+    });
     
     return {
       saveChanges1,
@@ -223,7 +240,8 @@ export default defineComponent({
       cotizacionValidator,
       mostrarChatBot,
       botonChatBot,
-      loading
+      loading,
+      currentConvenio
     };
   },
 });
