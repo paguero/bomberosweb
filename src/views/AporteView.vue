@@ -132,7 +132,7 @@
                                   aporte?:
                                 </h5>
                               </div>
-                              <div class="alert alert-primary">{{currentConvenio.mensaje}}</div>
+                              <div class="alert alert-primary" v-if="currentConvenio.mensaje">{{currentConvenio.mensaje}}</div>
                               <div
                                 class="form-group col-md-6"
                                 v-if="!currentConvenio.nombre"
