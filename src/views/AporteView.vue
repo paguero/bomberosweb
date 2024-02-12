@@ -161,7 +161,7 @@
                                                                     name="comuna"
                                                                  />
                               </div>
-                              <div v-if="currentConvenio.codigo!='' && currentConvenio.esComuna"
+                              <div v-if="currentConvenio.codigo=='' || currentConvenio.esComuna"
                                 class="form-group col-md-6"
                               >
                                 <label>*Compañía </label>
