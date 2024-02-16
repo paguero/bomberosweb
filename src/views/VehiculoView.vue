@@ -203,7 +203,8 @@
                                                 <div class="d-flex flex-row">
                                                   
                                                     <Prime-Button 
-                                                    :disabled="!datosConfirmados"
+                                                      onclick="gtag('event', 'Info_vehiculo')"
+                                                      :disabled="!datosConfirmados"
                                                       type="submit"
                                                       class="btn btn-primary"
                                                       label="Continuar" :loading="loading"/>

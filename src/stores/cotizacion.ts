@@ -45,7 +45,7 @@ export interface ICotizacion {
     montoPago: string;
     fechaTransaccion: string;
     exitoso: string;
-    emitida: string;
+    emitida?: boolean;
     anulada: string;
     pdfEnProceso: string;
     codigoAutorizacion: string;

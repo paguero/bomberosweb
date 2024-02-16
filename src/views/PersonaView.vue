@@ -207,6 +207,7 @@
                                               Volver</router-link>
                                             
                                                    <Prime-Button :disabled="!datosConfirmados"
+                                                   onclick="gtag('event', 'Info_persona')"
                                                       type="submit"
                                                       class="btn btn-primary"
                                                       label="Continuar"

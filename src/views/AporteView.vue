@@ -209,7 +209,7 @@
                       Volver</router-link
                     >
 
-                    <Prime-Button 
+                    <Prime-Button  onclick="gtag('event', 'Info_aporte')"
                                                       type="submit"
                                                       id="kt_account_edificio_details_submit"
                                                       :loading="loading"

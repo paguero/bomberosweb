@@ -33,7 +33,7 @@
                 </div>
               </div>
             
-            <button type="submit" ref="submitButton1" class="btn banner-form__button btn-quotation">COMPRAR</button> 
+            <button type="submit" ref="submitButton1" onclick="gtag('event', 'Info_patente_inferior')" class="btn banner-form__button btn-quotation">COMPRAR</button> 
           </Form>
           </div>
         </div>

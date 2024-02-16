@@ -127,6 +127,7 @@
                            <div class="d-grid mb-1 mt-4">
                               <!-- btn -->
                               <Prime-Button id="kt_account_edificio_details_submit"
+                               onclick="gtag('event', 'Info_confirmacion')"
                               :disabled="!currentCarroCompra.totalPagar || currentCarroCompra.totalPagar==0"
                                class="btn btn-primary btn-lg d-flex justify-content-between align-items-center" type="submit"
                                :loading="loading" label="Ir a Pagar">

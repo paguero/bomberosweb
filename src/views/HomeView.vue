@@ -45,7 +45,7 @@
                     
                 </div>
                 <div class="sr-soap-header-patente__btn">
-                    <Prime-Button :loading="loading" type="submit" label="COMPRAR"  class="btn banner-form__button btn-quotation"/> 
+                    <Prime-Button :loading="loading" type="submit" onclick="gtag('event', 'Info_patente')" label="COMPRAR"  class="btn banner-form__button btn-quotation"/> 
                 </div>
                 </Form>
             </div>
@@ -119,6 +119,7 @@ import * as Yup from "yup";
 import { useRouter, useRoute} from "vue-router";
 import { useConvenioStore } from "@/stores/convenio";
 import { useCotizacionStore } from "@/stores/cotizacion";
+import { useCarroCompraStore } from "@/stores/carroCompra";
 import { vMaska } from "maska"
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import { patenteEsValido } from "@/core/validators/YupPatente";
@@ -146,6 +147,7 @@ export default defineComponent({
     const router = useRouter();
     const store = useCotizacionStore();
     const storeConvenio = useConvenioStore();
+    const storeCarro = useCarroCompraStore();
     let loading = ref(false);
     const { bus } = useBus();
     const mostrarChatBot = ref(false);
@@ -182,10 +184,23 @@ export default defineComponent({
     onMounted(() => {
       if(convenioAporte)
         obtenerConvenio(convenioAporte);
+        obtenerCarro(carro.carroId);
     });
+
+    const obtenerCarro = (carroId) =>{
+      storeCarro
+        .getCarroCompra(carroId).then(()=>
+        {
+          if(storeCarro.currentCarroCompra.exitoso){
+            store.setCarro(JSON.stringify({carroId:null, cotizacionId:null}));
+            bus.emit("actualiza-carro-compra", 0);
+          }
+        });
+    }
+
     const obtenerConvenio = (codigo) =>{
       storeConvenio
-        .getConvenio(codigo).then(()=>{
+        .getConvenio(codigo).then(()=>{ 
           cotizacionDetails.value.convenioAporte =storeConvenio.currentConvenio.codigo; 
         });
     }
