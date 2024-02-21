@@ -16,13 +16,13 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: "/home",
         name: "home",
-        component: () => import("@/views/HomeView.vue"),
+        component: () => import("@/views/Incoming.vue"),
         meta: {
           pageTitle: "Dashboard",
           breadcrumbs: ["Dashboards"],
         },
       },
-      {
+      /*{
         path: "/yo-apoyo/:id",
         name: "yo-apoyo",
         component: () => import("@/views/HomeView.vue"),
@@ -30,7 +30,7 @@ const routes: Array<RouteRecordRaw> = [
           pageTitle: "Dashboard",
           breadcrumbs: ["Dashboards"],
         },
-      },
+      },*/
       {
         path: "/aportes",
         name: "aportes",
