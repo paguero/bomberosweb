@@ -81,8 +81,8 @@ export const useCarroCompraStore = defineStore("carroCompra", () => {
       });
   }
 
-  function iniciarEmision(carroId) {
-    return ApiService.post(`soap/emitir/inicio`, {carroId})
+  function iniciarEmision(params) {
+    return ApiService.post(`soap/emitir/inicio`, params)
       .then(({ data }) => {
         setCarroCompra(data);
       })

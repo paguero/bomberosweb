@@ -323,8 +323,13 @@ export default defineComponent({
     const carro = JSON.parse(store.getCarro());
 
     onMounted(async () => {     
-      obtenerCotizacion(cotizacionId);
+      await obtenerCotizacion(cotizacionId);
       obtenerCarro(carro.carroId);
+      window.scrollTo({
+        top: 650,
+        left: 0,
+        behavior: "smooth",
+      });
     });
     
     const obtenerCotizacion = (cotizacionId) =>{

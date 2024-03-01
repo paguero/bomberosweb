@@ -23,6 +23,15 @@ const routes: Array<RouteRecordRaw> = [
         },
       },
       {
+        path: "/terminal",
+        name: "info-terminal",
+        component: () => import("@/views/TerminalView.vue"),
+        meta: {
+          pageTitle: "Dashboard",
+          breadcrumbs: ["Dashboards"],
+        },
+      },
+      {
         path: "/yo-apoyo/:id",
         name: "yo-apoyo",
         component: () => import("@/views/HomeView.vue"),

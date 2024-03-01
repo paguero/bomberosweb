@@ -22,6 +22,10 @@
             </div>
 
             <div class="navbar-end navbar-menu">
+              <div class="card flex justify-content-center position-absolute top-0">
+                <Button type="button" icon="pi pi-ellipsis-v" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu" />
+                <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
+            </div>
               <router-link :to="{ name: 'home'}" class="banner-form__button-secondary">
                                               Descarga tu póliza</router-link>
               <div class="rrss-icons">
@@ -52,7 +56,31 @@
     
   <!-- end page header -->
 </template>
+<script setup>
+import { ref } from "vue";
+import Menu from 'primevue/menu';
 
+const menu = ref();
+const items = ref([
+    {
+        label: 'Options',
+        items: [
+            {
+                label: 'Refresh',
+                icon: 'pi pi-refresh'
+            },
+            {
+                label: 'Export',
+                icon: 'pi pi-upload'
+            }
+        ]
+    }
+]);
+
+const toggle = (event) => {
+    menu.value.toggle(event);
+};
+</script>
 <style lang="scss" scoped>
 .navbar-desktop {
   @media screen and (max-width: 1024px) {

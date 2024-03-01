@@ -52,6 +52,9 @@ import Tag from "primevue/tag";
 import BadgeDirective from 'primevue/badgedirective';
 import Checkbox from "primevue/checkbox";
 import { emitter } from  "./core/bus/bus";
+import { VueSignalR } from '@dreamonkey/vue-signalr';
+import { HubConnectionBuilder } from '@microsoft/signalr';
+
 
 declare module '@vue/runtime-core' {
   export interface ComponentCustomProperties {
@@ -88,12 +91,14 @@ idsrvAuth.startup().then((ok) => {
     //app.component("Toast", Toast);
     app.directive('badge', BadgeDirective); 
 
-
+    const connection = new HubConnectionBuilder().withUrl(`${import.meta.env.VITE_APP_API_URL_}/api/public/notify`).withAutomaticReconnect().build();
+    //const connection = new HubConnectionBuilder().withUrl(`https://localhost:7006/api/public/notify`).withAutomaticReconnect().configureLogging(1).build();
     app.use(createPinia());
     app.use(router);
     app.use(ElementPlus);
     app.use(ToastService);
     app.use(ConfirmationService);
+    app.use(VueSignalR, { connection });
     ApiService.init(app);
     initApexCharts(app);
     initInlineSvg(app);

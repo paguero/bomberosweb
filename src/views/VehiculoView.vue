@@ -105,7 +105,25 @@
                                                                   </div>
                                                                 </div>        
                                                             </div>    
-                                                            
+                                                            <div class="form-group col-md-6 margen-espacial">
+                                                                <p>*Tipo de Vehículo</p>
+                                                                
+                                                                <Field 
+                                                                v-slot="{ field,handleChange }"
+                                                                v-model="cotizacionDetails.vehiculo.tipoVehiculo"
+                                                                name="tipoVehiculo"
+                                                                value="value"
+                                                              >
+                                                                <Prime-Dropdown v-model="cotizacionDetails.vehiculo.tipoVehiculo" :options="allTipos" 
+                                                                optionLabel="nombre" optionValue="nombre" placeholder="Seleccione Tipo de vehículo" class="w-100"
+                                                                 @update:modelValue="handleChange" :model-value="field.value" />
+                                                                </Field>
+                                                               <div class="fv-plugins-message-container">
+                                                                  <div class="fv-help-block">
+                                                                    <ErrorMessage name="tipovehiculo" />
+                                                                  </div>
+                                                                </div> 
+                                                            </div>
                                                             <div class="form-group col-md-6 margen-espacial">
                                                                 <p>*Marca del Vehículo</p>
                                                                <Field 
@@ -133,7 +151,7 @@
                                                                 name="modelo"
                                                                 value="value"
                                                               >
-                                                                <Prime-Dropdown v-model="cotizacionDetails.vehiculo.modelo" :options="allModelos" 
+                                                                <Prime-Dropdown filter v-model="cotizacionDetails.vehiculo.modelo" :options="allModelos" 
                                                                 optionLabel="nombre" optionValue="nombre" placeholder="Seleccione Modelo" class="w-100" 
                                                                  @update:modelValue="handleChange" :model-value="field.value" />
                                                                 </Field>
@@ -144,25 +162,7 @@
                                                                 </div> 
 
                                                             </div>
-                                                            <div class="form-group col-md-6 margen-espacial">
-                                                                <p>*Tipo de Vehículo</p>
-                                                                
-                                                                <Field 
-                                                                v-slot="{ field,handleChange }"
-                                                                v-model="cotizacionDetails.vehiculo.tipoVehiculo"
-                                                                name="tipoVehiculo"
-                                                                value="value"
-                                                              >
-                                                                <Prime-Dropdown v-model="cotizacionDetails.vehiculo.tipoVehiculo" :options="allTipos" 
-                                                                optionLabel="nombre" optionValue="nombre" placeholder="Seleccione Tipo de vehículo" class="w-100"
-                                                                 @update:modelValue="handleChange" :model-value="field.value" />
-                                                                </Field>
-                                                               <div class="fv-plugins-message-container">
-                                                                  <div class="fv-help-block">
-                                                                    <ErrorMessage name="tipovehiculo" />
-                                                                  </div>
-                                                                </div> 
-                                                            </div>
+                                                            
                                                             <div class="form-group col-md-6">
                                                                 <p>*Nº Motor</p>
                                                                 <Field type="text"
@@ -370,6 +370,11 @@ export default defineComponent({
       obtenerTipos(store.currentCotizacion.codigoConvenio);
       obtenerCarro(carro.carroId);
       loading.value=false;
+      window.scrollTo({
+        top: 650,
+        left: 0,
+        behavior: "smooth",
+      });
     });
     const obtenerMarcas =async  (campania:string) => {
       await storeMarca.getMarcas(campania);

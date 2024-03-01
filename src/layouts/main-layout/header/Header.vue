@@ -42,6 +42,11 @@
                 </a>
               </div>
             <div class="navbar-end navbar-menu">
+              <div v-if="terminal" class="d-flex flex-row justify-content-center position-absolute top-0 align-items-center pe-5">
+                  <span class="text-white me-3">Hola {{terminal.responsable}}, revisa tu configuración    </span>
+                  <Prime-Button severity="secondary" type="button" icon="pi pi-ellipsis-v" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu" />
+                  <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
+              </div>
               <div>
                 <router-link :to="{ name: 'modifica-tu-poliza-ingresar'}" class="banner-form__button-secondary text-nowrap mx-2">
                                               Modifica tu póliza</router-link>
@@ -88,6 +93,9 @@
 import { getAssetPath } from "@/core/helpers/assets";
 import { defineComponent, ref } from "vue";
 import { useBus } from "../../../core/bus/bus";
+import Menu from 'primevue/menu';
+import { useRouter, useRoute} from "vue-router";
+import { useTerminalStore } from "@/stores/terminal";
 import KTHeaderMenu from "@/layouts/main-layout/header/menu/Menu.vue";
 import KTHeaderNavbar from "@/layouts/main-layout/header/Navbar.vue";
 const { bus } = useBus();
@@ -103,9 +111,18 @@ export default defineComponent({
   components: {
     KTHeaderMenu,
     KTHeaderNavbar,
+    Menu
   },
   setup() {
     const isOpen = ref(false);  
+    const store = useTerminalStore();
+    const router = useRouter();
+    const terminal = ref();
+    var jsonTerminal = store.getTerminalStorage();
+    if(jsonTerminal){
+      terminal.value = JSON.parse(jsonTerminal);
+    }
+
     bus.on('unidades-carro-compra', (total ) => {
        console.log("RECIBIENDO UNIDADES COMPRA" + JSON.stringify(total)  );  
        unidadesCarro.value = total as number;
@@ -113,16 +130,73 @@ export default defineComponent({
     bus.on('agrega-producto-carro', (e) => {
        console.log("RECIBIENDO EMITT OTRA PAGE B" + e  )
        isOpen.value = e as boolean;
-      }); 
+      });
+    bus.on('terminal-conectado', (terminalConectado) => {
+       terminal.value = JSON.parse(terminalConectado.toString());
+        items.value = [
+          {
+              label: `ID Terminal: ${terminal.value?.terminalId}`,
+              items: [
+                  {
+                      label: 'Cambiar terminal',
+                      icon: 'pi pi-refresh',
+                      command: () => {
+                        router.push({ name: "info-terminal"});
+                      }
+                  },
+                  {
+                      label: 'Desconectar',
+                      icon: 'pi pi-sign-out',
+                      command: () => {
+                        store.setTerminalStorage('');
+                        terminal.value=null;
+                      }
+                  }
+              ]
+          }
+        ]; 
+    });
+    const items = ref([
+        {
+            label: `ID Terminal: ${terminal.value?.terminalId}`,
+            items: [
+                {
+                    label: 'Cambiar terminal',
+                    icon: 'pi pi-refresh',
+                    command: () => {
+                      router.push({ name: "info-terminal"});
+                    }
+                },
+                {
+                    label: 'Desconectar',
+                    icon: 'pi pi-sign-out',
+                    command: () => {
+                      store.setTerminalStorage('');
+                      terminal.value=null;
+                    }
+                }
+            ]
+        }
+      ]);
 
+    
     const unidadesCarro = ref<number>(0);
+    const menu = ref();
+    
+    const toggle = (event) => {
+        menu.value.toggle(event);
+    };
     return {
       layout,
       headerWidthFluid,
       headerDisplay,
       themeMode,
       getAssetPath,
-      unidadesCarro
+      unidadesCarro,
+      toggle,
+      items,
+      menu,
+      terminal
     };
   },
 });

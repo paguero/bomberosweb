@@ -113,6 +113,7 @@ import { ErrorMessage, Field, Form } from "vee-validate";
 import Price from "@/components/widgets/Price.vue";
 import Bombero from "@/components/widgets/Bombero.vue";
 import Faq from "@/components/widgets/Faq.vue";
+import { useTerminalStore } from "@/stores/terminal";
 import ChatBot from "@/components/widgets/ChatBot.vue";
 import _ from "lodash";
 import * as Yup from "yup";
@@ -131,6 +132,8 @@ export interface ICotizacion {
   vehiculo: IVehiculo,
   carroId:string,
   convenioAporte:string;
+  terminal:string;
+  terminalEmail:string;
 }
 export default defineComponent({
   name: "main-dashboard",
@@ -146,6 +149,7 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const store = useCotizacionStore();
+    const storeTerminal = useTerminalStore();
     const storeConvenio = useConvenioStore();
     const storeCarro = useCarroCompraStore();
     let loading = ref(false);
@@ -164,9 +168,17 @@ export default defineComponent({
     if(jsonCarro){
       carro = JSON.parse(store.getCarro());
     }
+    const terminal = ref({});
+    var jsonTerminal = storeTerminal.getTerminalStorage();
+    if(jsonTerminal){
+      terminal.value = JSON.parse(jsonTerminal);
+    }
+
     const cotizacionDetails= ref<ICotizacion>({
       carroId : carro.carroId,
       convenioAporte:'',
+      terminal: terminal.value.terminalId,
+      terminalEmail: terminal.value.email,
       vehiculo : {
         patente : store.currentCotizacion?.patente
     }});
@@ -184,7 +196,7 @@ export default defineComponent({
     onMounted(() => {
       if(convenioAporte)
         obtenerConvenio(convenioAporte);
-        obtenerCarro(carro.carroId);
+      obtenerCarro(carro.carroId);
     });
 
     const obtenerCarro = (carroId) =>{

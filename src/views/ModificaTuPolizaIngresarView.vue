@@ -13,7 +13,7 @@
           v-model="cotizacionDetails.numeroFolio"
           class="form-control"
           type="text"
-          placeholder=""
+          placeholder="Nº de folio (aparece en el pdf)"
           name="numeroFolio"
           autocomplete="off"
         />
@@ -29,7 +29,7 @@
           v-model="cotizacionDetails.numeroPoliza"
           class="form-control"
           type="text"
-          placeholder=""
+          placeholder="Nº de la póliza"
           name="numeroPoliza"
           autocomplete="off"
         />
@@ -45,7 +45,7 @@
           v-model="cotizacionDetails.patente"
           class="form-control"
           type="text"
-          placeholder=""
+          placeholder="Patente"
           name="patente"
           autocomplete="off"
         />
