@@ -127,6 +127,7 @@
                            <div class="d-grid mb-1 mt-4">
                               <!-- btn -->
                               <Prime-Button id="kt_account_edificio_details_submit"
+                               onclick="gtag('event', 'Info_confirmacion')"
                               :disabled="!currentCarroCompra.totalPagar || currentCarroCompra.totalPagar==0"
                                class="btn btn-primary btn-lg d-flex justify-content-between align-items-center" type="submit"
                                :loading="loading" label="Ir a Pagar">
@@ -151,21 +152,40 @@
       <!-- Row -->
     </div>
     <!-- end page main wrapper -->
-    
+    <Prime-Dialog v-model:visible="modalPOS" modal :closable="false" header="Pago POS" :style="{ width: '50vw' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+      <div class="d-flex flex-column flex-md-row justify-content-center align-items-center">
+          <div class="d-flex flex-column">Por favor, termina el pago en la POS. Una vez aprobado, esta ventana se cerrará automáticamente.<br/> No cierres este mensaje.
+          <p v-if="mostrarMensaje" class="alert alert-secondary mt-5 text-black">
+              <i class="fa fa-exclamation me-3"></i>Por favor, autoriza el pago en la terminal.
+          </p>
+          <ProgressSpinner style="width: 50px; height: 50px" strokeWidth="8" fill="var(--surface-ground)"
+      animationDuration=".5s" aria-label="Custom ProgressSpinner" />
+          </div>
+          <img src="/media/img/redelcom.png"/>
+      </div>
+        <div class="flex align-items-center gap-3">
+          <Prime-Button label="Cancelar" @click="refrescarCarro" text class="btn btn-primary btn-lg d-flex justify-content-between align-items-center" />          
+        </div>
+    </Prime-Dialog>
   </div>
 </template>
 
 <script lang="ts">
-import { ref, defineComponent, onMounted, computed, watch } from "vue";
+import { ref, defineComponent, onMounted, computed, watch, inject } from "vue";
 import { ErrorMessage, Field, Form } from "vee-validate";
 import _ from "lodash";
 import { useConfirm } from "primevue/useconfirm";
 import { useRouter, useRoute} from "vue-router";
 import { useCarroCompraStore } from "@/stores/carroCompra";
 import { useCotizacionStore } from "@/stores/cotizacion";
+import { useTerminalStore } from "@/stores/terminal";
 import { useBus } from "@/core/bus/bus";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import moment from "moment";
+import { useSignalR } from '@dreamonkey/vue-signalr';
+import CryptoJS from 'crypto-js';
+import ProgressSpinner from 'primevue/progressspinner';
+
 moment.locale("es");
 
 export default defineComponent({
@@ -173,7 +193,8 @@ export default defineComponent({
   components: {
     ErrorMessage,
     Field,
-    Form
+    Form,
+    ProgressSpinner
 
   },
   
@@ -181,9 +202,14 @@ export default defineComponent({
     const { bus } = useBus();
     const confirm = useConfirm();
     const router = useRouter();
+    const storeTerminal = useTerminalStore();
     const store = useCotizacionStore();
     const storeCarro = useCarroCompraStore();
-    const loading = ref(false);
+    const loading = ref(true);
+    const modalPOS = ref(false);
+    const mostrarMensaje = ref(false);
+    const signalr = useSignalR();
+
     
      bus.on('actualiza-carro-compra', (id  ) => {
        console.log("RECIBIENDO CARRO COMPRA" + JSON.stringify(id)  );
@@ -194,15 +220,25 @@ export default defineComponent({
     bus.on('limpia-carro-compra', () => {       
        obtenerCarro(0);   
     });
+    const terminal = ref();
+    var jsonTerminal = storeTerminal.getTerminalStorage();
+    if(jsonTerminal){
+      terminal.value = JSON.parse(jsonTerminal);
+    }
 
-    const saveChanges1 = () => {
+    const saveChanges1 = async () => {
         loading.value = true;
-        storeCarro.iniciarEmision(carroId)
+        storeCarro.iniciarEmision({carroId:carroId, hash:''})
           .then(() => {
             loading.value = false;
-            location.href = storeCarro.currentCarroCompra.urlPago;
+            if(storeCarro.currentCarroCompra.urlPago=='RDC'){
+              modalPOS.value = true;
+            } else {
+              location.href = storeCarro.currentCarroCompra.urlPago;
+            }
           })
           .catch(() => {
+            loading.value = false;
             const [error] = Object.values(storeCarro.carroCompraErrors);
             Swal.fire({
                 text: error,
@@ -254,10 +290,34 @@ export default defineComponent({
     const carroId = route.params.id;
     const carro = JSON.parse(store.getCarro());
 
+    signalr.invoke('JoinNotificationGroup', carroId);
+
+    //signalr.invoke('SendMessage', { 'hello' });
+    signalr.on('ClientReceiveNotification', (user, message) => {
+      console.log('recibiendo mensaje');
+      console.log('carro ' + user);
+      console.log('message ' + message);
+      if(user == carroId && message=="0"){
+        mostrarMensaje.value = true;
+      } else if(user == carroId && message=="1"){
+        router.push({ name: "info-comprobante", params:{id:carroId} });
+      } else if(user == carroId && message=="-1"){
+        history.go();
+      }
+    });
+
+
+
     onMounted(async () => {     
       obtenerCarro(carroId);
       obtenerCotizaciones(carroId);
     });
+
+    const refrescarCarro = () => {     
+      obtenerCarro(carroId);
+      obtenerCotizaciones(carroId);
+      modalPOS.value = false;
+    };
     
     const obtenerCotizaciones = (carroId) =>{
       loading.value = true;
@@ -323,7 +383,9 @@ export default defineComponent({
       allCotizaciones,
       currentCarroCompra,
       eliminarCotizacion,
-      confirmarEliminarCotizacion
+      confirmarEliminarCotizacion,
+      modalPOS,
+      mostrarMensaje, refrescarCarro
     };
   },
 });

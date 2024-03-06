@@ -430,7 +430,7 @@ export default defineComponent({
      watch(() => cotizacionDetails.value.cliente?.rut, (newValue) =>  {
       esPersona.value = parseInt(newValue.split('-')[0])<50000000;
     });
-
+ 
     return {
       loading,
       saveChanges1,

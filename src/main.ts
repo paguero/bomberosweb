@@ -91,8 +91,8 @@ idsrvAuth.startup().then((ok) => {
     //app.component("Toast", Toast);
     app.directive('badge', BadgeDirective); 
 
-    const connection = new HubConnectionBuilder().withUrl(`${import.meta.env.VITE_APP_API_URL_}/api/public/notify`).withAutomaticReconnect().build();
-    //const connection = new HubConnectionBuilder().withUrl(`https://localhost:7006/api/public/notify`).withAutomaticReconnect().configureLogging(1).build();
+    //const connection = new HubConnectionBuilder().withUrl(`${import.meta.env.VITE_APP_API_URL}/api/public/notify`).withAutomaticReconnect().build();
+    const connection = new HubConnectionBuilder().withUrl(`https://socketpos.azurewebsites.net/api/public/notify`).withAutomaticReconnect().configureLogging(1).build();
     app.use(createPinia());
     app.use(router);
     app.use(ElementPlus);

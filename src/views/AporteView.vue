@@ -135,7 +135,7 @@
                               <div class="alert alert-primary" v-if="currentConvenio.mensaje">{{currentConvenio.mensaje}}</div>
                               <div
                                 class="form-group col-md-6"
-                                v-if="!currentConvenio.nombre"
+                                v-if="!currentConvenio.nombre || (currentConvenio && currentConvenio.esEmbajador)"
                               >
                                 <label>*Comuna</label>
                                 <Field 
@@ -163,7 +163,7 @@
                               </div>
 
                               
-                              <div v-if="!currentConvenio.codigo || (currentConvenio && currentConvenio.esComuna)"
+                              <div v-if="!currentConvenio.codigo || (currentConvenio && currentConvenio.esComuna) || (currentConvenio && currentConvenio.esEmbajador)"
                                 class="form-group col-md-6"
                               >
                                 <label>*Compañía </label>
@@ -321,7 +321,7 @@ export default defineComponent({
       await storeConvenio
         .getConvenio(codigo).then(()=>{
             if(storeConvenio.currentConvenio.esComuna){
-              storeCarro.currentCarroCompra.comuna = storeConvenio.currentConvenio.nombre;
+              storeCarro.currentCarroCompra.comuna = storeConvenio.currentConvenio.comuna;
             } else {
               cotizacionDetails.value.compania = storeConvenio.currentConvenio.nombre;
             }
@@ -430,6 +430,9 @@ export default defineComponent({
       return storeCarro.currentCarroCompra;
     });
     const currentConvenio = computed(() => {
+      if(storeConvenio.currentConvenio.esComuna){
+        cotizacionDetails.value.comuna = storeConvenio.currentConvenio.comuna;
+      }
       return storeConvenio.currentConvenio;
     });
     
