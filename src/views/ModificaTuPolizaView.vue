@@ -402,7 +402,10 @@ Yup.addMethod(Yup.string, "yupIsRut", function (mensaje) {
 
 const onSubmit = async (values) => {
 
-    console.log(cotizacionDetails.value)
+   if(!esPersona.value){
+    cotizacionDetails.value.cliente.apellidoMaterno='';
+    cotizacionDetails.value.cliente.apellidoPaterno='';
+  }
   await storeCotizacion
     .endoso(cotizacionDetails.value
     )
