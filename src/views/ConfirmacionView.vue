@@ -152,18 +152,20 @@
       <!-- Row -->
     </div>
     <!-- end page main wrapper -->
-    <Prime-Dialog v-model:visible="modalPOS" modal header="Pago POS" :style="{ width: '50vw' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
-    <div class="d-flex flex-column flex-md-row justify-content-center align-items-center">
-        <div class="d-flex flex-column">Por favor, termina el pago en la POS. Una vez aprobado, esta ventana se cerrará automáticamente.<br/> No cierres este mensaje.
-        <p v-if="mostrarMensaje" class="alert alert-secondary mt-5 text-black">
-            <i class="fa fa-exclamation me-3"></i>Por favor, autoriza el pago en la terminal.
-            
-        </p>
-        <ProgressSpinner style="width: 50px; height: 50px" strokeWidth="8" fill="var(--surface-ground)"
-    animationDuration=".5s" aria-label="Custom ProgressSpinner" />
+    <Prime-Dialog v-model:visible="modalPOS" modal :closable="false" header="Pago POS" :style="{ width: '50vw' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+      <div class="d-flex flex-column flex-md-row justify-content-center align-items-center">
+          <div class="d-flex flex-column">Por favor, termina el pago en la POS. Una vez aprobado, esta ventana se cerrará automáticamente.<br/> No cierres este mensaje.
+          <p v-if="mostrarMensaje" class="alert alert-secondary mt-5 text-black">
+              <i class="fa fa-exclamation me-3"></i>Por favor, autoriza el pago en la terminal.
+          </p>
+          <ProgressSpinner style="width: 50px; height: 50px" strokeWidth="8" fill="var(--surface-ground)"
+      animationDuration=".5s" aria-label="Custom ProgressSpinner" />
+          </div>
+          <img src="/media/img/redelcom.png"/>
+      </div>
+        <div class="flex align-items-center gap-3">
+          <Prime-Button label="Cancelar" @click="refrescarCarro" text class="btn btn-primary btn-lg d-flex justify-content-between align-items-center"  />          
         </div>
-        <img src="/media/img/redelcom.png"/>
-    </div>
     </Prime-Dialog>
   </div>
 </template>
@@ -224,15 +226,9 @@ export default defineComponent({
       terminal.value = JSON.parse(jsonTerminal);
     }
 
-    const firmar = async () => {
-      return '';
-    }
-
     const saveChanges1 = async () => {
-        loading.value = true;
-        let firma = await firmar();
-        
-        storeCarro.iniciarEmision({carroId:carroId, hash:firma})
+        loading.value = true;        
+        storeCarro.iniciarEmision({carroId:carroId, hash:''})
           .then(() => {
             loading.value = false;
             if(storeCarro.currentCarroCompra.urlPago=='RDC'){
@@ -299,6 +295,9 @@ export default defineComponent({
 
     //signalr.invoke('SendMessage', { 'hello' });
     signalr.on('ClientReceiveNotification', (user, message) => {
+      console.log('recibiendo mensaje');
+      console.log('carro ' + user);
+      console.log('message ' + message);
       if(user == carroId && message=="0"){
         mostrarMensaje.value = true;
       } else if(user == carroId && message=="1"){
@@ -314,6 +313,12 @@ export default defineComponent({
       obtenerCarro(carroId);
       obtenerCotizaciones(carroId);
     });
+
+    const refrescarCarro = () => {     
+      obtenerCarro(carroId);
+      obtenerCotizaciones(carroId);
+      modalPOS.value = false;
+    };
     
     const obtenerCotizaciones = (carroId) =>{
       loading.value = true;
@@ -381,7 +386,7 @@ export default defineComponent({
       eliminarCotizacion,
       confirmarEliminarCotizacion,
       modalPOS,
-      mostrarMensaje
+      mostrarMensaje, refrescarCarro
     };
   },
 });
