@@ -621,8 +621,11 @@ const cotizacionDetails = ref<ICotizacion>({
   tokenModificacion : storeCotizacion.getCarro().tokenModificacion
 });
 watch(() => cotizacionDetails.value.cliente.rut, (newValue) =>  {
-      console.log('watch' + newValue);
       esPersona.value = parseInt(newValue.split('-')[0])<50000000;
+      if(!esPersona.value){
+        cotizacionDetails.value.cliente.apellidoMaterno='';
+        cotizacionDetails.value.cliente.apellidoPaterno='';
+      }
     });
 
 </script>
