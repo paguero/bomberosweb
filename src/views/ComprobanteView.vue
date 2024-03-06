@@ -74,11 +74,26 @@
                                   </p>
 
                                   <template v-for="(cotizacion, x) in allCotizaciones" v-bind:key="x">
-                                    <div class="body border border-1">
-                                  <p class="font-size-lg">
-                                    {{cotizacion.vehiculo.patente}} {{cotizacion.vehiculo.modelo}} / {{cotizacion.vehiculo.anio}}<br/>
-                                    Su poliza <strong>n°{{ cotizacion.numeroPoliza }}</strong> está lista e informada a las municipalidades. Estamos generando su PDF para enviarselo por correo en un tiempo aproximado de 2 horas.
-                                  </p>
+                                    <div class="body border border-1 position-relative">
+                                      <div class="d-flex ms-auto align-items-center justify-content-end flex-row">
+                                          <p class="small me-5 text-nowrap">Descargar</p>
+                                          <!-- Notification action START -->
+                                          <div class="dropdown position-absolute end-0 top-0 mt-3 me-3">
+                                            <a href="#" class="z-index-1 text-secondary btn position-relative py-0 px-2" id="cardNotiAction1" data-bs-toggle="dropdown" aria-expanded="false">
+                                              <i class="bi bi-three-dots text-primary fs-1"></i>
+                                            </a>
+                                            <!-- Card share action dropdown menu -->
+                                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cardNotiAction1">
+                                              <li><a class="dropdown-item" target="_blank" :href="cotizacion.urlPoliza"> <i class="bi bi-download fa-fw pe-2"></i>Descargar PDF</a></li>
+                                            </ul>
+                                          </div>
+                                          <!-- Notification action END -->
+                                      </div>
+                                        <p class="font-size-lg mt-2">
+                                          {{cotizacion.vehiculo.patente}} {{cotizacion.vehiculo.modelo}} / {{cotizacion.vehiculo.anio}}<br/>
+                                          Su poliza <strong>n°{{ cotizacion.numeroPoliza }}</strong> está lista e informada a las municipalidades. Estamos generando su PDF para enviarselo por correo en un tiempo aproximado de 2 horas.                                    
+                                        </p>
+                                    
                                     </div>
                                   </template>
                                   <!-- Buttons -->
