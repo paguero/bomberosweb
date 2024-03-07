@@ -302,8 +302,19 @@ export default defineComponent({
         mostrarMensaje.value = true;
       } else if(user == carroId && message=="1"){
         router.push({ name: "info-comprobante", params:{id:carroId} });
-      } else if(user == carroId && message=="-1"){
-        history.go();
+      } else if(user == carroId){
+        Swal.fire({
+              text: 'ERROR EN EL PAGO. EL PROCESO INDICA:\n\t' + message,
+              icon: "error",
+              buttonsStyling: false,
+              confirmButtonText: "Ok!",
+              customClass: {
+                confirmButton: "btn fw-bold btn-light-primary",
+              },
+            }).then(function () {
+              history.go();
+            });
+        
       }
     });
 
