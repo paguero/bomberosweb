@@ -189,7 +189,7 @@ export const useCotizacionStore = defineStore("cotizacion", () => {
   }
 
   function verPdf(id: string|undefined) {
-    return ApiService.delete(`soap/poliza/pdf/${id}`)
+    return ApiService.get(`soap/poliza/pdf/${id}`)
       .catch(({ response }) => {
         setCotizacionError(response.data.errores);
 		    throw new Error();
