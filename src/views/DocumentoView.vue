@@ -258,7 +258,8 @@ export default defineComponent({
         store.getEmision(cotizacionDetails.value)
           .then(() => {
             loading.value = false;
-            //router.push({ name: "info-persona", params:{id:cotizacionDetails.value} });
+            //regeneramos el pdf por siaca
+            store.verPdf(store.currentCotizacion.cotizacionId);
           })
           .catch(() => {
             loading.value = false;

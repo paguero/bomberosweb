@@ -108,7 +108,7 @@
 
 <script lang="ts">
 import { ref, defineComponent, computed, onMounted } from "vue";
-import { useBus } from  "@/core/bus/bus";
+import { useBus } from  "@/core/bus/bus"; 
 import { ErrorMessage, Field, Form } from "vee-validate";
 import Price from "@/components/widgets/Price.vue";
 import Bombero from "@/components/widgets/Bombero.vue";
@@ -196,7 +196,7 @@ export default defineComponent({
     onMounted(() => {
       if(convenioAporte)
         obtenerConvenio(convenioAporte);
-      obtenerCarro(carro.carroId);
+        obtenerCarro(carro.carroId);
     });
 
     const obtenerCarro = (carroId) =>{
@@ -219,6 +219,7 @@ export default defineComponent({
     const saveChanges1 = () => {
         loading.value = true;
         // Activate indicator
+        obtenerCarro(carro.carroId);
         store.createCotizacion(cotizacionDetails.value)
           .then(() => {
             loading.value = false;

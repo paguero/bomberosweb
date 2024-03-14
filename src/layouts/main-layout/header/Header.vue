@@ -92,7 +92,7 @@
 <script lang="ts">
 import { getAssetPath } from "@/core/helpers/assets";
 import { defineComponent, ref } from "vue";
-import { useBus } from "../../../core/bus/bus";
+import { useBus } from "../../../core/bus/bus"; 
 import Menu from 'primevue/menu';
 import { useRouter, useRoute} from "vue-router";
 import { useTerminalStore } from "@/stores/terminal";

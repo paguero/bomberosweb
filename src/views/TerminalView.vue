@@ -79,6 +79,7 @@ import { ref, defineComponent, onMounted, computed, watch} from "vue";
 import { ErrorMessage, Field, Form } from "vee-validate";
 import { useBus } from  "@/core/bus/bus";
 import _ from "lodash";
+import { useCotizacionStore } from "@/stores/cotizacion";
 import { useRouter, useRoute} from "vue-router";
 import { useTerminalStore } from "@/stores/terminal";
 import type {ITerminal} from "@/stores/terminal";
@@ -98,6 +99,7 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const store = useTerminalStore();
+    const cotizacionStore = useCotizacionStore();
     const loading = ref(false);
     const visible = ref(false);
     const { bus } = useBus();
@@ -110,6 +112,8 @@ export default defineComponent({
       loading.value = true;
         store.validarTerminal(cotizacionDetails.value)
           .then(() => {
+            cotizacionStore.setCarro(JSON.stringify({carroId:null, cotizacionId:null}));
+            bus.emit("actualiza-carro-compra", 0);
             loading.value = false;
             store.setTerminalStorage(JSON.stringify(store.currentTerminal));
             bus.emit("terminal-conectado", JSON.stringify(store.currentTerminal));
