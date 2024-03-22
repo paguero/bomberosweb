@@ -196,7 +196,7 @@ export default defineComponent({
     onMounted(() => {
       if(convenioAporte)
         obtenerConvenio(convenioAporte);
-        obtenerCarro(carro.carroId);
+      obtenerCarro(carro.carroId);
     });
 
     const obtenerCarro = (carroId) =>{
