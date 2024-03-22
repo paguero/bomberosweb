@@ -95,7 +95,7 @@ export default defineComponent({
     const patentes = ref([
             { id:"item0", name: "Auto", price: "$5.490", icon: "auto.png", buy: false, patente:null, placeholder:'SOAP 24' },
             { id:"item1", name: "Camioneta", price: "$7.790", icon: "camioneta.png", buy: false, patente:null, placeholder:'SOAP 24' },
-            { id:"item2", name: "Moto", price: "$35.490", icon: "moto.png", buy: false, patente:null, placeholder:'SOAP 23' },
+            { id:"item2", name: "Moto", price: "$33.990", icon: "moto.png", buy: false, patente:null, placeholder:'SOAP 23' },
             { id:"item3", name: "Minibús", price: "$17.990", icon: "minibus.png", buy: false, patente:null, placeholder:'SOAP 24' },
             {
             id:"item4", name: "Carro de Arrastre",
