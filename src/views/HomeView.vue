@@ -108,6 +108,7 @@
 
 <script lang="ts">
 import { ref, defineComponent, computed, onMounted } from "vue";
+import { VueReCaptcha, useReCaptcha } from 'vue-recaptcha-v3'
 import { useBus } from  "@/core/bus/bus"; 
 import { ErrorMessage, Field, Form } from "vee-validate";
 import Price from "@/components/widgets/Price.vue";
@@ -134,6 +135,7 @@ export interface ICotizacion {
   convenioAporte:string;
   terminal:string;
   terminalEmail:string;
+  token:string;
 }
 export default defineComponent({
   name: "main-dashboard",
@@ -173,12 +175,19 @@ export default defineComponent({
     if(jsonTerminal){
       terminal.value = JSON.parse(jsonTerminal);
     }
+    const { executeRecaptcha, recaptchaLoaded } = useReCaptcha()
 
+    const recaptcha = async () => {
+      await recaptchaLoaded()
+      const token = await executeRecaptcha('login')
+      return token;
+    }
     const cotizacionDetails= ref<ICotizacion>({
       carroId : carro.carroId,
       convenioAporte:'',
       terminal: terminal.value.terminalId,
       terminalEmail: terminal.value.email,
+      token:'',
       vehiculo : {
         patente : store.currentCotizacion?.patente
     }});
@@ -216,10 +225,11 @@ export default defineComponent({
           cotizacionDetails.value.convenioAporte =storeConvenio.currentConvenio.codigo; 
         });
     }
-    const saveChanges1 = () => {
+    const saveChanges1 = async () => {
         loading.value = true;
         // Activate indicator
         obtenerCarro(carro.carroId);
+        cotizacionDetails.value.token = await recaptcha();
         store.createCotizacion(cotizacionDetails.value)
           .then(() => {
             loading.value = false;
@@ -269,7 +279,8 @@ export default defineComponent({
       mostrarChatBot,
       botonChatBot,
       loading,
-      currentConvenio
+      currentConvenio,
+      recaptcha
     };
   },
 });

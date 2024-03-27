@@ -9,7 +9,7 @@ TIP: To get started with clean router change path to @/router/clean.ts.
 import router from "./router";
 import ElementPlus from "element-plus";
 import i18n from "@/core/plugins/i18n";
-
+import { VueReCaptcha } from 'vue-recaptcha-v3'
 import "primevue/resources/primevue.min.css";
 import "primevue/resources/themes/saga-blue/theme.css";
 import "primeicons/primeicons.css";
@@ -99,6 +99,7 @@ idsrvAuth.startup().then((ok) => {
     app.use(ToastService);
     app.use(ConfirmationService);
     app.use(VueSignalR, { connection });
+    app.use(VueReCaptcha, { siteKey: '6Lc53_okAAAAADSAVXr57bSrpnjDTiXb8ex98o-L' })
     ApiService.init(app);
     initApexCharts(app);
     initInlineSvg(app);
