@@ -7,8 +7,8 @@
                 <h3>Contacto</h3>
                 <ul>
                     <li><i class="fa fa-email me-2"><i> conecta@soapbomberos.cl</li>
-                    <li>modificaciones@soapbomberos.cl</li>
-                    <li>despacho@soapbomberos.cl</li>
+                    <!--<li>modificaciones@soapbomberos.cl</li>
+                    <li>despacho@soapbomberos.cl</li>-->
                     <li>devolucionesh@soapbomberos.cl</li>
                 </ul>
 
