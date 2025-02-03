@@ -2,9 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\src",
-    "\\src\\layouts",
-    "\\src\\layouts\\main-layout",
-    "\\src\\layouts\\main-layout\\extras"
+    "\\src\\views"
   ],
+  "SelectedNode": "\\src\\main.ts",
   "PreviewInSolutionExplorer": false
 }

@@ -17,6 +17,7 @@
                       :validation-schema="cotizacionValidator">
                 <div class="apoyo" v-if="currentConvenio.slogan"><h5><i class="fas fa-engine-warning"></i> {{currentConvenio.slogan}}</h5></div>
                 <img src="/media/img/banner/soap-2023.png" style="width: 107px;margin:auto" />
+                <!--
                 <h5>Ingresa tu patente</h5>
                 <div class="sr-soap-header-patente__input" style="margin:auto; align-items:center">
 
@@ -47,11 +48,13 @@
                 <div class="sr-soap-header-patente__btn">
                     <Prime-Button :loading="loading" type="submit" onclick="gtag('event', 'Info_patente')" label="COMPRAR"  class="btn banner-form__button btn-quotation"/> 
                 </div>
+                -->
+                <p>Te esperamos pronto. Ya estamos preparandonos para apoyar a Bomberos con todo este 2025</p>
                 </Form>
             </div>
         </div>
     </section>
-    <Price></Price>
+    <!--<Price></Price>-->
     <section class="aliados">
       <div class="container p-5 align-items-center text-center">
         <h2>Nuestros Aliados</h2>
