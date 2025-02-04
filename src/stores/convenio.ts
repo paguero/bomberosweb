@@ -6,11 +6,13 @@ import JwtService from "@/core/services/JwtService";
 
 export interface IConvenio {
 		codigo: string;
+    codigoComuna: string;
     comuna: string;
     nombre: string;
     esComuna: boolean;
     slogan:string;
     mensaje:string;
+    url:string;
 }
 
 export const useConvenioStore = defineStore("convenio", () => {
@@ -31,7 +33,16 @@ export const useConvenioStore = defineStore("convenio", () => {
   function setConvenioError(error: any) {
     convenioErrors.value = { ...error };
   }
-
+  function getConvenios() {
+    return ApiService.get("convenio/v1/all")
+      .then(({ data }) => {
+        setConvenios(data);
+      })
+      .catch(({ response }) => {
+        setConvenioError(response.data.errors);
+		throw new Error();
+      });
+  }
   function getConvenio(id: string) {
     return ApiService.get("convenio", id)
       .then(({ data }) => {
@@ -48,6 +59,7 @@ export const useConvenioStore = defineStore("convenio", () => {
     convenioErrors,
     currentConvenio,
     allConvenios,
-    getConvenio
+    getConvenio,
+    getConvenios
   };
 });

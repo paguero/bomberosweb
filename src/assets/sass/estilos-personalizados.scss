@@ -4494,11 +4494,15 @@ height: auto;
   width: 100%;
   max-width: 1085px;      /* Ajusta según tu diseño */
   margin: 0 auto;         /* Centra en la pantalla */
-  display: flex;          /* Dos columnas lado a lado */
+  display: grid;          /* Dos columnas lado a lado */
+  grid-template-columns: 50% 50%;
   justify-content: space-between;
   align-items: flex-start; 
   gap: 30px;              /* Espacio horizontal entre columnas */
   padding: 40px 0;        /* Espacio superior e inferior */
+  @media (max-width: 768px){
+    grid-template-columns: 100%;
+  }
 }
 
 /* Columna izquierda y derecha ocupan espacio */
@@ -4601,10 +4605,15 @@ SECCIÓN APORTES
   width: 100%;
   max-width: 1085px;     /* Ajusta según tu diseño */
   margin: 0 auto;        /* Centra horizontalmente */
-  display: flex;         /* Dos columnas lado a lado */
+  display: grid;          /* Dos columnas lado a lado */
+  grid-template-columns: 50% 50%;
   gap: 30px;             /* Espacio entre columnas */
   padding: 40px 15px;    /* Espacio general */
   font-family: 'Nunito', Arial, sans-serif;
+  align-items: start;
+  @media (max-width: 768px){
+    grid-template-columns: 100%;
+  }
 }
 
 /* Columna izquierda y derecha */
@@ -4708,7 +4717,7 @@ SECCIÓN APORTES
 }
 
 /* Cada ítem */
-.aportes-list li {
+.aportes-list li div {
   display: flex;
   flex-wrap: wrap; /* Para que nombre, link y monto se distribuyan en la misma línea o salten */
   justify-content: space-between;
@@ -4717,7 +4726,7 @@ SECCIÓN APORTES
   padding-bottom: 10px;
 }
 
-.aportes-list li span {
+.aportes-list li div span {
   font-size: 14px;
   font-weight: 600;
   color: #333;

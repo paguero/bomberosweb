@@ -43,7 +43,7 @@
           <button class="btn-total">Monto total recaudado</button>
         </div>
       </div>
-    </div>
+    </div> 
 
     <!-- COLUMNA DERECHA -->
     <div class="right-column">
@@ -75,8 +75,11 @@
         <p class="subtitle">Compañías de la comuna</p>
         <ul class="aportes-list">
           <li v-for="compania in allAportes" :key="compania.compania">
-            <span>{{compania.compania}}</span>
-            <strong>{{$filters.formatCurrency(compania.montoAporte)}}</strong>
+            <div>
+              <span>{{compania.compania}}</span>
+              <strong>{{$filters.formatCurrency(compania.montoAporte)}}</strong>
+            </div>
+            <p>{{compania.url}}</p>
           </li>
           <!-- Agrega más items según tu necesidad -->
         </ul>
@@ -111,7 +114,7 @@
 import { ref, defineComponent, onMounted, computed } from "vue";
 import _ from "lodash";
 import { useRouter } from "vue-router";
-import { useAuthStore } from "@/stores/auth";
+import { useConvenioStore } from "@/stores/convenio";
 import { useAporteStore } from "@/stores/aporte";
 import { useComunaStore } from "@/stores/comuna";
 import type { IAporte } from "@/stores/aporte";
@@ -131,10 +134,11 @@ export default defineComponent({
     const router = useRouter();
     const aporte = ref<IAporte>();
     const store = useAporteStore();
+    const storeConvenio = useConvenioStore();
     const storeComuna = useComunaStore();
     const toast = useToast();
     const comuna = ref('');
-    onMounted(() => {
+    onMounted(async () => {
       buscarAportes();
       obtenerComunas();
     });
@@ -145,6 +149,22 @@ export default defineComponent({
         })
         .catch(() => {
           const [error] = Object.values(store.aporteErrors);
+          Swal.fire({
+            text: error,
+            icon: "error",
+            buttonsStyling: false,
+            confirmButtonText: "Ok",
+            heightAuto: false,
+            customClass: {
+              confirmButton: "btn fw-semobold btn-light-primary",
+            },
+          })
+        });
+    };
+    const buscarConvenios = async () => {
+      await storeConvenio.getConvenios()
+        .catch(() => {
+          const [error] = Object.values(storeConvenio.convenioErrors);
           Swal.fire({
             text: error,
             icon: "error",
@@ -173,10 +193,23 @@ export default defineComponent({
           })
         });
     };
-    const buscarAporte = (comuna) => {
+    const buscarAporte = async (comuna) => {
+      loading.value = true;
+      await buscarConvenios();
       store.getAporte(comuna)
         .then(() => {
           loading.value = false;
+          console.log('filtro convenios '  + JSON.stringify(storeConvenio.allConvenios));
+          var convenios = storeConvenio.allConvenios.filter(c=>c.comuna==comuna);
+          console.log('filtro convenios '  + JSON.stringify(convenios));
+          store.allAportes.forEach((aporte, index) => {
+            var convenio = convenios.find(c=>c.nombre == aporte.compania);
+            if(convenio){
+              aporte.url = 'https;//www.soapbomberos.cl/' + convenio.codigo;
+            }
+            
+          });
+          //recorremos y ponemos la info al convenio
         })
         .catch(() => {
           const [error] = Object.values(store.aporteErrors);

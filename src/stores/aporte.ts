@@ -11,7 +11,7 @@ export interface IAporte {
     comuna: string;
     cantidad: string;
     fecha: string;
-
+    url:string;
 }
 
 export const useAporteStore = defineStore("aporte", () => {
