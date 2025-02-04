@@ -97,8 +97,9 @@ export const useCotizacionStore = defineStore("cotizacion", () => {
     return localStorage.carro;
   }
 
-  function getCotizaciones(id: string) {
-    return ApiService.get("soap/cotizaciones", id)
+  function getCotizaciones(email: string) {
+    ApiService.setHeader();
+    return ApiService.post("poliza/v1/missoaps", {email})
       .then(({ data }) => {
         setCotizacions(data);
       })
@@ -108,8 +109,8 @@ export const useCotizacionStore = defineStore("cotizacion", () => {
       });
   }
 
-  function getCotizacion(id: string) {
-    return ApiService.get("soap/cotizacion", id)
+  function getCotizacion(cotizacion: ICotizacion) {
+    return ApiService.get(`cotizacion/v1/${cotizacion.carroId}/cotizacion`, cotizacion.cotizacionId)
       .then(({ data }) => {
         setCotizacion(data);
       })
@@ -119,18 +120,32 @@ export const useCotizacionStore = defineStore("cotizacion", () => {
       });
   }
   function getEmisionValidacion(params:IConsultaCotizacionValidacion) {
-    return ApiService.post(`soap/cotizacion/emision/consulta/validacion`,params)
+    ApiService.setHeader();
+    return ApiService.post(`cotizacion/v1/cotizacion/emision/consulta/validacion`,params)
       .then(({ data }) => {
         setCotizacion(data);
       })
       .catch(({ response }) => {
         setCotizacionError(response.data.errores);
-		throw new Error();
+		    throw new Error();
       });
   }
 
+  function getEmisionesValidacion(params:IConsultaCotizacionValidacion) {
+    ApiService.setHeader();
+    return ApiService.post(`cotizacion/v1/cotizacion/emision/consulta/validaciones`,params)
+      .then(({ data }) => {
+        setCotizacion(data);
+      })
+      .catch(({ response }) => {
+        setCotizacionError(response.data.errores);
+		    throw new Error();
+      });
+  }
+
+
   function getEmision(params: IConsultaCotizacion) {
-    return ApiService.post("soap/cotizacion/emision/consulta", params)
+    return ApiService.post("cotizacion/v1/cotizacion/emision/consulta", params)
       .then(({ data }) => {
         setCotizacion(data);
       })
@@ -141,7 +156,8 @@ export const useCotizacionStore = defineStore("cotizacion", () => {
   }
 
   function createCotizacion(params: ICotizacion|any) {
-    return ApiService.post("soap/cotizacion", params)
+    ApiService.setHeader();
+    return ApiService.post("Cotizacion/v1/cotizacion", params)
       .then(({ data }) => {
         setCotizacion(data);
 
@@ -153,7 +169,7 @@ export const useCotizacionStore = defineStore("cotizacion", () => {
   }
 
   function endoso(params: ICotizacion|any) {
-    return ApiService.post("soap/cotizacion/endoso", params)
+    return ApiService.post("cotizacion/v1/endoso/soap", params)
       .then(({ data }) => {
         setCotizacion(data);
 
@@ -166,7 +182,7 @@ export const useCotizacionStore = defineStore("cotizacion", () => {
 
 
   function updateCotizacion(params: ICotizacion) {
-    return ApiService.put(`soap/cotizacion/${params.cotizacionId}`, params)
+    return ApiService.put(`cotizacion/v1/${params.carroId}/cotizacion/${params.cotizacionId}`, params)
       .then(({ data }) => {
         setCotizacion(data);
       })
@@ -177,8 +193,8 @@ export const useCotizacionStore = defineStore("cotizacion", () => {
   }
 
   
-  function deleteCotizacion(id: string|undefined) {
-    return ApiService.delete(`soap/cotizacion/${id}`)
+  function deleteCotizacion(params: ICotizacion) {
+    return ApiService.delete(`cotizacion/v1/${params.carroId}/cotizacion/${params.cotizacionId}`)
       .then(({ data }) => {
         setCotizacion(data);
       })
@@ -211,6 +227,7 @@ export const useCotizacionStore = defineStore("cotizacion", () => {
     getCarro,
     getEmision,
     getEmisionValidacion,
+    getEmisionesValidacion,
     endoso
   };
 });

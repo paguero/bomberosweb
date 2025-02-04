@@ -1,7 +1,7 @@
 import type { User } from 'oidc-client'
 import { createOidcAuth, SignInType, LogLevel } from './vue-oidc-client'
 import { useAuthStore } from "@/stores/auth";
-const loco = window.location
+const loco = window.location;
 const appRootUrl = `${loco.protocol}//${loco.host}${import.meta.env.BASE_URL}`
 const idsrvAuth = createOidcAuth(
   'main',

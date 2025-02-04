@@ -1,43 +1,31 @@
 <template>
-  <div class="content-wrapper flex-row-fluid container space-2 space-3--lg">
-    <!-- start page main wrapper -->
-    <div
-      id="mt-50 main-wrapper portal-content d-flex content d-flex flex-column flex-column-fluid container-fluid"
-      style="padding-top: 30px"
-    >
-      <div class="row">
-        <div
-          data-aos="fade-right fade-left"
-          data-aos-delay="100"
-          class="buyPatent donation-info col-lg-4 aos-init aos-animate text-center d-lg-block mx-auto resume-content"
-        >
-          <div class="buyPatent-info lift lift-lg sticky-top" style="min-height:230px;background: url('/media/img/latfirefighter.png');background-position: center 0; background-size: cover;">
-            <div class="donation-info__model">
-              
-            <div class="buySuccess-pay__item">
-              <label for=""> </label>
-              <p> </p>
-            </div>
-            <div class="buySuccess-pay__item">
-              <label for=""> </label>
-              <p> </p>
-            </div>
-            </div>
-            <div class="donation-info__price">
-              <h3>¡Gracias por convertirte en un héroe de verdad!</h3>
-            </div>
-            <div class="donation-info__img">
-             
-            </div>
-          </div>
-        </div>
-        <div
-          data-aos="fade-up"
-          data-aos-delay="100"
-          class="col-md-12 col-lg-8 aos-init aos-animate content d-flex flex-column mt-1 mb-5 mx-auto"
-        >
-          <div class="">
-              <div class="buySuccess">
+
+
+<section class="breadcrumb-section">
+    <!-- Breadcrumb arriba -->
+    <nav class="breadcrumb">
+        <img src="/media/misc/ico-home.webp" alt="Icono Home" class="home-icon" />
+        <router-link :to="{name:'home'}">Inicio</router-link>
+        <span>/</span>
+        <a href="#">Obtener una copia de tu póliza</a>
+    </nav>
+
+    <div class="volver-container">
+        <!-- Botón Volver -->
+        <router-link :to="{ name: 'home'}" class="btn-volver">
+            <img src="/media/misc/ico-atras.webp" alt="Flecha Volver" class="arrow-icon" />
+            <span>Volver</span>
+        </router-link>
+
+        <!-- Título a la derecha -->
+        <h1 class="section-title">Obtener una copia de tu póliza</h1>
+    </div>
+</section>
+
+<section class="login-section">
+    <div class="login-content align-items-start">
+      <!-- Formulario de inicio de sesión -->
+      <div class="login-container w-100" style="max-width:100%">
               <Form
                                       id="kt_account_edificio_details_form"
                                       class="form"
@@ -54,19 +42,11 @@
                     <div class="row m-b-lg">
                       <div class="col-md-12">
                        <div class="buySuccess-form">
-                          <h1 style="text-align: center">
-                            Puedes descargar tu SOAP aquí
-                          </h1>
-
-                           <h5 style="text-align: center">
+                          <h5>
                             Para buscar tu póliza, debes ingresar tu Rut y Patente
                           </h5>
-                          <!--div class="problemas alert alert-info">Si has comprado tu SOAP y no has recibido tu póliza. Por favor ten paciencia, existe un problema técnico al momento de informar tu seguro a las municipalidades.
-                            Todos los SOAP estamos presentando el problema y estamos a la espera de su solución para poder enviarte tu póliza.
-                          </div-->
-                          <div class="panel-buscar-polizas mt-5">
-                            <div class="row">
-                           <div class="form-group col-md-6">
+
+                          <div class="mb-5">
                             <label for="rut">Rut</label>
                               <Field 
                                                                 v-slot="{ field,handleChange }"
@@ -92,7 +72,7 @@
                                                                   </div>
                                                                 </div>
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="mb-5">
                               <label for="patente">Patente</label>
 
                               <Field 
@@ -169,19 +149,17 @@
                               </ul>
                             </div>
                         </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </Form>
-           </div>
-          </div>
+              <div class="divider">
+          <hr>
         </div>
+      
       </div>
-      <!-- Row -->
     </div>
-    <!-- end page main wrapper -->
-  </div>
+  </section>
+
 </template>
 
 <script lang="ts">
@@ -258,8 +236,6 @@ export default defineComponent({
         store.getEmision(cotizacionDetails.value)
           .then(() => {
             loading.value = false;
-            //regeneramos el pdf por siaca
-            store.verPdf(store.currentCotizacion.cotizacionId);
           })
           .catch(() => {
             loading.value = false;

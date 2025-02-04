@@ -43,16 +43,16 @@ export default defineComponent({
     const faqs = ref([
         {
           title:
-            "¿Qué es el SOAP 2024 o Seguro Obligatorio de Accidentes Personales?",
+            "¿Qué es el SOAP 2025 o Seguro Obligatorio de Accidentes Personales?",
           text:
-            "El SOAP 2024 o Seguro Obligatorio de Accidentes Personales es un seguro exigido por la ley N° 18.490 y la CMF (Comisión para el Mercado Financiero), que tiene como objetivo otorgar cobertura a las personas lesionadas o muertas como consecuencia de un accidente en que el vehículo asegurado participe. El Seguro Obligatorio de Accidentes Personales o SOAP debe ser contratado por el propietario de un vehículo motorizado sea este auto, moto, entre otros, para poder acceder al permiso de circulación. En resumen El SOAP o Seguro Obligatorio de Accidentes Personales para tu vehículo, es un seguro que entrega cobertura ante lesiones o fallecimiento a causa de accidente o choque.",
+            "El SOAP 2025 o Seguro Obligatorio de Accidentes Personales es un seguro exigido por la ley N° 18.490 y la CMF (Comisión para el Mercado Financiero), que tiene como objetivo otorgar cobertura a las personas lesionadas o muertas como consecuencia de un accidente en que el vehículo asegurado participe. El Seguro Obligatorio de Accidentes Personales o SOAP debe ser contratado por el propietario de un vehículo motorizado sea este auto, moto, entre otros, para poder acceder al permiso de circulación. En resumen El SOAP o Seguro Obligatorio de Accidentes Personales para tu vehículo, es un seguro que entrega cobertura ante lesiones o fallecimiento a causa de accidente o choque.",
         },
         {
           title:"¿Cuándo Bomberos de Chile recibe las donaciones realizadas?",
           text:"El aporte llega de manera íntegra a la compañía que escogiste una vez que finaliza la campaña. La información será transparentada con montos exactos a través de nuestra página web y en www.bomberosdechile.cl"
         },
         {
-          title: "¿A quién cubre el SOAP 2024?",
+          title: "¿A quién cubre el SOAP 2025?",
           text:
             "El seguro obligatorio cubre al conductor, las personas transportadas en el vehículo asegurado y cualquier tercero afectado en el accidente. En caso de muerte del accidentado la indemnización se pagará a sus beneficiarios, en el siguiente orden de precedencia: el cónyuge, los hijos menores de edad, los hijos mayores de edad, los padres, la madre de los hijos de filiación no matrimonial del fallecido y, a falta de los anteriores, sus herederos legales.",
         },
@@ -64,12 +64,12 @@ export default defineComponent({
         },
         {
           title:
-            "¿Qué cubre el SOAP 2024 o Seguro Obligatorio de Accidentes Personales?",
+            "¿Qué cubre el SOAP 2025 o Seguro Obligatorio de Accidentes Personales?",
           text:
-            "El SOAP 2024 o Seguro Obligatorio de Accidentes Personales cubre la muerte, muerte accidental, incapacidad permanente y gastos médicos producto de lesiones consecuencia de accidentes de tránsito en que intervenga el vehículo asegurado, sus remolques o sus cargas. Los gastos médicos comprenden: atención prehospitalaria, transporte sanitario, hospitalización, atención médica y quirúrgica, dental, prótesis e implantes, gastos farmacéuticos y gastos por concepto de rehabilitación de las víctimas. El seguro tiene preferencia frente a cualquier otra prestación cubierta por una Isapre, Fonasa u otro seguro complementario de salud y accidentes. La contratación del SOAP consta de un certificado que otorga la compañía aseguradora, y en él se detallan los datos del vehículo protegido, los antecedentes del propietario, entre otros.",
+            "El SOAP 2025 o Seguro Obligatorio de Accidentes Personales cubre la muerte, muerte accidental, incapacidad permanente y gastos médicos producto de lesiones consecuencia de accidentes de tránsito en que intervenga el vehículo asegurado, sus remolques o sus cargas. Los gastos médicos comprenden: atención prehospitalaria, transporte sanitario, hospitalización, atención médica y quirúrgica, dental, prótesis e implantes, gastos farmacéuticos y gastos por concepto de rehabilitación de las víctimas. El seguro tiene preferencia frente a cualquier otra prestación cubierta por una Isapre, Fonasa u otro seguro complementario de salud y accidentes. La contratación del SOAP consta de un certificado que otorga la compañía aseguradora, y en él se detallan los datos del vehículo protegido, los antecedentes del propietario, entre otros.",
         },
         {
-          title: "¿Cuál es el plazo para cobrar el SOAP 2024?",
+          title: "¿Cuál es el plazo para cobrar el SOAP 2025?",
           text:
             "El plazo para cobrar este seguro de auto obligatorio es de un año a contar de la fecha del accidente o de la muerte del afectado.",
         },
@@ -79,7 +79,7 @@ export default defineComponent({
             "<table class='tabla-cobertura'><thead></thead><tr><th style='width:50%'>Coberturas SOAP</th><th>Indemnización</th></tr></thead><tbody><tr><td>Muerte</td><td>300 UF por persona</td></tr><tr><td>Incapacidad Permanente total</td><td>300 UF por persona</td></tr><tr><td>Incapacidad permanente parcial</td><td>Hasta 200 UF por persona</td></tr><tr><td>Gastos médicos hospitalarios</td><td>Gastos médicos hospitalarios	Hasta 300 UF (nivel 3 Fonasa)</td></tr></tbody></table>",
         },{
           title:
-            "¿Dónde puedo contratar el SOAP 2024 o Seguro Obligatorio de Accidentes Personales?",
+            "¿Dónde puedo contratar el SOAP 2025 o Seguro Obligatorio de Accidentes Personales?",
           text:
             "Puedes comprar el seguro obligatorio de accidentes personales para tu vehículo de manera 100% online en www.soapbomberos.cl ",
         },
@@ -95,7 +95,7 @@ export default defineComponent({
             "No cubre los daños causados al vehículo. Sólo ampara los riesgos de muerte, lesiones de las personas afectadas por accidentes y reembolsa los gastos médicos y hospitalarios.",
         },
         {
-          title: "¿Qué pasa si no tengo SOAP 2024?",
+          title: "¿Qué pasa si no tengo SOAP 2025?",
           text:
             "Este seguro debe ser contratado obligatoriamente por todo propietario de un vehículo motorizado, remolque, acoplados, casas rodantes u otros similares, al momento de adquirir el Permiso de Circulación. Si no contratas tu SOAP, no puedes circular en tu vehículo.",
         },

@@ -85,8 +85,19 @@ export const useVehiculoStore = defineStore("vehiculo", () => {
       });
   }
 
-  function updateVehiculo(params: IVehiculo) {
-    return ApiService.put(`soap/vehiculo/${params.cotizacionId}/${params.patente}`, params)
+  function updateVehiculo(params: ICotizacion) {
+    return ApiService.put(`cotizacion/v1/${params.carroId}/vehiculo/${params.cotizacionId}`, params)
+      .then(({ data }) => {
+        setVehiculo(data);
+      })
+      .catch(({ response }) => {
+        setVehiculoError(response.data.errores);
+		throw new Error();
+      });
+  }
+
+  function updateVehiculoExtension(params: ICotizacion) {
+    return ApiService.put(`cotizacion/v1/${params.carroId}/vehiculo/extendido/${params.cotizacionId}`, params)
       .then(({ data }) => {
         setVehiculo(data);
       })
@@ -116,6 +127,7 @@ export const useVehiculoStore = defineStore("vehiculo", () => {
 	getVehiculo,
 	createVehiculo,
 	updateVehiculo,
+  updateVehiculoExtension,
     deleteVehiculo
   };
 });

@@ -1,191 +1,330 @@
 <template>
-  <div class="content-wrapper flex-row-fluid container space-2 space-3--lg">
-    <!-- start page main wrapper -->
-    <div
-      id="mt-50 main-wrapper portal-content d-flex content d-flex flex-column flex-column-fluid container-fluid"
-      style="padding-top: 30px"
-    >
-      <div class="row">
-        <div
-          data-aos="fade-right fade-left"
-          data-aos-delay="100"
-          class="buyPatent donation-info col-lg-4 aos-init aos-animate text-center d-lg-block mx-auto resume-content"
-        >
-          <div class="buyPatent-info lift lift-lg sticky-top" style="min-height:230px;background: url('/media/img/latfirefighter.png');background-position: center 0; background-size: cover;">
-            <div class="donation-info__model">
-              
-            <div class="buySuccess-pay__item">
-              <label for="">Fecha de pago</label>
-              <p>{{$filters.formatDate(currentCarroCompra.fechaContratacion)}}</p>
-            </div>
-            <div class="buySuccess-pay__item">
-              <label for="">Monto de pago</label>
-              <p>{{$filters.formatCurrency(currentCarroCompra.totalPagar) }}</p>
-            </div>
-            </div>
-            <div class="donation-info__price">
-              <h3>¡Gracias por convertirte en un héroe de verdad!</h3>
-            </div>
-            <div class="donation-info__img">
-             
-            </div>
-          </div>
-        </div>
-        <div
-          data-aos="fade-up"
-          data-aos-delay="100"
-          class="col-md-12 col-lg-8 aos-init aos-animate content d-flex flex-column mt-1 mb-5 mx-auto"
-        >
-          <div class="">
-            <div class="buySuccess">
-              <b-form
-                class="form-signinx d-flex align-items-stretch flex-column"
-                @submit.stop.prevent="onSubmit"
-              >
-                <div class="tab-content" id="myTabContent">
-                  <div
-                    class="tab-pane fade show active"
-                    id="home3"
-                    role="tabpanel"
-                  >
-                    <div class="row m-b-lg">
-                      <div class="col-md-12">
-                        <div v-if="!currentCarroCompra.exitoso">ERROR</div>
-                        <div class="buySuccess-form" v-else>
-                             <h1 style="text-align: center;">Contratación de SOAP 2024</h1>
-                            <div class="container-lg  animated fadeInLeft">
-                              <div class="row align-items-center ticket">
-                                <div class="col-md-9 offset-md-n3 order-md-1">
-
-                                  <!-- Image -->
-                                  <img class="img-fluid mw-md-125 mb-8 mb-md-0 aos-init aos-animate" style="max-width: 86%;height: auto;float: right;" src="/media/svg/illustrations/working.svg" alt="..." data-aos="fade-up" data-aos-delay="100">
-
-                                </div>
-                                <div class="col-md-6 order-md-0 text-center text-md-left aos-init aos-animate" data-aos="fade-up">
-
-                                  <!-- Heading -->
-                                  <h1 class="display-3 mb-4">
-                                    ¡Tu <span class="text-primary">SOAP</span> ya está listo!
-                                  </h1>
-
-                                  <!-- Text -->
-                                  <p class="font-size-lg">
-                                    La contratación de tu Seguro Obligatorio ha finalizado exitosamente.
-                                  </p>
-
-                                  <template v-for="(cotizacion, x) in allCotizaciones" v-bind:key="x">
-                                    <div class="body border border-1 position-relative">
-                                      <div class="d-flex ms-auto align-items-center justify-content-end flex-row">
-                                          <p class="small me-5 text-nowrap">Descargar</p>
-                                          <!-- Notification action START -->
-                                          <div class="dropdown position-absolute end-0 top-0 mt-3 me-3">
-                                            <a href="#" class="z-index-1 text-secondary btn position-relative py-0 px-2" id="cardNotiAction1" data-bs-toggle="dropdown" aria-expanded="false">
-                                              <i class="bi bi-three-dots text-primary fs-1"></i>
-                                            </a>
-                                            <!-- Card share action dropdown menu -->
-                                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cardNotiAction1">
-                                              <li><a class="dropdown-item" target="_blank" :href="cotizacion.urlPoliza"> <i class="bi bi-download fa-fw pe-2"></i>Descargar PDF</a></li>
-                                            </ul>
-                                          </div>
-                                          <!-- Notification action END -->
-                                      </div>
-                                        <p class="font-size-lg mt-2">
-                                          {{cotizacion.vehiculo.patente}} {{cotizacion.vehiculo.modelo}} / {{cotizacion.vehiculo.anio}}<br/>
-                                          Su poliza <strong>n°{{ cotizacion.numeroPoliza }}</strong> está lista e informada a las municipalidades. Estamos generando su PDF para enviarselo por correo en un tiempo aproximado de 2 horas.                                    
-                                        </p>
-                                    
-                                    </div>
-                                  </template>
-                                  <!-- Buttons -->
-                                  <!--<a class="btn btn-primary" target="_blank" v-if="budget.documentoPdf!=null" v-bind:href="budget.documentoPdf"
-                                                      ><i class="far fa-file-pdf"></i> Descargar tu Póliza</a
-                                                    >-->
-
-                                </div>
-                              </div>
-                            </div>
-                           <hr class="separator"/>   
-
-                           <div class="buySuccess-form__share">
-                            <div class="buySuccess-form__share-item">
-                              <label>
-                                Comparte ya esta causa para poder llegar a más
-                                personas y ayudar a que la tarea de los
-                                <strong>#HEROESDEVERDAD</strong> no sea tan
-                                difícil.
-
-                                <br />
-                                <br />
-                                <strong class="buySuccess-form__strong"
-                                  >¡Gracias por ayudar a Bomberos de
-                                  Chile!</strong
-                                >
-                              </label>
-                            </div>
-                            <div class="v-application">
-                              <h1>Compártelo en:</h1>
-                              <ShareNetwork
-                                class="v-btn v-btn--is-elevated v-btn--fab v-btn--has-bg v-btn--round theme--dark  v-size--small indigo mr-4"
-                                network="facebook"
-                                url="https://www.soapbomberos.cl"
-                                title="¡Colaboremos con Bomberos de Chile!"
-                                description="¡Amigos!. No sabía que al adquirir mi Seguro Obligatorio de Accidentes Personales (SOAP) tenía la opción de ayudar a que la tarea de los #HEROESDEVERDAD no sea tan difícil."
-                                quote="¡Colaboremos con Bomberos de Chile!. ¡Convirtámonos en #HEROESDEVERDAD!"
-                                hashtags="#HEROESDEVERDAD, #ayudabomberos, #soapconsentido"
-                              >
-                                <v-icon color="white">mdi-facebook</v-icon>
-                              </ShareNetwork>
-                              <ShareNetwork
-                                class="v-btn v-btn--is-elevated v-btn--fab v-btn--has-bg v-btn--round theme--dark v-size--small theme-twitter mr-4"
-                                network="twitter"
-                                url="https://www.soapbomberos.cl"
-                                title="¡Colaboremos con Bomberos de Chile! #HEROESDEVERDAD #ayudabomberos #soapconsentido"
-                                description="¡Amigos!. No sabía que al adquirir mi Seguro Obligatorio de Accidentes Personales (SOAP) tenía la opción de ayudar a que la tarea de los #HEROESDEVERDAD no sea tan difícil."
-                                quote="¡Convirtámonos en #HEROESDEVERDAD!"
-                                hashtags="#HEROESDEVERDAD, #ayudabomberos, #soapconsentido"
-                              >
-                                <v-icon color="white">mdi-twitter</v-icon>
-                              </ShareNetwork>
-                               <ShareNetwork
-                                class="v-btn v-btn--is-elevated v-btn--fab v-btn--has-bg v-btn--round theme--dark v-size--small green mr-4"
-                                network="whatsapp"
-                                url="https://www.soapbomberos.cl"
-                                title="¡Colaboremos con Bomberos de Chile!"
-                                description="¡Amigos!. No sabía que al adquirir mi Seguro Obligatorio de Accidentes Personales (SOAP) tenía la opción de ayudar a que la tarea de los #HEROESDEVERDAD no sea tan difícil."
-                                quote="¡Convirtámonos en #HEROESDEVERDAD!"
-                                hashtags="#HEROESDEVERDAD, #ayudabomberos, #soapconsentido"
-                              >
-                                <v-icon color="white">mdi-whatsapp</v-icon>
-                              </ShareNetwork>
-                              <v-btn fab dark small color="indigo" hidden>
-                                <v-icon>mdi-facebook</v-icon>
-                              </v-btn>
-                              <v-btn fab dark small color="primary" hidden>
-                                <v-icon>mdi-twitter</v-icon>
-                              </v-btn>
-                              <v-btn fab dark small color="green" hidden>
-                                <v-icon>mdi-whatsapp</v-icon>
-                              </v-btn>
-                              
-                            </div>
-                          </div>
-
-                        <hr class="separator"/>
-                          
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </b-form>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Row -->
+    <div class="overlayed-loader fullscreen-overlayed-loader" v-if="loading">
+    <div class="fullscreen-overlayed-loader__overlay"></div> 
+    <div class="ecw-loader-animation fullscreen-overlayed-loader__loader">
+      <svg data-v-287d4030="" width="160px" height="80px" viewBox="0 0 160 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svg-car-loader"><g data-v-287d4030="" id="car-icon" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g data-v-287d4030="" id="icon_carLoader"><ellipse data-v-287d4030="" id="car__wheel__1" stroke="#212f40" stroke-width="4.97777778" cx="72.2089151" cy="45.0519547" rx="11.165023" ry="10.9480453"></ellipse> <ellipse data-v-287d4030="" id="car__wheel__2" stroke="#212f40" stroke-width="4.97777778" cx="129.894867" cy="45.0519547" rx="11.165023" ry="10.9480453"></ellipse> <line data-v-287d4030="" id="car__support" x1="119.660263" y1="46.4610953" x2="83.9942172" y2="46.4610953" stroke="#212f40" stroke-width="4.97777778"></line> <path data-v-287d4030="" id="car__body__id" d="M60.6717247,46.1467592 L55.2752969,46.1467592 C50.8092877,45.2344221 49.940897,40.9768489 52.546069,33.3740396 C56.4538271,21.9394145 58.500748,14.0324928 66.1301804,6.73379594 C73.7596128,-0.564900963 112.775165,-7.62030797 131.073398,18.290066 C134.919128,23.7640887 145.277788,23.0950415 148.875407,26.622745 C152.473025,30.1504485 151.976802,33.8606194 151.976802,38.3614825 C151.976802,42.9231681 149.123518,45.5385344 143.354923,46.1467592 L140.563667,46.1467592" stroke="#212f40" stroke-width="4.97777778"></path> <line data-v-287d4030="" id="upper__trail__id" stroke="#212f40" x1="12.6141079" y1="32.3555556" x2="32" y2="32.3555556" stroke-width="5" stroke-linecap="round"></line> <line data-v-287d4030="" id="lower__trail__id" stroke="#212f40" x1="6" y1="21.1555556" x2="26" y2="21.1555556" stroke-width="5" stroke-linecap="round"></line></g></g></svg> <div data-v-287d4030="" class="loader-message">
+      Un momento...
     </div>
-    <!-- end page main wrapper -->
+    </div>
   </div>
+  <section class="breadcrumb-section">
+
+    <!-- Breadcrumb arriba -->
+    <nav class="breadcrumb">
+      <img src="/media/misc/ico-home.webp" alt="Icono Home" class="home-icon">
+      <router-link :to="{name:'home'}">Inicio</router-link>
+      <span>/</span>
+      <a>Suscripción exitosa</a>
+    </nav>
+
+    <div class="volver-container">
+      <!-- Botón Volver -->
+      <router-link  :to="{ name: 'home'}" class="btn-volver">
+      <img src="/media/misc/ico-atras.webp" alt="Flecha Volver" class="arrow-icon">
+      <span>Volver</span>
+    </router-link>
+      <!-- Título a la derecha -->
+      <h1 class="section-title">Suscripción exitosa</h1>
+    </div>
+
+    </section>
+
+  <section class="purchase-success">
+    <div class="success-container">
+      <img src="/media/misc/foto-activa-seguros.webp" alt="Bomberos exitosos">
+      <h2>¡Has comprado tu SOAP y aportaste a Bomberos de Chile con éxito!</h2>
+      <div class="table-responsive table-responsive-xxl border border-1">
+        <table id="example" class="tabla-soap table-centered mt-0 table" style="width: 100%;">
+            <thead class="bg-light">
+                <tr>
+                    <th colspan="1"><div class=""></div></th>
+                    <th colspan="1"><div class="">Vehículo</div></th>
+                    <th colspan="1"><div class="">Póliza</div></th>
+                    <th colspan="1"><div class="">Valor Soap</div></th>
+                    <th colspan="1"><div class=""></div></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(data, x) in allCotizaciones" v-bind:key="x">
+                    <td class="align-middle border-top-0">
+                      <a v-if="data.urlPoliza!=''" :href="data.urlPoliza" target="_blank"><i  class="p-1 pi pi-file-pdf"></i>Póliza</a>
+                    </td>
+                    <td class="align-middle border-top-0">
+                        <h6 class="mb-0">{{data.vehiculo.patente}}</h6><span><small class="text-muted"> {{data.vehiculo.marca}} / {{data.vehiculo.modelo}}</small></span>
+                    </td>
+                    <td class="align-middle border-top-0">#{{data.numeroPoliza}}</td>
+                    <td class="align-middle border-top-0">{{$filters.formatCurrency(data.planPesos)}}<br/>
+                      <span class="custom-badge badge bg-warning">{{$filters.formatCurrency(data.aporte)}}</span>
+                      <br/>{{$filters.formatCurrency(data.montoPago)}}</td>
+                    <td class="align-middle border-top-0">
+                      <span class="cursor-pointer" @click="descargarCertificado(data)"><i  class="p-1 pi pi-file-pdf"></i>Certificado</span>
+                    </td>
+                </tr>
+                
+            </tbody>
+        </table>
+    </div>
+
+    </div>
+  </section>
+  <Form
+                                      id="kt_account_edificio_details_form"
+                                      novalidate="novalidate"
+                                      @submit="saveChanges()"
+                                    >
+  <section class="additional-coverage d-none">
+    <!-- Contenedor Azul -->
+    <div class="coverage-header">
+      <h2>Súmale GRATIS estas coberturas por 3 meses</h2>
+    </div>
+  
+    <!-- Contenedor Blanco -->
+    <div class="tabla-coberturas">
+      <br>
+      <p>*Al 4° mes el cobro será generado automáticamente.</p>
+      
+      <table>
+          <thead>
+              <tr>
+                <th></th>
+                  <th></th>
+                  <th>UF</th>
+                  <th>Equivalente a pesos</th>
+                  <th></th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr v-for="(asistencia, idx) in allAsistencias" v-bind:key="asistencia.id">
+                <td>
+                    <input type="checkbox" name="cobertura" v-model="asistencia.seleccionado" :value="true"></td>
+                  <td>
+                      
+                      <label for="asistencia-vial"><b>{{asistencia.nombreAsistencia}}</b></label>
+                  </td>
+                  <td>
+                      <span style="color: red;">{{asistencia.primaUf}} UF</span><br>
+                      <span style="font-size: 12px; color: red;">Neto mensual por vehículo asegurado</span>
+                  </td>
+                  <td>
+                      <span style="color: green;">= {{$filters.formatCurrency(asistencia.primaPesos)}}</span>
+                  </td>
+                  <td>
+                    <span class="info-icon cursor-pointer" @click="visible[idx]=true">?</span>
+                  </td>
+              </tr>
+          </tbody>
+      </table>
+    
+  </div>
+
+    <section class="continue-section">
+      <button class="continue-button">CONTINUAR</button>
+    </section>
+  </section>
+  </Form>
+  
+  
+  <!-- Modal 1 -->
+<Prime-Dialog v-model:visible="visible[0]" modal header="Asistencia Vial" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+  <div class="modal-content">
+    <img src="/media/banners/banner-asistencia-vial.webp" alt="Seguro de asistencia en carretera" />
+    <p><strong>Objetivo:</strong> Brindar soluciones rápidas y efectivas ante emergencias vehiculares, garantizando la tranquilidad y movilidad de los asegurados en cualquier momento y lugar dentro del territorio nacional.</p>
+
+        <h2>Coberturas</h2>
+        <ol>
+            <li><strong>Remolque o Transporte del Vehículo:</strong>
+                <ul>
+                    <li>Traslado del vehículo asegurado en caso de que no pueda circular debido a un accidente o avería.</li>
+                    <li>Límite: UF 10 por evento, hasta 2 eventos al año.</li><br>
+                </ul>
+            </li>
+            <li><strong>Reparaciones In Situ:</strong>
+                <p>Servicios que pueden realizarse en el lugar donde ocurrió el evento:</p>
+                <ul>
+                    <li>Cambio de neumáticos.</li>
+                    <li>Apertura de puertas por pérdida de llaves.</li>
+                    <li>Abastecimiento de combustible (hasta 5 litros, costo a cargo del cliente).</li>
+                    <li>Puente de batería.</li>
+                    <li>Límite: Ilimitado en número de eventos anuales para cada servicio.</li><br>
+                </ul>
+            </li>
+        </ol>
+
+        <h2>Ámbito Territorial</h2>
+        <p>El servicio se extiende a todo el territorio nacional, excluyendo territorios insulares (excepto Isla Grande de Chiloé) y cubriendo hasta 20 km desde los límites urbanos de la ciudad.</p>
+
+        <h2>Procedimiento de Atención</h2>
+        <ol>
+            <li><strong>Contacto con la Central de Asistencia:</strong>
+                <p>El cliente debe llamar al número indicado en su certificado para activar el servicio.</p>
+            </li>
+            <li><strong>Verificación de Datos:</strong>
+                <p>Se requerirán datos como nombre, RUT, dirección, patente y detalles de la solicitud.</p>
+            </li>
+            <li><strong>Coordinación del Servicio:</strong>
+                <p>Si el evento califica según las condiciones contratadas, se enviará un técnico o se organizará el remolque.</p>
+            </li>
+            <li><strong>Seguimiento:</strong>
+                <p>Se informará al cliente sobre el progreso del servicio.</p>
+            </li>
+        </ol>
+
+        <h2>Reembolsos</h2>
+        <p>En casos excepcionales donde no se pueda prestar el servicio por fuerza mayor, el cliente podrá solicitar un reembolso, sujeto a las siguientes condiciones:</p>
+        <ul>
+            <li>Autorización previa de la central de asistencia.</li>
+            <li>Presentación de documentos de respaldo (boletas, facturas).</li>
+            <li>Plazo de análisis y pago: 15 días hábiles.</li><br>
+        </ul>
+
+        <h2>Exclusiones</h2>
+        <ul>
+            <li>Coordinación directa del cliente sin aviso a la central.</li>
+            <li>Daños preexistentes a la vigencia del producto.</li>
+            <li>Eventos derivados de desastres naturales, guerras o alteraciones del orden público.</li><br>
+        </ul>
+
+        <h2>Atención al Cliente</h2>
+        <p><strong>Central de asistencia vía Whatsapp:</strong></p>
+  </div>
+</Prime-Dialog>
+
+<!-- Modal 2 -->
+<Prime-Dialog v-model:visible="visible[1]" modal header="Seguro de accidente personal full" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+  <div class="modal-content">
+    <img src="/media/banners/banner-seguro-personal-full.webp" alt="Seguro de accidente personal full" />
+    <p><strong>Objetivo:</strong> Ofrecer respaldo económico y tranquilidad en momentos difíciles. La cobertura incluye el reembolso de gastos médicos por accidentes y una compensación en caso de fallecimiento accidental.</p>
+
+      <h2>Coberturas</h2>
+      <ol>
+          <li><strong>Muerte Accidental:</strong>
+              <p>En virtud de esta cobertura, la compañía pagará a los beneficiarios UF 200 en su equivalente en pesos, inmediatamente después de acreditada la ocurrencia del siniestro de acuerdo con la ley y al Reglamento de Auxiliares del Comercio de Seguros.</p>
+          </li>
+          <li><strong>Incapacidad Total y Permanente por Accidente:</strong>
+              <p>Si el asegurado sufre lesiones producto de un accidente y queda incapacitado totalmente en un plazo de 90 días, el asegurador pagará UF 100 en su equivalente en pesos.</p>
+          </li>
+          <li><strong>Incapacidad Temporal por Accidente:</strong>
+              <p>Si el asegurado queda incapacitado temporalmente dentro de 30 días tras un accidente, el asegurador pagará UF 20 en su equivalente en pesos.</p>
+          </li>
+          <li><strong>Desmembramiento Accidental:</strong>
+              <p>Indemnización proporcional según la pérdida total o funcional de miembros u órganos debido a un accidente.</p>
+              <ul>
+                  <li>100% por pérdida total de ambos ojos o extremidades principales.</li>
+                  <li>Porcentajes menores para pérdidas parciales o específicas.</li>
+                  <li>Límite máximo indemnizable: UF 100.</li>
+              </ul><br>
+          </li>
+          <li><strong>Reembolso de Gastos Médicos por Accidente:</strong>
+              <p>Reembolso de gastos médicos, farmacéuticos, de urgencia y/o hospitalarios que surjan dentro de los 30 días posteriores a un accidente, con un tope de UF 20 por evento.</p>
+              <ul>
+                  <li>Se reembolsarán gastos no cubiertos por beneficios de salud estatales o privados.</li>
+                  <li>Si no hay beneficios de salud, se cubre el 50% del gasto real, hasta UF 20.</li>
+              </ul><br>
+          </li>
+          <li><strong>Gastos Funerarios por Accidente:</strong>
+              <p>Cobertura para gastos funerarios como urna, transporte de restos, publicaciones y servicios religiosos.</p>
+          </li>
+      </ol>
+
+      <h2>Exclusiones</h2>
+      <ul>
+          <li>Participación en actos delictivos, guerras o deportes extremos.</li>
+          <li>Accidentes bajo influencia de alcohol o drogas.</li>
+          <li>Lesiones derivadas de suicidio o actos terroristas.</li><br>
+      </ul>
+
+      <h2>Condiciones de Suscripción</h2>
+      <ul>
+          <li>Edad mínima de ingreso: 18 años.</li>
+          <li>Edad máxima de ingreso: 69 años y 364 días.</li>
+          <li>Permanencia hasta los 70 años y 364 días.</li><br>
+      </ul>
+
+      <h2>Requisitos para Reclamos</h2>
+      <ul>
+          <li>Comunicación del siniestro dentro de 10 días a través de correo o línea telefónica.</li>
+          <li>Presentación de documentos como facturas, licencias médicas y diagnósticos.</li><br>
+      </ul>
+
+      <h2>Vigencia y Renovación</h2>
+      <p>La cobertura dura 12 meses y se renueva automáticamente por otros 12 meses, salvo aviso del asegurador con al menos 30 días de antelación.</p>
+
+      <h2>Tarifas y Pago</h2>
+      <p>El costo mensual es de UF 0,04498, con los primeros tres meses exentos de pago. En caso de incumplimiento, hay un plazo de 60 días para regularizar.</p>
+
+      <h2>Atención al Cliente</h2>
+      <p class="contact-info">Línea directa: 800 391 300<br>
+      Correo electrónico: siniestros@sbins.cl</p>
+  </div>
+</Prime-Dialog>
+
+<!-- Modal 3 -->
+<Prime-Dialog v-model:visible="visible[2]" modal header="Seguro de asistencia en sala de urgencia" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+  <div class="modal-content">
+    <img src="/media/banners/banner-sala-urgencias.webp" alt="Seguro de asistencia en sala de urgencia" />
+    <p><strong>Objetivo:</strong> Proveer asistencia médica rápida y efectiva al contratante y su grupo familiar directo (cónyuge, conviviente civil, hijos), en situaciones de emergencia derivadas de enfermedades o accidentes, garantizando acceso a atención en centros de urgencia convenidos.</p>
+
+        <h2>Coberturas</h2>
+        <ol>
+            <li><strong>Atención de Urgencia por Enfermedad:</strong>
+                <ul>
+                    <li>Cobertura del 100% del copago posterior al sistema de salud y seguros, hasta un tope de UF 5 por evento.</li>
+                    <li>Máximo de 3 eventos anuales.</li><br>
+                </ul>
+            </li>
+            <li><strong>Atención de Urgencia por Accidente:</strong>
+                <ul>
+                    <li>Cobertura del 100% del copago posterior al sistema de salud y seguros, hasta un tope de UF 5 por evento.</li>
+                    <li>Sin límite en el número de eventos anuales.</li><br>
+                </ul>
+            </li>
+            <li><strong>Traslado Sanitario por Accidente:</strong>
+                <ul>
+                    <li>Coordinación de transporte en ambulancia o medio adecuado en caso de accidentes graves.</li>
+                    <li>Tope de UF 3 por evento, con un máximo de 3 eventos anuales.</li><br>
+                </ul>
+            </li>
+        </ol>
+
+        <h2>Servicios Incluidos</h2>
+        <ul>
+            <li>Consultas médicas en urgencias.</li>
+            <li>Exámenes necesarios (laboratorio e imagenología).</li>
+            <li>Medicamentos e insumos requeridos durante la atención.</li>
+            <li>Seguimiento y evaluación post-atención para garantizar la calidad del servicio.</li><br>
+        </ul>
+
+        <h2>Flujo de Operación</h2>
+        <ol>
+            <li>Contacto del cliente mediante línea telefónica exclusiva.</li>
+            <li>Verificación de datos y suscripción.</li>
+            <li>Derivación a centros médicos en convenio.</li>
+            <li>Seguimiento de la atención hasta el alta médica.</li>
+            <li>Encuesta de calidad tras el servicio.</li><br>
+        </ol>
+
+        <h2>Reembolsos</h2>
+        <p>Se aceptan solicitudes de reembolso en caso de:</p>
+        <ul>
+            <li>Falta de respuesta por parte de la línea de asistencia.</li>
+            <li>Inexistencia de proveedores disponibles en la zona.</li>
+            <li>Autorización previa de un ejecutivo.</li><br>
+        </ul>
+
+        <h2>Atención al Cliente</h2>
+        <p><strong>Línea telefónica:</strong> +562 2 712 33 60</p>
+
+        <h2>Exclusiones</h2>
+        <ul>
+            <li>No se cubren gastos derivados de deportes de alto riesgo, accidentes laborales, enfermedades laborales, actos delictivos o eventos fuera de la vigencia del contrato.</li>
+            <li>Excluye territorios insulares, excepto la Isla Grande de Chiloé.</li>
+            <li>Excluye el territorio fuera del límite urbano de la ciudad (hasta 20km desde su límite).</li><br>
+        </ul>
+
+        <h2>Tarifa Mensual</h2>
+        <p>UF 0,066 + IVA por cliente vigente al cierre de mes.</p>
+  </div>
+</Prime-Dialog>
 </template>
 
 <script lang="ts">
@@ -195,7 +334,10 @@ import _ from "lodash";
 import { useConfirm } from "primevue/useconfirm";
 import { useRouter, useRoute} from "vue-router";
 import { useCarroCompraStore } from "@/stores/carroCompra";
+import { useSuscripcionAsistenciaStore } from "@/stores/suscripcionAsistencia";
+import { useAsistenciaStore } from "@/stores/asistencia";
 import { useCotizacionStore } from "@/stores/cotizacion";
+import { useCertificadoStore } from "@/stores/certificado";
 import * as Yup from "yup";
 import { useBus } from "@/core/bus/bus";
 import Swal from "sweetalert2/dist/sweetalert2.js";
@@ -217,117 +359,34 @@ export default defineComponent({
     const router = useRouter();
     const store = useCotizacionStore();
     const storeCarro = useCarroCompraStore();
+    const storeCertificado = useCertificadoStore();
+    const storeSuscripcionAsistencia = useSuscripcionAsistenciaStore();
+    const storeAsistencia = useAsistenciaStore();
     const loading = ref(false);
-    
+    const visible = ref([false, false, false]);
+
      bus.on('actualiza-carro-compra', (id  ) => {
        console.log("RECIBIENDO CARRO COMPRA" + JSON.stringify(id)  );
        obtenerCarro(id);
-       obtenerCotizaciones(id);
     }); 
 
     bus.on('limpia-carro-compra', () => {       
        obtenerCarro(0);   
     });
 
-    const saveChanges1 = () => {
-      loading.value=true;
-        storeCarro.iniciarEmision(carroId)
-          .then(() => {
-            loading.value = false;
-            Swal.fire({
-              text: "Se inicia el proceso de pago. Serás redirigido a Mercado Pago.",
-              icon: "success",
-              buttonsStyling: false,
-              confirmButtonText: "Ok!",
-              customClass: {
-                confirmButton: "btn fw-bold btn-light-primary",
-              },
-            }).then(function () {
-              location.href = storeCarro.currentCarroCompra.urlPago;
-            });
-          })
-          .catch(() => {
-            const [error] = Object.values(store.cotizacionErrors);
-            Swal.fire({
-                text: error,
-                icon: "error",
-                buttonsStyling: false,
-                confirmButtonText: "Ok",
-                heightAuto: false,
-                customClass: {
-                confirmButton: "btn fw-semobold btn-light-primary",
-                },
-            });
-          });
-    };
-
-    const eliminarCotizacion = (cotizacionId) => {
-        loading.value = true;
-        store.deleteCotizacion(cotizacionId)
-          .then(() => {
-            loading.value = false;
-            Swal.fire({
-              text: "El vehículo ha sido eliminado correctamente.",
-              icon: "success",
-              buttonsStyling: false,
-              confirmButtonText: "Ok!",
-              customClass: {
-                confirmButton: "btn fw-bold btn-light-primary",
-              },
-            }).then(function () {
-              obtenerCarro(carroId);
-              obtenerCotizaciones(carroId);
-            });
-          })
-          .catch(() => {
-            const [error] = Object.values(store.cotizacionErrors);
-            Swal.fire({
-                text: error,
-                icon: "error",
-                buttonsStyling: false,
-                confirmButtonText: "Ok",
-                heightAuto: false,
-                customClass: {
-                confirmButton: "btn fw-semobold btn-light-primary",
-                },
-            });
-          });
-    };
-   
+    
     const route = useRoute();
     const carroId = route.params.id;
     const carro = JSON.parse(store.getCarro());
 
     onMounted(async () => {  
       store.setCarro(JSON.stringify({carroId:null, cotizacionId:null}));   
-      obtenerCarro(carroId);
-      obtenerCotizaciones(carroId);
+      await obtenerCarro(carroId);
+      obtenerAsistencias(carroId);
     });
-    
-    const obtenerCotizaciones = (carroId) =>{
-      loading.value = true;
-      store
-        .getCotizaciones(carroId)
-        .then(() => {
-          loading.value = false;
-        })
-        .catch(() => {
-          const [error] = Object.values(store.cotizacionErrors);
-          Swal.fire({
-            text: error,
-            icon: "error",
-            buttonsStyling: false,
-            confirmButtonText: "Ok",
-            heightAuto: false,
-            customClass: {
-              confirmButton: "btn fw-semobold btn-light-primary",
-            },
-          })
-        });
-    }
 
-    const obtenerCarro = (carroId) =>{
-      storeCarro
+    const obtenerCarro = async (carroId) =>{
+      await storeCarro
         .getCarroCompra(carroId)
         .catch(() => {
           const [error] = Object.values(storeCarro.carroCompraErrors);
@@ -343,33 +402,89 @@ export default defineComponent({
           })
         });
     }
+
+    const obtenerAsistencias = async (carroId) =>{
+      await storeAsistencia
+        .getAsistencias(carroId)
+        .catch(() => {
+          const [error] = Object.values(storeAsistencia.asistenciaErrors);
+          Swal.fire({
+            text: error,
+            icon: "error",
+            buttonsStyling: false,
+            confirmButtonText: "Ok",
+            heightAuto: false,
+            customClass: {
+              confirmButton: "btn fw-semobold btn-light-primary",
+            },
+          })
+        });
+    }
+
+    const descargarCertificado = async(cotizacion) => {
+      loading.value = true;
+      await storeCertificado.getCertificado(cotizacion).then(()=>{
+        window.open(storeCertificado.currentCertificado.urlCertificado);
+        loading.value = false;
+      }).catch(() => {
+          const [error] = Object.values(storeCertificado.certificadoErrors);
+          Swal.fire({
+            text: error,
+            icon: "error",
+            buttonsStyling: false,
+            confirmButtonText: "Ok",
+            heightAuto: false,
+            customClass: {
+              confirmButton: "btn fw-semobold btn-light-primary",
+            },
+          })
+        });
+    }
+
     const allCotizaciones = computed(() => {
-      return store.allCotizacions;
+      return storeCarro.currentCarroCompra.cotizaciones;
+    });
+    const allAsistencias = computed(() => {
+      return storeAsistencia.allAsistencias;
     });
     const currentCarroCompra = computed(() => {
       return storeCarro.currentCarroCompra;
     });
 
-    const confirmarEliminarCotizacion = (cotizacionId) => {
-      confirm.require({
-          message: '¿Está seguro de eliminar el vehículo?',
-          header: 'Confirmación',
-          icon: 'pi pi-exclamation-triangle',
-          accept: () => {
-              eliminarCotizacion(cotizacionId);
-          },
-          reject: () => {
-              
-          }
-      });
-    }
+    /**
+     * Envia la informacion para realizar la suscripcion de asistencia
+     */
+    const saveChanges = async () => {
+        loading.value = true;        
+        storeSuscripcionAsistencia.createSuscripcionAsistencia({carroId, suscripciones:allAsistencias.value})
+          .then(() => {
+            loading.value = false;
+            router.push({ name: "info-suscripcion", params:{id:carroId} });
+          })
+          .catch(() => {
+            loading.value = false;
+            const [error] = Object.values(storeCarro.carroCompraErrors);
+
+            Swal.fire({
+                text: error,
+                icon: "error",
+                buttonsStyling: false,
+                confirmButtonText: "Ok",
+                heightAuto: false,
+                customClass: {
+                confirmButton: "btn fw-semobold btn-light-primary",
+                },
+            });
+          });
+    };
     return {
       loading,
-      saveChanges1,
       allCotizaciones,
       currentCarroCompra,
-      eliminarCotizacion,
-      confirmarEliminarCotizacion
+      visible,
+      descargarCertificado,
+      allAsistencias,
+      saveChanges
     };
   },
 });

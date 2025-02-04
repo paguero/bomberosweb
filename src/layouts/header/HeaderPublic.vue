@@ -1,58 +1,35 @@
 <template>
   <!-- start page header -->
-  <header
-    id="kt_header_mobile"
-    class="_fixed-top bg-blue"
-    v-bind:class="headerClasses"
-  >     
-  <div class="sticky-wrapper" style="min-height: 70px;">
-    <div class="header-main _sticky-header _sticky-active">
+  <header class="main-header">
+    <!-- Sección superior: Botón "Conoce aquí lo recaudado" -->
+    <div class="section-button">
+      <div class="button-container">
+        <a href="recaudacion.html" class="recaudado-button">Conoce aquí lo recaudado</a>
+      </div>
+    </div>
 
-  <div id="header-wrapper">
-
-      <div>
-          <nav class="Navbar">
-            <div class="brand">
-              <router-link to="/">
-                <img src="/media/img/asegura-logo.png" />
-              </router-link>
-            </div>
-            <div class="navbar-center d-none d-sm-block">
-              <img src="/media/img/logotipo.png" />
-            </div>
-
-            <div class="navbar-end navbar-menu">
-              <div class="card flex justify-content-center position-absolute top-0">
-                <Button type="button" icon="pi pi-ellipsis-v" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu" />
-                <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
-            </div>
-              <router-link :to="{ name: 'home'}" class="banner-form__button-secondary">
-                                              Descarga tu póliza</router-link>
-              <div class="rrss-icons">
-                <a href="https://www.instagram.com/soapbomberos/"
-                  ><img src="/media/logos/instagram.png"
-                /></a>
-                <a href="https://www.facebook.com/SOAPbomberos"
-                  ><img src="/media/logos/facebook.png"
-                /></a>
-                <a href="https://twitter.com/SoapBomberos"
-                  ><img src="/media/logos/twitter.png"
-                /></a>
-                <a href="https://www.tiktok.com/@soapbomberos?lang=es"
-                  ><img src="/media/logos/tik-tok.png"
-                /></a>
-                <a href="https://www.youtube.com/channel/UCX5HLqeLRbNt-87GzSfZSVA"
-                  ><img src="/media/logos/youtube.png"
-                /></a>
-                <a href="https://www.linkedin.com/company/soap-bomberos/"
-                  ><img src="/media/logos/linkedin.png" />
-                </a>
-              </div>
-            </div>
-          </nav>
+    <!-- Sección inferior: Logo + Botones (Iniciar sesión, Registrarse, Carrito) -->
+    <div class="section-logo">
+      <div class="logo-container">
+        <!-- LOGO -->
+        <div class="logo">
+          <span class="soap">SOAP</span>
+          <span class="bomberos">BOMBEROS</span>
         </div>
-      </div> </div> </div>
-    </header>
+
+        <!-- Botones a la derecha -->
+        <div class="buttons-right" id="buttons-right">
+          <a href="inicio-sesion.html" class="action-button">Iniciar sesión</a>
+          <a href="inicio-sesion.html" class="action-button">Regístrate</a>
+          
+          <div class="cart-icon" id="cartIcon">
+            <span class="cart-badge">1</span>
+            <img src="img/carrito-ico.png" alt="Carrito de compras" class="cart-img">
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
     
   <!-- end page header -->
 </template>

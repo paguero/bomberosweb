@@ -1,110 +1,181 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
-  <main  class="content-wrapper flex-row-fluid position-relative">
-     <section style="padding-left: 0px; padding-right: 0px;" class="banner container-fluid">
-        <div class="banner-container container">
-        <div class="banner-text">
-          <img src="/media/img/banner/banner-text.png" />
-        </div>
-     
-            <!-- PATENTE-->
-            <div class="banner-form">
-                <Form autocomplete="off" class="form-signinx d-flex align-items-stretch flex-column" novalidate="novalidate"
+  <div class="overlayed-loader fullscreen-overlayed-loader" v-if="loading">
+    <div class="fullscreen-overlayed-loader__overlay"></div> 
+    <div class="ecw-loader-animation fullscreen-overlayed-loader__loader">
+      <svg data-v-287d4030="" width="160px" height="80px" viewBox="0 0 160 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svg-car-loader"><g data-v-287d4030="" id="car-icon" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g data-v-287d4030="" id="icon_carLoader"><ellipse data-v-287d4030="" id="car__wheel__1" stroke="#212f40" stroke-width="4.97777778" cx="72.2089151" cy="45.0519547" rx="11.165023" ry="10.9480453"></ellipse> <ellipse data-v-287d4030="" id="car__wheel__2" stroke="#212f40" stroke-width="4.97777778" cx="129.894867" cy="45.0519547" rx="11.165023" ry="10.9480453"></ellipse> <line data-v-287d4030="" id="car__support" x1="119.660263" y1="46.4610953" x2="83.9942172" y2="46.4610953" stroke="#212f40" stroke-width="4.97777778"></line> <path data-v-287d4030="" id="car__body__id" d="M60.6717247,46.1467592 L55.2752969,46.1467592 C50.8092877,45.2344221 49.940897,40.9768489 52.546069,33.3740396 C56.4538271,21.9394145 58.500748,14.0324928 66.1301804,6.73379594 C73.7596128,-0.564900963 112.775165,-7.62030797 131.073398,18.290066 C134.919128,23.7640887 145.277788,23.0950415 148.875407,26.622745 C152.473025,30.1504485 151.976802,33.8606194 151.976802,38.3614825 C151.976802,42.9231681 149.123518,45.5385344 143.354923,46.1467592 L140.563667,46.1467592" stroke="#212f40" stroke-width="4.97777778"></path> <line data-v-287d4030="" id="upper__trail__id" stroke="#212f40" x1="12.6141079" y1="32.3555556" x2="32" y2="32.3555556" stroke-width="5" stroke-linecap="round"></line> <line data-v-287d4030="" id="lower__trail__id" stroke="#212f40" x1="6" y1="21.1555556" x2="26" y2="21.1555556" stroke-width="5" stroke-linecap="round"></line></g></g></svg> <div data-v-287d4030="" class="loader-message">
+      Un momento...
+    </div>
+    </div>
+  </div>
+  <!--Seccion principal Banner-->
+  <section class="section-patente">
+    <Form autocomplete="off" class="" novalidate="novalidate"
                       @submit="saveChanges1()"
                       :validation-schema="cotizacionValidator">
-                <div class="apoyo" v-if="currentConvenio.slogan"><h5><i class="fas fa-engine-warning"></i> {{currentConvenio.slogan}}</h5></div>
-                <img src="/media/img/banner/soap-2023.png" style="width: 107px;margin:auto" />
-                <!--
-                <h5>Ingresa tu patente</h5>
-                <div class="sr-soap-header-patente__input" style="margin:auto; align-items:center">
-
-                        <div class="form" style="margin:auto; align-items:center">
-                                <Field 
-                                      v-slot="{ field,handleChange }"
-                                      v-model="cotizacionDetails.vehiculo.patente"
-                                      name="patente"
-                                      value="value"
-                                    >
-                                      <Prime-InputMask slotChar='' :unstyled="true"
-                                                   mask="**** **"
-                                                  class="form-control form-control-lg form-control-solid patente mb-3 mb-lg-0"
-                                                  maxlength="75"
-                                                  placeholder="SOAP 24"
-                                                  v-model="cotizacionDetails.vehiculo.patente"
-                                                  v-bind="field"
-                                                  @update:modelValue="handleChange" :model-value="field.value"
-                                                  /></Field>
-                           <div class="fv-plugins-message-container">
+    <div class="text-banner">
+      <p class="banner-title">APORTA A NUESTROS<br> BOMBEROS DE CHILE</p>
+      <p class="banner-subtitle">Hazlo por ti, hazlo por ellos</p>
+    </div>
+    <div class="container-patente">
+      <h1>INGRESE SU PATENTE</h1>
+      <div class="input-box">
+        <div class="plate-format">
+          <Field 
+            v-slot="{ field,handleChange }"
+            v-model="cotizacionDetails.vehiculo.patente"
+            name="patente"
+            value="value"
+          >
+            <Prime-InputMask slotChar='' :unstyled="true"
+                          mask="**** **"
+                        class="form-control form-control-lg form-control-solid patente mb-3 mb-lg-0"
+                        maxlength="7"
+                        placeholder="SOAP 25"
+                        v-model="cotizacionDetails.vehiculo.patente"
+                        v-bind="field"
+                        @update:modelValue="handleChange" :model-value="field.value"
+                        /></Field>
+        </div>
+      </div>
+                                <div class="fv-plugins-message-container">
                                   <div class="fv-help-block">
                                     <ErrorMessage name="patente" />
                                   </div>
                                 </div>
-                        </div>
-                    
-                </div>
-                <div class="sr-soap-header-patente__btn">
-                    <Prime-Button :loading="loading" type="submit" onclick="gtag('event', 'Info_patente')" label="COMPRAR"  class="btn banner-form__button btn-quotation"/> 
-                </div>
-                -->
-                <p>Te esperamos pronto. Ya estamos preparandonos para apoyar a Bomberos con todo este 2025</p>
-                </Form>
-            </div>
+      <p class="helper-text">Sin espacios, puntos o guión.</p>
+      <Prime-Button :loading="loading" type="submit"  label="COMPRAR"  class="buy-button"/> 
+
+    </div>
+    <div class="button-group">
+      <router-link :to="{ name: 'modifica-tu-poliza-ingresar'}" class="custom-button">
+        <img src="/media/misc/ico-lapiz.webp" alt="Editar" class="button-icon">
+        Modificar Póliza
+      </router-link>
+      <router-link :to="{ name: 'info-documento'}" class="custom-button">
+        <img src="/media/misc/ico-descarga.webp" alt="Descargar" class="button-icon">
+        Descargar Póliza
+      </router-link>
+    </div>
+    </Form>
+  </section>
+  <!--Fin Seccion principal Banner-->
+  <!-- Sección del slider -->
+  <section class="section-slider">
+    <div class="slider-container">
+
+      <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
         </div>
-    </section>
-    <!--<Price></Price>-->
-    <section class="aliados">
-      <div class="container p-5 align-items-center text-center">
-        <h2>Nuestros Aliados</h2>
-        <div class="row align-items-center">
-          <div class="col-6 col-md-4 col-xl-3">
-              <img src="/media/img/content/saca-tu-permiso.png" class="img-fluid"/>
-          </div>
-          <div class="col-6 col-md-4 col-xl-3">
-              <img src="/media/img/content/south.png" class="img-fluid"/>
-          </div>
-          <div class="col-6 col-md-4 col-xl-3">
-              <img src="/media/img/content/tarjetaliderbci1.png" class="img-fluid"/>
+        <div class="carousel-inner">
+          <div class="carousel-item slide1 active">
+            <div class="content-slider slide flex-column align-items-start justify-content-center">
+              <h2>Compra tu <br>SOAP Bomberos<br>
+              antes y obtén gratis <br>asistencia en carretera</h2>
+              <router-link :to="{name:'promo-grua'}" class="benefit-button">Conoce este beneficio <span>→</span></router-link>
             </div>
-          <div class="col-6 col-md-4 col-xl-3">
-              <img src="/media/img/content/logo-aseguraonline-horizontal-1-1.png" class="img-fluid"/>
-</div>
-          <div class="col-6 col-md-4 col-xl-3">
-                          <img src="/media/img/content/logos-stpr_Mesa_de_trabajo.png" class="img-fluid"/>
-                          </div>
-          <div class="col-6 col-md-4 col-xl-3">
-              <img src="/media/img/content/logo-seguro-las-condes.png" class="img-fluid"/>
-              </div>
-          <div class="col-6 col-md-4 col-xl-3">
-              <img src="/media/img/content/mercado_pago.png" class="img-fluid"/>
+          </div>
+          <div class="carousel-item slide2">
+            <div class="content-slider slide flex-column align-items-start justify-content-center">
+              <h2>Compra tu SOAP<br>
+                y obtén seguro de<br>
+                accidente personal full</h2>
+                <router-link :to="{name:'promo-accidente'}" class="benefit-button">Conoce este beneficio <span>→</span></router-link>
+            </div>
+          </div>
+          <div class="carousel-item slide3">
+            <div class="content-slider slide flex-column align-items-start justify-content-center">
+              <h2>Suma a tu SOAP<br>
+                  Seguro de asistencia<br>
+                  en sala de urgencia</h2>
+                  <router-link :to="{name:'promo-urgencia'}" class="benefit-button">Conoce este beneficio <span>→</span></router-link>
+            </div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <div show class="sticky-alert py-4"><router-link :to="{ name: 'aportes'}"><i class="fas fa-link"></i> Conoce Aquí lo recaudado hasta el momento y ayudanos a compartir y seguir ayudando a nuestros #HEROESDEVERDAD</router-link></div>
-    <!--div class="notification-box">
-    <router-link :to="{ name: 'indicators'}">
-                                              <i v-b-tooltip.hover title="Conocer los aportes recaudados" class="fas fa-chart-bar"></i></router-link>
-    </div-->
-    <Bombero></Bombero>
-    <Faq></Faq> 
-    
-        <transition name="fade">
-          <div v-show="mostrarChatBot" class="panel-chatbot">
-            <ChatBot :mostrarChatBot="mostrarChatBot"> </ChatBot>
-          </div>
-        </transition>
 
-        <div class="botonChatBot" v-show="botonChatBot">
-          <img
-            src="/media/img/ejecutivo-animado.gif"
-            alt=""
-            @click="(mostrarChatBot = true), (botonChatBot = false)"
-          />
+  <!-- Sección: Valor del SOAP -->
+  <section class="section-soap-value">
+    <div class="soap-value-container">
+      <h2>Conoce el valor de tu SOAP</h2>
+      <p>Cada vez que adquieres tu SOAP 2025 con Bomberos de Chile, 
+      tienes la opción de donar a bomberos desde $1.000 pesos a la Compañía que tú elijas.</p>
+    </div>
+  </section>
+
+  <!-- Sección: Tarjetas -->
+  <section class="section-card">
+    <Price/>
+  </section>
+
+
+  <section class="soap-donation">
+    <!-- Lado izquierdo -->
+    <div class="soap-donation-left">
+      <div class="soap-text-container">
+        <div class="soap-title">
+          <h2>¿Por qué donar a <br> SOAP BOMBEROS?</h2>
         </div>
+        <div class="soap-content">
+          <p>
+            Al comprar tu SOAP 2025 con Bomberos de Chile, además de estar cumpliendo con la documentación necesaria para la circulación de vehículos motorizados, estás haciendo un aporte para que la institución mejor evaluada de nuestro país, siga salvando vidas y bienes, tal como lo ha realizado por 170 años.
+          </p>
+          <p>
+            Cada vez que adquieres tu SOAP 2025 con Bomberos de Chile, tienes la opción de donar a bomberos desde $1.000 pesos a la Compañía que tú elijas. Si quieres que ese aporte sea más, puedes elegir una de las opciones de aporte extraordinario. Con tu aporte y el de todos, estamos apoyando la labor de los más de 50 mil bomberos y bomberas de todo nuestro país.
+          </p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Lado derecho -->
+    <div class="soap-donation-right">
+      <div class="soap-image-container">
+        <router-link :to="{name:'aprende-soap'}" class="soap-link">
+          Aprende sobre el SOAP <span>→</span>
+        </router-link>
+      </div>
+    </div>
+  </section>
+  
+  
+  <Suscripcion/>
+  
+  <section class="our-allies">
+    <h2>Nuestros Aliados</h2>
+    <div class="allies-container">
+      <!-- Logos: Sustituye src con las rutas de tus imágenes -->
+      <img src="/media/misc/logo-saca-tu-permiso.webp" alt="Logo 1" class="ally-logo">
+      <img src="/media/misc/logo-asegura.webp" alt="Logo 2" class="ally-logo">
+      <img src="/media/misc/logo-seguro-las-condes.webp" alt="Logo 3" class="ally-logo">
+      <img src="/media/misc/logo-seguros-southbridge.webp" alt="Logo 4" class="ally-logo">
+      <img src="/media/misc/logo-mercado-pago.webp" alt="Logo 5" class="ally-logo">
+      <img src="/media/misc/logo-balloon.webp" alt="Logo 6" class="ally-logo">
+    </div>
+  </section>
+
+  <div id="cartContainer"></div>
+
+  <main  class="content-wrapper flex-row-fluid position-relative">
+    
+    <!--<Price></Price>-->
+    <transition name="fade">
+      <div v-show="mostrarChatBot" class="panel-chatbot">
+        <ChatBot :mostrarChatBot="mostrarChatBot"> </ChatBot>
+      </div>
+    </transition>
+
+    <div class="botonChatBot" v-show="botonChatBot">
+      <img
+        src="/media/img/ejecutivo-animado.gif"
+        alt=""
+        @click="(mostrarChatBot = true), (botonChatBot = false)"
+      />
+    </div>
   </main>
 </template>
 
@@ -115,10 +186,9 @@ import { VueReCaptcha, useReCaptcha } from 'vue-recaptcha-v3'
 import { useBus } from  "@/core/bus/bus"; 
 import { ErrorMessage, Field, Form } from "vee-validate";
 import Price from "@/components/widgets/Price.vue";
-import Bombero from "@/components/widgets/Bombero.vue";
-import Faq from "@/components/widgets/Faq.vue";
 import { useTerminalStore } from "@/stores/terminal";
 import ChatBot from "@/components/widgets/ChatBot.vue";
+import Suscripcion from "@/components/widgets/Suscripcion.vue";
 import _ from "lodash";
 import * as Yup from "yup";
 import { useRouter, useRoute} from "vue-router";
@@ -128,6 +198,7 @@ import { useCarroCompraStore } from "@/stores/carroCompra";
 import { vMaska } from "maska"
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import { patenteEsValido } from "@/core/validators/YupPatente";
+import router from "@/router";
 
 export interface IVehiculo {
   patente: string
@@ -144,12 +215,11 @@ export default defineComponent({
   name: "main-dashboard",
   components: {
     Price,
-    Faq,
-    Bombero,
     ChatBot,
     ErrorMessage,
     Field,
     Form,
+    Suscripcion
   }, 
   setup() {
     const router = useRouter();
@@ -208,7 +278,7 @@ export default defineComponent({
     onMounted(() => {
       if(convenioAporte)
         obtenerConvenio(convenioAporte);
-      obtenerCarro(carro.carroId);
+        obtenerCarro(carro.carroId);
     });
 
     const obtenerCarro = (carroId) =>{
@@ -250,10 +320,10 @@ export default defineComponent({
                   confirmButton: "btn fw-bold btn-light-primary",
                 },
               }).then(function () {
-                router.push({ name: "info-vehiculo", params:{id:store.currentCotizacion.cotizacionId} });
+                router.push({ name: "info-persona", params:{id:store.currentCotizacion.cotizacionId} });
               });
             } else {
-              router.push({ name: "info-vehiculo", params:{id:store.currentCotizacion.cotizacionId} });
+              router.push({ name: "info-persona", params:{id:store.currentCotizacion.cotizacionId} });
             }
           })
           .catch(() => {

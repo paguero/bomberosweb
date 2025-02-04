@@ -1,329 +1,289 @@
 <template>
-  <div class="d-flex justify-content-center align-items-center">
-    <div class="card card-white v-application border border-1">
-      <div class="card-body" v-if="cotizacionDetails.vehiculo">
-        <Form @submit="onSubmit" class="" :validation-schema="formulario">
-          <div class="tab-content" id="myTabContent">
-            <div class="tab-pane fade show active" id="home3" role="tabpanel">
-              <div class="row m-b-lg">
-                <div class="col-md-12">
-                  <div class="d-flex align-items-center justify-content-center">
-                    <h2 class="py-5">
-                      Modificar datos del <span class="rosa">Vehículo</span>
-                    </h2>
-                  </div>
-                  <h3 id="form-quote">Datos del vehículo a asegurar</h3>
-                  <p>Verifica los datos con el patrón del auto.</p>
-                  <div class="row">
-                    <div class="form-group col-md-6">
-                      <p>*Ingrese Patente</p>
-                      <Field
-                        v-slot="{ field, handleChange }"
-                        v-model="cotizacionDetails.vehiculo.patente"
-                        name="patente"
-                        value="value"
-                        v-mask="'AAAAAA'"
-                        @change="obtenerVehiculo"
-                   
-                      >
-                        <Prime-InputText
-                          class="form-control form-patente p-2"
-                          name="patente"
-                          maxlength="8"
-                          v-bind="field"
-                          @update:modelValue="handleChange"
-                          :model-value="field.value"
-                          placeholder="ABCD20"
-                          v-model="cotizacionDetails.vehiculo.patente"
-                        />
-                      </Field>
-                      <div class="fv-plugins-message-container">
-                        <div class="fv-help-block">
-                          <ErrorMessage name="patente" />
-                        </div>
-                      </div>
-                    </div>
 
-                    <div class="form-group col-md-6 margen-espacial">
-                      <p>*Marca del Vehículo</p>
-                      <Field
-                        v-slot="{ field, handleChange }"
-                        v-model="cotizacionDetails.vehiculo.marca"
-                        name="marca"
-                        value="value"
-                      >
-                        <Prime-Dropdown
-                          filter
-                          v-model="cotizacionDetails.vehiculo.marca"
-                          :options="allMarcas"
-                          optionLabel="nombre"
-                          optionValue="nombre"
-                          placeholder="Seleccione Marca"
-                          class="w-100"
-                          @update:modelValue="handleChange"
-                          :model-value="field.value"
-                        />
-                      </Field>
-                      <div class="fv-plugins-message-container">
-                        <div class="fv-help-block">
-                          <ErrorMessage name="marca" />
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-group col-md-6 margen-espacial">
-                      <p>*Modelo del Vehículo</p>
-                      <Field
-                        v-slot="{ field, handleChange }"
-                        v-model="cotizacionDetails.vehiculo.modelo"
-                        name="modelo"
-                        value="value"
-                      >
-                        <Prime-Dropdown
-                          v-model="cotizacionDetails.vehiculo.modelo"
-                          :options="allModelos"
-                          optionLabel="nombre"
-                          optionValue="nombre"
-                          placeholder="Seleccione Modelo"
-                          class="w-100"
-                          @update:modelValue="handleChange"
-                          :model-value="field.value"
-                        />
-                      </Field>
-                      <div class="fv-plugins-message-container">
-                        <div class="fv-help-block">
-                          <ErrorMessage name="modelo" />
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-group col-md-6 margen-espacial">
-                      <p>*Tipo de Vehículo</p>
+<section class="breadcrumb-section">
+    <!-- Breadcrumb arriba -->
+    <nav class="breadcrumb">
+        <img src="/media/misc/ico-home.webp" alt="Icono Home" class="home-icon" />
+        <router-link :to="{name:'home'}">Inicio</router-link>
+        <span>/</span>
+        <a href="#">Modifica tu póliza</a>
+    </nav>
 
-                      <Field
-                        v-slot="{ field, handleChange }"
-                        v-model="cotizacionDetails.vehiculo.tipoVehiculo"
-                        name="tipoVehiculo"
-                        value="value"
-                      >
-                        <Prime-Dropdown
-                          v-model="cotizacionDetails.vehiculo.tipoVehiculo"
-                          :options="allTipos"
-                          optionLabel="nombre"
-                          optionValue="nombre"
-                          placeholder="Seleccione Tipo de vehículo"
-                          class="w-100"
-                          @update:modelValue="handleChange"
-                          :model-value="field.value"
-                          :disabled="true"
-                        />
-                      </Field>
-                      <div class="fv-plugins-message-container">
-                        <div class="fv-help-block">
-                          <ErrorMessage name="tipovehiculo" />
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-group col-md-6">
-                      <p>*Nº Motor</p>
-                      <Field
-                        type="text"
-                        maxlength="50"
-                        name="numeroMotor"
-                        class="form-control p-2"
-                        placeholder="Numero Motor"
-                        v-model="cotizacionDetails.vehiculo.numeroMotor"
-                      />
-                      <div class="fv-plugins-message-container">
-                        <div class="fv-help-block">
-                          <ErrorMessage name="numeroMotor" />
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-group col-md-6 margen-espacial">
-                      <p>*Año del vehículo</p>
-                      <Prime-Dropdown
-                        v-model="cotizacionDetails.vehiculo.anio"
-                        :options="allAnios"
-                        placeholder="Seleccione aAño"
-                        class="w-100"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
+    <div class="volver-container">
+        <!-- Botón Volver -->
+        <router-link :to="{ name: 'home'}" class="btn-volver">
+            <img src="/media/misc/ico-atras.webp" alt="Flecha Volver" class="arrow-icon" />
+            <span>Volver</span>
+        </router-link>
 
-              <div class="row m-b-lg">
-                <div class="col-md-12">
-                  <div class="d-flex align-items-center justify-content-center">
-                    <h2 class="py-5">
-                      Modificar datos del <span class="rosa">Propietario</span>
-                    </h2>
-                  </div>
-                  <h3 id="form-quote">Datos del propietario del vehículo</h3>
-
-                  <div class="row">
-                    <div class="form-group col-md-6">
-                      <label>*RUT</label>
-                      <Field
-                        v-slot="{ field, handleChange }"
-                        v-model="cotizacionDetails.cliente.rut"
-                        name="rut"
-                        value="value"
-                      >
-                        <Prime-InputText
-                          class="form-control form-rut"
-                          size="lg"
-                          id="rut"
-                          name="rut"
-                          maxlength="11"
-                          placeholder="Rut"
-                          v-bind="field"
-                          @update:modelValue="handleChange"
-                          :model-value="field.value"
-                          v-model="cotizacionDetails.cliente.rut"
-                        />
-                      </Field>
-                      <div class="fv-plugins-message-container">
-                        <div class="fv-help-block">
-                          <ErrorMessage name="rut" />
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-group col-md-6">
-                      <label>*Nombre / Razón Social</label>
-                      <Field
-                        v-slot="{ field, handleChange }"
-                        v-model="cotizacionDetails.cliente.nombre"
-                        name="nombre"
-                        value="value"
-                      >
-                        <Prime-InputText
-                          class="form-control form-patente"
-                          maxlength="75"
-                          placeholder="Ingrese Nombres"
-                          v-model="cotizacionDetails.cliente.nombre"
-                          v-bind="field"
-                          @update:modelValue="handleChange"
-                          :model-value="field.value"
-                      /></Field>
-                      <div class="fv-plugins-message-container">
-                        <div class="fv-help-block">
-                          <ErrorMessage name="nombre" />
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-group col-md-6" v-if="esPersona">
-                      <label>*Apellido Paterno</label>
-                      <Field
-                        v-slot="{ field, handleChange }"
-                        v-model="cotizacionDetails.cliente.apellidoPaterno"
-                        name="apellidoPaterno"
-                        value="value"
-                      >
-                        <Prime-InputText
-                          class="form-control"
-                          maxlength="75"
-                          placeholder="Ingrese Apellido Paterno"
-                          v-model="cotizacionDetails.cliente.apellidoPaterno"
-                          v-bind="field"
-                          @update:modelValue="handleChange"
-                          :model-value="field.value"
-                      /></Field>
-                      <div class="fv-plugins-message-container">
-                        <div class="fv-help-block">
-                          <ErrorMessage name="apellidoPaterno" />
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-group col-md-6" v-if="esPersona">
-                      <label>*Apellido Materno</label>
-                      <Field
-                        v-slot="{ field, handleChange }"
-                        v-model="cotizacionDetails.cliente.apellidoMaterno"
-                        name="apellidoMaterno"
-                        value="value"
-                      >
-                        <Prime-InputText
-                          class="form-control"
-                          maxlength="75"
-                          placeholder="Ingrese Apellido Materno"
-                          v-model="cotizacionDetails.cliente.apellidoMaterno"
-                          v-bind="field"
-                          @update:modelValue="handleChange"
-                          :model-value="field.value"
-                        />
-                      </Field>
-                      <div class="fv-plugins-message-container">
-                        <div class="fv-help-block">
-                          <ErrorMessage name="apellidoMaterno" />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="form-group col-md-6">
-                      <label>*Correo electrónico</label>
-                      <Field
-                        v-slot="{ field, handleChange }"
-                        v-model="cotizacionDetails.cliente.email"
-                        name="email"
-                        value="value"
-                      >
-                        <Prime-InputText
-                          class="form-control"
-                          maxlength="75"
-                          placeholder="Ingrese Email"
-                          v-model="cotizacionDetails.cliente.email"
-                          v-bind="field"
-                          @update:modelValue="handleChange"
-                          :model-value="field.value"
-                        />
-                      </Field>
-                      <div class="fv-plugins-message-container">
-                        <div class="fv-help-block">
-                          <ErrorMessage name="email" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="card card-bordered shadow-none mt-2 mb-2">
-              <!-- card body -->
-              <div class="card-body p-6">
-                <!-- check input -->
-                <div class="d-flex">
-                  <div class="form-check me-2">
-                    <Prime-Checkbox
-                      id="chbx"
-                      v-model="datosConfirmados"
-                      :class="{ 'p-invalid': errorMessage }"
-                      binary
-                      aria-describedby="chbx-error"
-                    />
-                  </div>
-                  <div>
-                    <p class="mb-0 small">
-                     He revisado la información a modificar.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="d-flex flex-row">
-              <Prime-Button
-                :disabled="!datosConfirmados"
-                type="submit"
-                class="btn btn-primary"
-                label="Modificar"
-                :loading="loading"
-              />
-              <div></div>
-            </div>
-          </div>
-        </Form>
-      </div>
+        <!-- Título a la derecha -->
+        <h1 class="section-title">Modifica tu póliza</h1>
     </div>
-  </div>
+</section>
+
+<Form @submit="onSubmit" class="d-flex gap-4 w-80 flex-column vehicle-data-section" :validation-schema="formulario">
+    <section class="vehicle-data-section" v-if="cotizacionDetails.vehiculo">
+        <!-- COLUMNA DERECHA: DATOS DEL PROPIETARIO -->
+        <div class="datos-vehiculo" v-if="cotizacionDetails.cliente">
+            <!-- Encabezado verde -->
+            <div class="header-green">
+                <h2>Datos del vehículo a asegurar</h2>
+                <p>Verifica los datos con el padrón del auto.</p>
+            </div>
+
+            <!-- Contenido / Formulario del vehiculo -->
+            <div class="vehiculo-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <p>*Ingrese Patente</p>
+                        <Field v-slot="{ field, handleChange }" v-model="cotizacionDetails.vehiculo.patente" name="patente" value="value" v-mask="'AAAAAA'" @change="obtenerVehiculo">
+                            <Prime-InputText
+                                class="form-control form-patente p-2"
+                                name="patente"
+                                maxlength="8"
+                                v-bind="field"
+                                @update:modelValue="handleChange"
+                                :model-value="field.value"
+                                placeholder="ABCD20"
+                                v-model="cotizacionDetails.vehiculo.patente"
+                            />
+                        </Field>
+                        <div class="fv-plugins-message-container">
+                            <div class="fv-help-block">
+                                <ErrorMessage name="patente" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <p>*Marca del Vehículo</p>
+                        <Field v-slot="{ field, handleChange }" v-model="cotizacionDetails.vehiculo.marca" name="marca" value="value">
+                            <Prime-Dropdown
+                                filter
+                                v-model="cotizacionDetails.vehiculo.marca"
+                                :options="allMarcas"
+                                optionLabel="nombre"
+                                optionValue="nombre"
+                                placeholder="Seleccione Marca"
+                                class="w-100"
+                                @update:modelValue="handleChange"
+                                :model-value="field.value"
+                            />
+                        </Field>
+                        <div class="fv-plugins-message-container">
+                            <div class="fv-help-block">
+                                <ErrorMessage name="marca" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <p>*Modelo del Vehículo</p>
+                        <Field v-slot="{ field, handleChange }" v-model="cotizacionDetails.vehiculo.modelo" name="modelo" value="value">
+                            <Prime-Dropdown
+                                v-model="cotizacionDetails.vehiculo.modelo"
+                                :options="allModelos"
+                                optionLabel="nombre"
+                                optionValue="nombre"
+                                placeholder="Seleccione Modelo"
+                                class="w-100"
+                                @update:modelValue="handleChange"
+                                :model-value="field.value"
+                            />
+                        </Field>
+                        <div class="fv-plugins-message-container">
+                            <div class="fv-help-block">
+                                <ErrorMessage name="modelo" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <p>*Tipo de Vehículo</p>
+
+                        <Field v-slot="{ field, handleChange }" v-model="cotizacionDetails.vehiculo.tipoVehiculo" name="tipoVehiculo" value="value">
+                            <Prime-Dropdown
+                                v-model="cotizacionDetails.vehiculo.tipoVehiculo"
+                                :options="allTipos"
+                                optionLabel="nombre"
+                                optionValue="nombre"
+                                placeholder="Seleccione Tipo de vehículo"
+                                class="w-100"
+                                @update:modelValue="handleChange"
+                                :model-value="field.value"
+                                :disabled="true"
+                            />
+                        </Field>
+                        <div class="fv-plugins-message-container">
+                            <div class="fv-help-block">
+                                <ErrorMessage name="tipovehiculo" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <p>*Nº Motor</p>
+                        <Field type="text" maxlength="50" name="numeroMotor" class="form-control p-2" placeholder="Numero Motor" v-model="cotizacionDetails.vehiculo.numeroMotor" />
+                        <div class="fv-plugins-message-container">
+                            <div class="fv-help-block">
+                                <ErrorMessage name="numeroMotor" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <p>*Año del vehículo</p>
+                        <Prime-Dropdown v-model="cotizacionDetails.vehiculo.anio" :options="allAnios" placeholder="Seleccione aAño" class="w-100" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="propietario-data-section">
+        <!-- COLUMNA DERECHA: DATOS DEL PROPIETARIO -->
+        <div class="datos-propietario" v-if="cotizacionDetails.cliente">
+            <!-- Encabezado azul -->
+            <div class="header-blue">
+                <h2>Datos del propietario del vehículo</h2>
+                <p>En caso de no estar actualizados, corregir sobre el mismo campo.</p>
+            </div>
+
+            <!-- Contenido / Formulario del propietario -->
+            <div class="propietario-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="rut">*RUT</label>
+                        <Field v-slot="{ field,handleChange }" v-model="cotizacionDetails.cliente.rut" name="rut" value="value">
+                            <Prime-InputText
+                                class="form-control form-rut"
+                                size="lg"
+                                id="rut"
+                                name="rut"
+                                maxlength="11"
+                                placeholder="Rut"
+                                v-bind="field"
+                                @update:modelValue="handleChange"
+                                :model-value="field.value"
+                                v-model="cotizacionDetails.cliente.rut"
+                            />
+                        </Field>
+                        <div class="fv-plugins-message-container">
+                            <div class="fv-help-block">
+                                <ErrorMessage name="rut" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="nombre">*Nombre / Razón Social</label>
+                        <Field v-slot="{ field,handleChange }" v-model="cotizacionDetails.cliente.nombre" name="nombre" value="value">
+                            <Prime-InputText
+                                class="form-control form-patente"
+                                maxlength="75"
+                                placeholder="Ingrese Nombres"
+                                v-model="cotizacionDetails.cliente.nombre"
+                                v-bind="field"
+                                @update:modelValue="handleChange"
+                                :model-value="field.value"
+                            />
+                        </Field>
+                        <div class="fv-plugins-message-container">
+                            <div class="fv-help-block">
+                                <ErrorMessage name="nombre" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="apellido-p">*Apellido Paterno</label>
+                        <Field v-slot="{ field,handleChange }" v-model="cotizacionDetails.cliente.apellidoPaterno" name="apellidoPaterno" value="value">
+                            <Prime-InputText
+                                class="form-control"
+                                maxlength="75"
+                                placeholder="Ingrese Apellido Paterno"
+                                v-model="cotizacionDetails.cliente.apellidoPaterno"
+                                v-bind="field"
+                                @update:modelValue="handleChange"
+                                :model-value="field.value"
+                            />
+                        </Field>
+                        <div class="fv-plugins-message-container">
+                            <div class="fv-help-block">
+                                <ErrorMessage name="apellidoPaterno" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="apellido-m">*Apellido Materno</label>
+                        <Field v-slot="{ field,handleChange }" v-model="cotizacionDetails.cliente.apellidoMaterno" name="apellidoMaterno" value="value">
+                            <Prime-InputText
+                                class="form-control"
+                                maxlength="75"
+                                placeholder="Ingrese Apellido Materno"
+                                v-model="cotizacionDetails.cliente.apellidoMaterno"
+                                v-bind="field"
+                                @update:modelValue="handleChange"
+                                :model-value="field.value"
+                            />
+                        </Field>
+                        <div class="fv-plugins-message-container">
+                            <div class="fv-help-block">
+                                <ErrorMessage name="apellidoMaterno" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">*Correo electrónico</label>
+                        <Field v-slot="{ field,handleChange }" v-model="cotizacionDetails.cliente.email" name="email">
+                            <Prime-InputText class="form-control" maxlength="75" placeholder="Ingrese Email" v-model="cotizacionDetails.cliente.email" v-bind="field" @update:modelValue="handleChange" :model-value="field.value" />
+                        </Field>
+                        <div class="fv-plugins-message-container">
+                            <div class="fv-help-block">
+                                <ErrorMessage name="email" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="telefono">*Teléfono de contacto</label>
+                        <Field v-slot="{ field,handleChange }" v-model="cotizacionDetails.cliente.telefono" name="telefono">
+                            <Prime-InputText class="form-control" maxlength="12" placeholder="978542514" v-model="cotizacionDetails.cliente.telefono" v-bind="field" @update:modelValue="handleChange" :model-value="field.value" />
+                        </Field>
+                        <div class="fv-plugins-message-container">
+                            <div class="fv-help-block">
+                                <ErrorMessage name="telefono" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Checkbox He revisado información -->
+                <div class="checks-row">
+                    <Field v-slot="{ field,handleChange }" v-model="cotizacionDetails.datosConfirmados" name="datosConfirmados">
+                        <Prime-Checkbox id="chbx" v-model="cotizacionDetails.datosConfirmados" :class="{ 'p-invalid': errorMessage }" binary @update:modelValue="handleChange" :model-value="field.value" />
+                    </Field>
+                    <label for="acepto">
+                        He revisado la información <br />
+                        <span class="small-text">La información que aparece es correcta.</span>
+                    </label>
+                </div>
+                <div class="fv-plugins-message-container">
+                    <div class="fv-help-block">
+                        <ErrorMessage name="datosConfirmados" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="continue-container">
+            <Prime-Button type="submit" class="continue-button" label="Continuar" :loading="loading" />
+        </div>
+    </section>
+</Form>
 </template>
 <script setup lang="ts">
 import { ref, onMounted, nextTick, computed, watch } from "vue";
@@ -364,6 +324,7 @@ const datosConfirmados = ref(false);
 const loading = ref(true);
 const visible = ref(false);
 const esPersona= ref(false);
+const modelos = ref([]);
 const formulario = Yup.object().shape({
       patente: Yup.string().required("Es obligatorio").label("Patente").test("yupIsPatente", "Patente ingresada no es valida", function (value) {
           return patenteEsValido(value);
@@ -375,6 +336,7 @@ const formulario = Yup.object().shape({
            rut: Yup.string().required("Es obligatorio").label("Rut").test("yupIsRut", "Rut ingresado no es valido", function (value) {
           return rutEsValido(value);
         }),
+        datosConfirmados: Yup.bool().required("Es obligatorio").label("datosConfirmados"),
   nombre: Yup.string().required("Es obligatorio").label("Nombre"),
   apellidoPaterno: Yup.string().label("Rut").test("requiredIsPersona", "Es obligatorio", function (value) {
           return  (esPersona.value && value!='')|| !esPersona.value;
@@ -386,6 +348,8 @@ const formulario = Yup.object().shape({
     .required("Es obligatorio")
     .email("Email inválido")
     .label("Email"),
+    telefono: Yup.string().required("Es obligatorio").label("telefono"),
+      
 });
 
 Yup.addMethod(Yup.string, "yupIsRut", function (mensaje) {
@@ -440,54 +404,23 @@ const onSubmit = async (values) => {
 };
 
 const cotizacionId = route.params.id;
+const carroId = route.params.carroId;
 onMounted(async () => {
   obtenerAnios();
   loading.value = true;
-  await obtenerCotizacion(cotizacionId);
-  obtenerMarcas(storeCotizacion.currentCotizacion.codigoConvenio);
-  obtenerModelos(
-    storeCotizacion.currentCotizacion.codigoConvenio,
-    storeCotizacion.currentCotizacion.vehiculo.marca,
-    storeCotizacion.currentCotizacion.vehiculo.tipoVehiculo
-  );
+  await obtenerCotizacion(carroId, cotizacionId);
   obtenerTipos(storeCotizacion.currentCotizacion.codigoConvenio);
-
   loading.value = false;
 });
-const obtenerMarcas = async (campania: string) => {
-  await storeMarca.getMarcas(campania).catch(() => {
-    const [error] = Object.values(storeMarca.marcaErrors);
-    Swal.fire({
-      text: error,
-      icon: "error",
-      buttonsStyling: false,
-      confirmButtonText: "Ok",
-      heightAuto: false,
-      customClass: {
-        confirmButton: "btn fw-semobold btn-light-primary",
-      },
-    });
-  });
-};
-const obtenerModelos = (
-  campania: string,
-  marca: string,
-  tipoVehiculo: string
-) => {
-  storeModelo.getModelos(campania, marca, tipoVehiculo).catch(() => {
-    const [error] = Object.values(storeMarca.marcaErrors);
-    Swal.fire({
-      text: error,
-      icon: "error",
-      buttonsStyling: false,
-      confirmButtonText: "Ok",
-      heightAuto: false,
-      customClass: {
-        confirmButton: "btn fw-semobold btn-light-primary",
-      },
-    });
-  });
-};
+const obtenerMarcas = async  (tipoVehiculo: string) => {
+    await storeTipo.getTipoVehiculo(tipoVehiculo);
+    obtenerModelos(cotizacionDetails.value.vehiculo?.marca);
+  };
+
+const obtenerModelos = (marca: string) => {
+      console.log(marca + ' > ' + storeTipo.currentTipoVehiculo.marcas + ' >> ' + allMarcas.value);
+      modelos.value = allMarcas.value?.find(c=>c.codigo==marca).modelos;
+    };
 const obtenerTipos = (campania: string) => {
   storeTipo.getTipoVehiculos(campania).catch(() => {
     const [error] = Object.values(storeTipo.tipoVehiculoErrors);
@@ -506,29 +439,27 @@ const obtenerTipos = (campania: string) => {
 const obtenerAnios = () => {
   storeAnio.getAnios();
 };
-const obtenerCotizacion = async (cotizacionId) => {
-  await storeCotizacion
-    .getCotizacion(cotizacionId)
-    .then(() => {
-      cotizacionDetails.value = storeCotizacion.currentCotizacion;
-      cotizacionDetails.value.patente =
-        storeCotizacion.currentCotizacion.vehiculo?.patente;
-      esPersona.value = parseInt(storeCotizacion.currentCotizacion.cliente.rut.split('-')[0])<50000000;
-    })
-    .catch(() => {
-      const [error] = Object.values(storeCotizacion.cotizacionErrors);
-      Swal.fire({
-        text: error,
-        icon: "error",
-        buttonsStyling: false,
-        confirmButtonText: "Ok",
-        heightAuto: false,
-        customClass: { 
-          confirmButton: "btn fw-semobold btn-light-primary",
-        },
-      });
-    });
-};
+const obtenerCotizacion = async (carroId, cotizacionId) =>{
+      await storeCotizacion
+        .getCotizacion({carroId, cotizacionId})
+        .then(() => {
+          cotizacionDetails.value = storeCotizacion.currentCotizacion;
+          cotizacionDetails.value.patente = storeCotizacion.currentCotizacion.vehiculo?.patente
+        })
+        .catch(() => {
+          const [error] = Object.values(storeCotizacion.cotizacionErrors);
+          Swal.fire({
+            text: error,
+            icon: "error",
+            buttonsStyling: false,
+            confirmButtonText: "Ok",
+            heightAuto: false,
+            customClass: {
+              confirmButton: "btn fw-semobold btn-light-primary",
+            },
+          })
+        });
+    }
 
 const obtenerVehiculo = async () => {
   await storeVehiculo
@@ -537,11 +468,7 @@ const obtenerVehiculo = async () => {
       cotizacionDetails.value.patente =
         cotizacionDetails.value.vehiculo.patente;
       cotizacionDetails.value.vehiculo = storeVehiculo.currentVehiculo;
-      obtenerModelos(
-        storeCotizacion.currentCotizacion.codigoConvenio,
-        storeVehiculo.currentVehiculo.marca,
-        storeVehiculo.currentVehiculo.tipoVehiculo
-      );
+      
     })
     .catch(() => {
       const [error] = Object.values(storeVehiculo.vehiculoErrors);
@@ -558,17 +485,17 @@ const obtenerVehiculo = async () => {
     });
 };
 const allMarcas = computed(() => {
-  return storeMarca.allMarcas;
-});
-const allModelos = computed(() => {
-  return storeModelo.allModelos;
-});
-const allTipos = computed(() => {
-  return storeTipo.allTipoVehiculos;
-});
-const allAnios = computed(() => {
-  return storeAnio.allAnios;
-});
+      return storeTipo.currentTipoVehiculo.marcas;
+    });
+    const allModelos = computed(() => {
+      return modelos.value;
+    });
+    const allTipos = computed(() => {
+      return storeTipo.allTipoVehiculos;
+    });
+    const allAnios = computed(() => {
+      return storeAnio.allAnios;
+    });
 const currentCarroCompra = computed(() => {
   return storeCarro.currentCarroCompra;
 });
@@ -623,7 +550,17 @@ const cotizacionDetails = ref<ICotizacion>({
   patente: storeCotizacion.currentCotizacion?.vehiculo?.patente,
   tokenModificacion : storeCotizacion.getCarro().tokenModificacion
 });
-watch(() => cotizacionDetails.value.cliente.rut, (newValue) =>  {
+
+watch(async () => cotizacionDetails.value.vehiculo?.tipoVehiculo, async (newValue) =>  {
+      if(cotizacionDetails.value.vehiculo)
+        await obtenerMarcas(await newValue);
+    });
+    watch(() => cotizacionDetails.value.vehiculo?.marca, (newValue) =>  {
+      if(allMarcas.value && allMarcas.value?.length>0)
+        obtenerModelos(newValue);
+    }); 
+
+  watch(() => cotizacionDetails.value.cliente?.rut, (newValue) =>  {
       esPersona.value = parseInt(newValue.split('-')[0])<50000000;
       if(!esPersona.value){
         cotizacionDetails.value.cliente.apellidoMaterno='';

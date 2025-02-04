@@ -18,6 +18,8 @@ export const usePrimaSoapStore = defineStore("primaSoap", () => {
   const primaSoapErrors = ref({});
   const currentPrimaSoap = ref<IPrimaSoap>({} as IPrimaSoap);
   const allPrimaSoaps = ref<IPrimaSoap[]>([] as Array<IPrimaSoap>);
+  const allPrimasVigencia = ref<IPrimaSoap[]>([] as Array<IPrimaSoap>);
+  const currentPrimaVigencia = ref<IPrimaSoap>({} as IPrimaSoap);
 
   function setPrimaSoap(primaSoap: IPrimaSoap) {
     currentPrimaSoap.value = primaSoap;
@@ -29,12 +31,18 @@ export const usePrimaSoapStore = defineStore("primaSoap", () => {
     primaSoapErrors.value = {};
   }
 
+  function setPrimaVigencia(primaSoap: IPrimaSoap[]) {
+    allPrimasVigencia.value = primaSoap;
+    primaSoapErrors.value = {};
+  }
+
+
   function setPrimaSoapError(error: any) {
     primaSoapErrors.value = { ...error };
   }
 
   function getPrimaSoap(campania: string, tipoVehiculo: string) {
-    return ApiService.get(`soap/prima/${campania}/${tipoVehiculo}`)
+    return ApiService.get(`primasoap/v1/primaSoaps/${campania}/${tipoVehiculo}`)
       .then(({ data }) => {
         setPrimaSoap(data);
       })
@@ -43,6 +51,18 @@ export const usePrimaSoapStore = defineStore("primaSoap", () => {
 		throw new Error();
       });
   }
+
+  function getPrimaSoapExtendida(tipoVehiculo: string) {
+    return ApiService.get(`primasoap/v1/primaSoaps/extendida/${tipoVehiculo}`)
+      .then(({ data }) => {
+        setPrimaVigencia(data);
+      })
+      .catch(({ response }) => {
+        setPrimaSoapError(response.data.errores);
+		throw new Error();
+      });
+  }
+
 
   function createPrimaSoap(params: IPrimaSoap) {
     return ApiService.post("primaSoap", params)
@@ -81,11 +101,14 @@ export const usePrimaSoapStore = defineStore("primaSoap", () => {
   return {
     primaSoapErrors,
     currentPrimaSoap,
+    currentPrimaVigencia,
     allPrimaSoaps,
+    allPrimasVigencia,
 	getPrimaSoap,
 	createPrimaSoap,
 	updatePrimaSoap,
-    deletePrimaSoap
+    deletePrimaSoap,
+    getPrimaSoapExtendida
   };
 });
 

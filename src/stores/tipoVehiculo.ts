@@ -2,14 +2,14 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import ApiService from "@/core/services/ApiService";
 import JwtService from "@/core/services/JwtService";
-
+import type { IMarca } from "@/stores/marca";
 
 export interface ITipoVehiculo {
 		codigo: string;
-nombre: string;
-activo: string;
-orden: string;
-
+    nombre: string;
+    activo: string;
+    orden: string;
+    marcas: IMarca[];
 }
 
 export const useTipoVehiculoStore = defineStore("tipoVehiculo", () => {
@@ -32,7 +32,7 @@ export const useTipoVehiculoStore = defineStore("tipoVehiculo", () => {
   }
 
   function getTipoVehiculos(campania:string) {
-    return ApiService.get("soap/tipoVehiculos", campania)
+    return ApiService.get("tipoVehiculo/v1/tipoVehiculos", campania)
       .then(({ data }) => {
         setTipoVehiculos(data);
       })
@@ -43,7 +43,7 @@ export const useTipoVehiculoStore = defineStore("tipoVehiculo", () => {
   }
 
   function getTipoVehiculo(id: string) {
-    return ApiService.get("tipoVehiculo", id)
+    return ApiService.get("tipoVehiculo/v1/tipoVehiculo", id)
       .then(({ data }) => {
         setTipoVehiculo(data);
       })

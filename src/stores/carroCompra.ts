@@ -37,19 +37,8 @@ export const useCarroCompraStore = defineStore("carroCompra", () => {
     carroCompraErrors.value = { ...error };
   }
 
-  function getCarroCompras() {
-    return ApiService.get("carroCompras/all")
-      .then(({ data }) => {
-        setCarroCompras(data);
-      })
-      .catch(({ response }) => {
-        setCarroCompraError(response.data.errores);
-		throw new Error();
-      });
-  }
-
   function getCarroCompra(id: string) {
-    return ApiService.get("soap/carroCompra", id)
+    return ApiService.get("carroCompra/v1/carroCompra", id)
       .then(({ data }) => {
         setCarroCompra(data);
       })
@@ -82,7 +71,7 @@ export const useCarroCompraStore = defineStore("carroCompra", () => {
   }
 
   function iniciarEmision(params) {
-    return ApiService.post(`soap/emitir/inicio`, params)
+    return ApiService.post(`cotizacion/v1/emision/soap/iniciar`, params)
       .then(({ data }) => {
         setCarroCompra(data);
       })
@@ -98,14 +87,9 @@ export const useCarroCompraStore = defineStore("carroCompra", () => {
     carroCompraErrors,
     currentCarroCompra,
     allCarroCompras,
-	getCarroCompras,
-	getCarroCompra,
-	createCarroCompra,
-	updateCarroCompra,
-  iniciarEmision
+    getCarroCompra,
+    createCarroCompra,
+    updateCarroCompra,
+    iniciarEmision
   };
 });
-
-
-
-

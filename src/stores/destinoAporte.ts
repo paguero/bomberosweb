@@ -1,9 +1,3 @@
-
-
-
-
-
-
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import ApiService from "@/core/services/ApiService";
@@ -38,7 +32,7 @@ export const useDestinoAporteStore = defineStore("destinoAporte", () => {
   }
 
   function getDestinoAportes(comuna:string) {
-    return ApiService.get("soap/companias", comuna)
+    return ApiService.get("destinoaporte/v1/destinoAportes", comuna)
       .then(({ data }) => {
         setDestinoAportes(data);
       })

@@ -72,8 +72,8 @@ export const useClienteStore = defineStore("cliente", () => {
       });
   }
 
-  function updateCliente(params: ICliente) {
-    return ApiService.put(`soap/cliente/${params.cotizacionId}/${params.rut}`, params)
+  function updateCliente(params: ICotizacion) {
+    return ApiService.put(`cotizacion/v1/${params.carroId}/cliente/${params.cotizacionId}`, params)
       .then(({ data }) => {
         setCliente(data);
       })

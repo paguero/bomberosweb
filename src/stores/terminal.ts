@@ -38,7 +38,7 @@ export const useTerminalStore = defineStore("terminal", () => {
   }
 
   function validarTerminal(params: ITerminal) {
-    return ApiService.post("terminal/v1/validar", params)
+    return ApiService.post("terminal/v1/terminal/validar", params)
       .then(({ data }) => {
         setTerminal(data);
       })

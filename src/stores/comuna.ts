@@ -34,7 +34,7 @@ export const useComunaStore = defineStore("comuna", () => {
   }
 
   function getComunas() {
-    return ApiService.get("soap/comunas")
+    return ApiService.get("comuna/v1/all")
       .then(({ data }) => {
         setComunas(data);
       })

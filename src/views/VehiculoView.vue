@@ -1,268 +1,233 @@
 <template>
-  <div class="content-wrapper flex-row-fluid container space-2 space-3--lg">
-  
-                <!-- start page main wrapper -->
-               <div id="mt-50 main-wrapper portal-content d-flex content d-flex flex-column flex-column-fluid container-fluid" style="padding-top:30px">
-                    <div class="row">
-                        <div data-aos="fade-right fade-left" data-aos-delay="100" class="buyPatent donation-info col-lg-4 aos-init aos-animate text-center d-lg-block mx-auto resume-content">
+<div class="overlayed-loader fullscreen-overlayed-loader" v-if="loading">
+    <div class="fullscreen-overlayed-loader__overlay"></div> 
+    <div class="ecw-loader-animation fullscreen-overlayed-loader__loader">
+      <svg data-v-287d4030="" width="160px" height="80px" viewBox="0 0 160 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svg-car-loader"><g data-v-287d4030="" id="car-icon" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g data-v-287d4030="" id="icon_carLoader"><ellipse data-v-287d4030="" id="car__wheel__1" stroke="#212f40" stroke-width="4.97777778" cx="72.2089151" cy="45.0519547" rx="11.165023" ry="10.9480453"></ellipse> <ellipse data-v-287d4030="" id="car__wheel__2" stroke="#212f40" stroke-width="4.97777778" cx="129.894867" cy="45.0519547" rx="11.165023" ry="10.9480453"></ellipse> <line data-v-287d4030="" id="car__support" x1="119.660263" y1="46.4610953" x2="83.9942172" y2="46.4610953" stroke="#212f40" stroke-width="4.97777778"></line> <path data-v-287d4030="" id="car__body__id" d="M60.6717247,46.1467592 L55.2752969,46.1467592 C50.8092877,45.2344221 49.940897,40.9768489 52.546069,33.3740396 C56.4538271,21.9394145 58.500748,14.0324928 66.1301804,6.73379594 C73.7596128,-0.564900963 112.775165,-7.62030797 131.073398,18.290066 C134.919128,23.7640887 145.277788,23.0950415 148.875407,26.622745 C152.473025,30.1504485 151.976802,33.8606194 151.976802,38.3614825 C151.976802,42.9231681 149.123518,45.5385344 143.354923,46.1467592 L140.563667,46.1467592" stroke="#212f40" stroke-width="4.97777778"></path> <line data-v-287d4030="" id="upper__trail__id" stroke="#212f40" x1="12.6141079" y1="32.3555556" x2="32" y2="32.3555556" stroke-width="5" stroke-linecap="round"></line> <line data-v-287d4030="" id="lower__trail__id" stroke="#212f40" x1="6" y1="21.1555556" x2="26" y2="21.1555556" stroke-width="5" stroke-linecap="round"></line></g></g></svg> <div data-v-287d4030="" class="loader-message">
+      Un momento...
+    </div>
+    </div>
+  </div>
+<section class="breadcrumb-section">
 
-                          <div class="buyPatent-info lift lift-lg sticky-top z-index-2" style="min-height:230px;background: url('/media/img/latfirefighter.png');background-position: center 0; background-size: cover;">
+  <!-- Breadcrumb arriba -->
+  <nav class="breadcrumb">
+    <img src="/media/misc/ico-home.webp" alt="Icono Home" class="home-icon">
+    <router-link :to="{name:'home'}">Inicio</router-link>
+    <span>/</span>
+    <a>Datos del propietario</a>
+  </nav>
 
-                              <div><span>
-                               <Prime-InputMask slotChar='' :unstyled="true" v-if="cotizacionDetails.vehiculo"
-                                                  mask="**** **"
-                                                  class="form-control valor-patente"
-                                                  maxlength="75"
-                                                  :disabled="true"
-                                                  placeholder="SOAP 24"
-                                                  v-model="cotizacionDetails.vehiculo.patente"
-                                                  />
-                                {{cotizacionDetails.vehiculo?.marca}} / {{cotizacionDetails.vehiculo?.modelo}} / {{cotizacionDetails.vehiculo?.anio}}</span></div>
-                                      <div class="donation-info__model">
-                                       <div class="donation-soap">
-                                          <div class="soap">
-                                            <h3>{{$filters.formatCurrency(cotizacionDetails.planPesos)}}</h3>
-                                            <label>Valor SOAP</label>
-                                          </div>
-                                          <div>
-                                            <span class="plus text-align-center"><i class="fas fa-plus-circle"></i></span>
-                                          </div>
-                                          <div class="donation">
-                                            <h3>{{$filters.formatCurrency(cotizacionDetails.aporte)}}</h3>
-                                            <label><i class="fas fa-heart"></i> Tu Aporte</label>
-                                          </div>
-                                        </div>
-                                        <!--<div class="donation-info__model-soap">
-                                          <label>Valor SOAP:</label>
-                                          <p>{{budget.prima|currency}}</p>
-                                        </div>
-                                        <div class="donation-info__model-donation">
-                                          <label>Tu Aporte:</label>
-                                          <p>{{budget.aporte|currency}}</p>
-                                        </div>-->
-                                      </div>
-                                      <div class="donation-info__price">
-                                        <label>Total a Pagar</label>
-                                        <h3>{{$filters.formatCurrency(cotizacionDetails.montoPago)}}</h3>
-                                      </div>
-                                      <div class="donation-info__img">
-                                        
-                                        <div class="arrow autohide">
-                                          <span></span>
-                                          <span></span>
-                                          <span></span>
-                                        </div>
-                                      </div>
+  <div class="volver-container">
+    <!-- Botón Volver -->
+    <button class="btn-volver" onclick="history.back()">
+      <img src="/media/misc/ico-atras.webp" alt="Flecha Volver" class="arrow-icon">
+      <span>Volver</span>
+    </button>
 
-                             
-                             
+    <!-- Título a la derecha -->
+    <h1 class="section-title">Datos del vehículo</h1>
+  </div>
 
-                            </div>
-                        </div>
-                        <div data-aos="fade-up" data-aos-delay="100" class="col-md-12 col-lg-8 aos-init aos-animate content d-flex flex-column mt-1 mb-5 mx-auto">
-                            <div class="card card-white v-application border border-1">
-                                <div class="card-body" v-if="cotizacionDetails.vehiculo">
-                                    <Form
+</section>
+
+
+<section class="section-slider" v-if="mostrarVigencia">
+    <div class="slider-container">
+        <div style="height: 184px!important;" data-bs-ride="carousel" data-v-38c47deb="">
+            <div class="carousel-inner" data-v-38c47deb="">
+                <div class="p-10 pt-5 text-white" data-v-38c47deb="" style="background-image:url('/media/banners/vigencia-extendida-.png')!important">
+                    <div class="flex-column align-items-start justify-content-center pb-10" data-v-38c47deb="">
+                        <h2 class="text-white">
+                            ¿Necesitas tu SOAP con cobertura desde hoy?
+                        </h2>
+                        <p>Si tu auto es nuevo o no cuentas con tu SOAP vigente al día de hoy, <br/>puedes contratarlo y obtener cobertura inmediata.</p>
+                        <p v-for="prima in primasExtendidas">
+                          {{prima.codigoTipoVehiculo}}: {{$filters.formatCurrency(prima.primaTecnica)}}
+                        </p>
+                        <button @click="vigenciaExtendida" class="benefit-button mb-5" data-v-38c47deb="">Lo necesito <span data-v-38c47deb="">→</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="vehicle-data-section">
+  <Form
                                       id="kt_account_edificio_details_form"
-                                      class="form d-flex flex-column flex-lg-row"
                                       novalidate="novalidate"
                                       @submit="saveChanges1()"
                                       :validation-schema="cotizacionsValidator"
                                     >
-                                        <div class="tab-content" id="myTabContent">
-                                            <div class="tab-pane fade show active" id="home3" role="tabpanel">
-                                                <div class="row m-b-lg">
-                                                    <div class="col-md-12">
-                                                      <div class="d-flex align-items-center justify-content-center">
-                                                        <h2 class="py-5">Suscripción de <span class="rosa">Vehículo</span></h2>
-                                                      </div>
-                                                      <h3 id="form-quote">Datos del vehículo a asegurar</h3>
-                                                        <p>Verifica los datos con el patrón del auto.</p>
-                                                        <div class="row">
-                                                            <div class="form-group col-md-6">
-                                                              <p>*Ingrese Patente</p>
-                                                              <Field 
-                                                                v-slot="{ field,handleChange }"
-                                                                v-model="cotizacionDetails.vehiculo.patente"
-                                                                name="patente"
-                                                               value="value"
-                                                               v-mask="'AAAAAA'"
-                                                               @change="obtenerVehiculo"
-                                                              >
-                                                              <Prime-InputText
-                                                              class="form-control form-patente p-2"
-                                                              name="patente"
-                                                              maxlength="8"
-                                                              v-bind="field"
-                                                              @update:modelValue="handleChange" :model-value="field.value"
-                                                              placeholder="ABCD20"
-                                                              v-model="cotizacionDetails.vehiculo.patente"
-                                                              />
-                                                              </Field>    
-                                                                <div class="fv-plugins-message-container">
-                                                                  <div class="fv-help-block">
-                                                                    <ErrorMessage name="patente" />
-                                                                  </div>
-                                                                </div>        
-                                                            </div>    
-                                                            <div class="form-group col-md-6 margen-espacial">
-                                                                <p>*Tipo de Vehículo</p>
-                                                                
-                                                                <Field 
-                                                                v-slot="{ field,handleChange }"
-                                                                v-model="cotizacionDetails.vehiculo.tipoVehiculo"
-                                                                name="tipoVehiculo"
-                                                                value="value"
-                                                              >
-                                                                <Prime-Dropdown v-model="cotizacionDetails.vehiculo.tipoVehiculo" :options="allTipos" 
-                                                                optionLabel="nombre" optionValue="nombre" placeholder="Seleccione Tipo de vehículo" class="w-100"
-                                                                 @update:modelValue="handleChange" :model-value="field.value" />
-                                                                </Field>
-                                                               <div class="fv-plugins-message-container">
-                                                                  <div class="fv-help-block">
-                                                                    <ErrorMessage name="tipovehiculo" />
-                                                                  </div>
-                                                                </div> 
-                                                            </div>
-                                                            <div class="form-group col-md-6 margen-espacial">
-                                                                <p>*Marca del Vehículo</p>
-                                                               <Field 
-                                                                v-slot="{ field,handleChange }"
-                                                                v-model="cotizacionDetails.vehiculo.marca"
-                                                                name="marca"
-                                                                value="value"
-                                                              >
-                                                               <Prime-Dropdown filter v-model="cotizacionDetails.vehiculo.marca" :options="allMarcas" 
-                                                                optionLabel="nombre" optionValue="nombre" placeholder="Seleccione Marca" class="w-100"
-                                                                
-                                                                @update:modelValue="handleChange" :model-value="field.value" />
-                                                               </Field>
-                                                               <div class="fv-plugins-message-container">
-                                                                  <div class="fv-help-block">
-                                                                    <ErrorMessage name="marca" />
-                                                                  </div>
-                                                                </div> 
-                                                            </div>
-                                                            <div class="form-group col-md-6 margen-espacial">
-                                                                <p>*Modelo del Vehículo</p>
-                                                                 <Field 
-                                                                v-slot="{ field,handleChange }"
-                                                                v-model="cotizacionDetails.vehiculo.modelo"
-                                                                name="modelo"
-                                                                value="value"
-                                                              >
-                                                                <Prime-Dropdown filter v-model="cotizacionDetails.vehiculo.modelo" :options="allModelos" 
-                                                                optionLabel="nombre" optionValue="nombre" placeholder="Seleccione Modelo" class="w-100" 
-                                                                 @update:modelValue="handleChange" :model-value="field.value" />
-                                                                </Field>
-                                                               <div class="fv-plugins-message-container">
-                                                                  <div class="fv-help-block">
-                                                                    <ErrorMessage name="modelo" />
-                                                                  </div>
-                                                                </div> 
-
-                                                            </div>
-                                                            
-                                                            <div class="form-group col-md-6">
-                                                                <p>*Nº Motor</p>
-                                                                <Field type="text"
-                                                                    maxlength="50" name="numeroMotor"
-                                                                    class="form-control p-2"
-                                                                    placeholder="Numero Motor"
-                                                                    v-model="cotizacionDetails.vehiculo.numeroMotor"/>
-                                                                    <div class="fv-plugins-message-container">
-                                                                  <div class="fv-help-block">
-                                                                    <ErrorMessage name="numeroMotor" />
-                                                                  </div>
-                                                                </div> 
-                                                            </div>
-                                                            <div class="form-group col-md-6 margen-espacial">
-                                                                <p>*Año del vehículo</p>
-                                                                 <Prime-Dropdown v-model="cotizacionDetails.vehiculo.anio" :options="allAnios" 
-                                                                 placeholder="Seleccione aAño" class="w-100" />
-                                                            </div>
-                                                        </div>
-                                                  
-                                                    </div>
-                                                </div>
-                                            </div>
-                                             <div class="card card-bordered shadow-none mt-2 mb-2">
-                                          <!-- card body -->
-                                          <div class="card-body p-6">
-                                             <!-- check input -->
-                                             <div class="d-flex">
-                                                <div class="form-check me-2">
-                                                   <Prime-Checkbox id="chbx" v-model="datosConfirmados" :class="{ 'p-invalid': errorMessage }" binary aria-describedby="chbx-error" />
-                                                </div>
-                                                <div>
-                                                   <p class="mb-0 small">*Acepto las políticas, <a href="#;" @click="visible=true">terminos y condiciones</a></p>
-                                                </div>
-                                             </div>
-                                          </div>
-                                       </div>                                               
-                                                <div class="d-flex flex-row">
-                                                  
-                                                    <Prime-Button 
-                                                      onclick="gtag('event', 'Info_vehiculo')"
-                                                      :disabled="!datosConfirmados"
-                                                      type="submit"
-                                                      class="btn btn-primary"
-                                                      label="Continuar" :loading="loading"/>
-                                                      <div></div>
-                                                </div>
-                                                
-                                        </div>
-                                    </Form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Row -->
-                </div>
-                <!-- end page main wrapper -->
-                <Prime-Dialog v-model:visible="visible" modal header="Términos y condiciones" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
-                    <h3>TÉRMINOS Y CONDICIONES DEL SOAP ELECTRÓNICO SOAPBOMBERO</h3>
-
-<p>ASUMIDO EL RIESGO POR SOUTHBRIDGE COMPAÑÍA DE SEGUROS GENERALES S.A. E INTERMEDIADO POR PRODUCTORA DE SEGUROS LAS CONDES BAJO SU MARCA SOAPBOMBEROS.</p>
-
-<p>La cobertura de riesgo está a cargo de Southbridge Compañía de Seguros Generales S.A. y es intermediada por Productora de Seguros Las Condes Ltda. Los detalles de las condiciones y exclusiones se encuentran especificados en la póliza, la cual está registrada en el depósito de pólizas de la CMF bajo el código POL 3 2013 0487, así como en las condiciones particulares del contrato. La contratación de este seguro cumple con la Circular 1.864 del 21.01.08 de la CMF, la cual regula la venta del SOAP por Internet. Cabe destacar que la responsabilidad exclusiva sobre la exactitud de los datos ingresados recae en el contratante, quien asumirá las consecuencias derivadas de posibles errores o inexactitudes de información.</p>
-
-<h5>Sobre el Uso y Veracidad de la Información</h5>
-
-<p>El solicitante es responsable de los datos ingresados, tanto del vehículo como del propietario. Estos deben concordar con la información registrada en el Registro Nacional de Vehículos Motorizados, obtenible del padrón o certificado de dominio del vehículo. Cualquier error o inexactitud en la información será responsabilidad exclusiva del solicitante, liberando de responsabilidad a la compañía, al corredor de seguros y al canal de ventas.</p>
-
-<h5>Autorización para Contacto y Uso de Datos</h5>
-
-<p>El contratante autoriza conscientemente a Productora de Seguros Las Condes -o alguna de sus marcas relacionadas- a contactarlo a través de los medios indicados al proporcionar sus datos. Este contacto tiene como objetivo informar sobre nuevos productos y servicios, evaluar la calidad del servicio o productos contratados, y podrá ser realizado por la propia Productora de Seguros Las Condes Ltda. o terceros autorizados.</p>
-
-<h5>Cláusula de uso de datos</h5>
-
-<p>En cumplimiento de los principios de Conducta de Mercado, transparencia y protección de datos, Productora de Seguros Las Condes Ltda. solicita la autorización del contratante para almacenar y tratar sus datos personales. Estos datos se utilizarán para la tramitación, seguimiento y actualización de solicitudes de información, la gestión de la actividad aseguradora, el cumplimiento del contrato de seguro y el envío de información y publicidad. Además, se acepta que estos datos puedan ser entregados a entidades específicas, exclusivamente para los fines mencionados anteriormente.</p>
-
-<h5>Condiciones de Pago</h5>
-
-<p>Para el pago del Seguro Obligatorio de Accidentes Personales (SOAP), Productora de Seguros Las Condes Ltda., a través de sus marcas SOAPBOMBEROS y ASEGURAONLINE, ofrece la plataforma de pago online Mercado Pago y/o sus asociadas. La prima del seguro se considerará pagada solo cuando el sistema de pago apruebe la transacción y Productora de Seguros Las Condes Ltda. haya recibido el monto correspondiente.
-
-En caso de duplicidad de pago por parte del cliente, este podrá solicitar la devolución del excedente mediante los sistemas previstos por SOAPBOMBEROS, siempre que los fondos estén disponibles en Productora de Seguros Las Condes Ltda. El plazo para las devoluciones será máximo de 30 días corridos.
-
-Para consultas sobre el proceso de reembolso, el cliente puede contactar al centro de soporte Web a devoluciones@soapbomberos.cl durante el horario de atención de lunes a viernes de 09:00 hrs. a 18:00 hrs.</P>
-
-<h5>Información de los Vehículos</h5>
-
-<p>Según la normativa vigente, los datos del vehículo no pueden ser modificados a través de este medio. En caso de discrepancia o dudas sobre la exactitud de los datos, se insta al cliente a comunicarse con el centro de soporte Web a conecta@soapbomberos.cl.</p>
-
-<h5>Despacho a Domicilio</h5>
-<p>
-De acuerdo con la normativa de la CMF, si el contratante lo solicita al momento de la contratación, Southbridge Compañía de Seguros Generales S.A. enviará el certificado SOAP a su domicilio. El despacho se realizará por un servicio de correo fehaciente y expedito dentro de los 3 días hábiles siguientes a la solicitud. El despacho a domicilio tiene un recargo de $5.000 pesos en la Región Metropolitana y de $8.000 en otras regiones.
-
-El certificado enviado por correo postal es una impresión del mismo SOAP electrónico, comparable a la que el cliente puede imprimir con su impresora particular. Todos los SOAP se enviarán a un mismo domicilio.</p>
-
-<h5>Consultas</h5>
-
-<p>Para resolver dudas o recibir apoyo en el proceso de contratación del seguro, visite www.soapbomberos.cl o escriba al centro de soporte Web a conecta@soapbomberos.cl. El horario de atención es de lunes a viernes de 09:00 hrs. a 18:00 hrs.</p>
-
-                </Prime-Dialog>
+<!-- COLUMNA IZQUIERDA: DATOS DEL VEHÍCULO -->
+<div class="datos-vehiculo" v-if="cotizacionDetails.vehiculo">
+  <!-- Encabezado verde -->
+  <div class="header-green">
+    <h2>Datos del vehículo a asegurar</h2>
+    <p>Verifica los datos con el padrón del auto.</p>
   </div>
+
+  <!-- Contenido / Formulario del vehículo -->
+  <div class="vehiculo-form">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="patente">*Ingrese Patente</label>
+        <Field 
+          v-slot="{ field,handleChange }"
+          v-model="cotizacionDetails.vehiculo.patente"
+          name="patente"
+          value="value"
+          v-mask="'AAAAAA'"
+          @change="obtenerVehiculo"
+        >
+        <Prime-InputText
+        class="form-control form-patente p-2"
+        name="patente"
+        maxlength="8"
+        v-bind="field"
+        @update:modelValue="handleChange" :model-value="field.value"
+        placeholder="ABCD20"
+        v-model="cotizacionDetails.vehiculo.patente"
+        />
+        </Field>    
+          <div class="fv-plugins-message-container">
+            <div class="fv-help-block">
+              <ErrorMessage name="patente" />
+            </div>
+          </div>  
+      </div>
+      <div class="form-group">
+        <label for="tipo-vehiculo">*Tipo de Vehículo</label>
+        <Field 
+          v-slot="{ field,handleChange }"
+          v-model="cotizacionDetails.vehiculo.tipoVehiculo"
+          name="tipoVehiculo"
+          value="value"
+        >
+          <Prime-Dropdown v-model="cotizacionDetails.vehiculo.tipoVehiculo" :options="allTipos" 
+          optionLabel="nombre" optionValue="nombre" placeholder="Seleccione Tipo de vehículo" class="w-100"
+            @update:modelValue="handleChange" :model-value="field.value" />
+          </Field>
+          <div class="fv-plugins-message-container">
+            <div class="fv-help-block">
+              <ErrorMessage name="tipovehiculo" />
+            </div>
+          </div> 
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="marca">*Marca del Vehículo</label>
+        <Field 
+          v-slot="{ field,handleChange }"
+          v-model="cotizacionDetails.vehiculo.marca"
+          name="marca"
+          value="value"
+        >
+          <Prime-Dropdown filter v-model="cotizacionDetails.vehiculo.marca" :options="allMarcas" 
+          optionLabel="nombre" optionValue="nombre" placeholder="Seleccione Marca" class="w-100"
+          
+          @update:modelValue="handleChange" :model-value="field.value" />
+          </Field>
+          <div class="fv-plugins-message-container">
+            <div class="fv-help-block">
+              <ErrorMessage name="marca" />
+            </div>
+          </div> 
+      </div>
+      <div class="form-group">
+        <label for="modelo">*Modelo del Vehículo</label>
+        <Field 
+          v-slot="{ field,handleChange }"
+          v-model="cotizacionDetails.vehiculo.modelo"
+          name="modelo"
+          value="value"
+        >
+          <Prime-Dropdown filter v-model="cotizacionDetails.vehiculo.modelo" :options="allModelos" 
+          optionLabel="nombre" optionValue="nombre" placeholder="Seleccione Modelo" class="w-100" 
+            @update:modelValue="handleChange" :model-value="field.value" />
+          </Field>
+          <div class="fv-plugins-message-container">
+            <div class="fv-help-block">
+              <ErrorMessage name="modelo" />
+            </div>
+          </div> 
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="numero-motor">*N° Motor</label>
+        <Field type="text"
+          maxlength="50" name="numeroMotor"
+          class="form-control p-2"
+          placeholder="PE30977676"
+          v-model="cotizacionDetails.vehiculo.numeroMotor"/>
+          <div class="fv-plugins-message-container">
+        <div class="fv-help-block">
+          <ErrorMessage name="numeroMotor" />
+        </div>
+      </div> 
+      </div>
+      <div class="form-group">
+        <label for="anio-vehiculo">*Año del Vehículo</label>
+        <Prime-Dropdown v-model="cotizacionDetails.vehiculo.anio" :options="allAnios" 
+                                                                 placeholder="Seleccione Año" class="w-100" />
+      </div>
+    </div>
+
+    <!-- Checkbox Políticas y Términos -->
+    <div class="checks-row">
+      <Field 
+          v-slot="{ field,handleChange }"
+          v-model="cotizacionDetails.datosConfirmados"
+          name="datosConfirmados"
+          
+        >
+            <Prime-Checkbox id="chbx" v-model="cotizacionDetails.datosConfirmados" :class="{ 'p-invalid': errorMessage }" binary  @update:modelValue="handleChange" :model-value="field.value" />
+          </Field>
+          <label for="acepto">
+            Acepto las políticas, <a href="/info-condiciones" target="_blank">términos y condiciones</a>
+          </label>
+    </div>
+    <div class="fv-plugins-message-container">
+            <div class="fv-help-block">
+              <ErrorMessage name="datosConfirmados" />
+            </div>
+          </div> 
+    <div class="checks-row">
+      <Field 
+          v-slot="{ field,handleChange }"
+          v-model="cotizacionDetails.aceptoComercial"
+          name="aceptoComercial"
+          
+        >
+            <Prime-Checkbox id="chbx" v-model="cotizacionDetails.aceptoComercial" :class="{ 'p-invalid': errorMessage }" binary  @update:modelValue="handleChange" :model-value="field.value" />
+          </Field>
+          <label for="acepto">
+            *Acepto específicamente el uso de mis datos para finalidades comerciales.
+          </label>
+    </div>
+    <div class="fv-plugins-message-container">
+            <div class="fv-help-block">
+              <ErrorMessage name="aceptoComercial" />
+            </div>
+          </div> 
+  </div>
+</div>
+
+  <div class="continue-container">
+    <Prime-Button 
+      type="submit"
+      class="continue-button"
+      label="" :loading="loading">
+      <span class="main-text">CONTINUA</span><br/><span class="sub-text">y haz tu aporte</span>
+    </Prime-Button>
+  </div>
+  </Form>
+</section>
+
 </template>
 
 <script lang="ts">
@@ -312,6 +277,8 @@ export default defineComponent({
     const datosConfirmados = ref(false);
     const loading = ref(true);
     const visible = ref(false);
+    const mostrarVigencia = ref(false);
+    const modelos = ref([]);
 
     const cotizacionsValidator = Yup.object().shape({
       patente: Yup.string().required("Es obligatorio").label("Patente").test("yupIsPatente", "Patente ingresada no es valida", function (value) {
@@ -320,8 +287,9 @@ export default defineComponent({
 		  marca: Yup.string().required("Es obligatorio").label("Marca"),
 		  modelo: Yup.string().required("Es obligatorio").label("Modelo"),
 		  tipoVehiculo: Yup.string().required("Es obligatorio").label("Tipo Vehículo"),
-		  numeroMotor: Yup.string().required("Es obligatorio").label("numeroMotor")
-
+		  numeroMotor: Yup.string().required("Es obligatorio").label("numeroMotor"),
+      datosConfirmados: Yup.bool().required("Es obligatorio").label("datosConfirmados"),
+      aceptoComercial: Yup.bool().required("Es obligatorio").label("datosConfirmados")
     });
 
     Yup.addMethod(Yup.string, "yupIsPatente", function (mensaje) {
@@ -337,10 +305,10 @@ export default defineComponent({
     });
     const saveChanges1 = () => {
       loading.value = true;
-        storeVehiculo.updateVehiculo(cotizacionDetails.value.vehiculo)
+        storeVehiculo.updateVehiculo(cotizacionDetails.value)
           .then(() => {
             loading.value = false;
-            router.push({ name: "info-persona", params:{id:cotizacionDetails.value.cotizacionId} });
+            router.push({ name: "info-aporte", params:{id:cotizacionDetails.value.cotizacionId} });
           })
           .catch(() => {
             const [error] = Object.values(storeVehiculo.vehiculoErrors);
@@ -356,7 +324,27 @@ export default defineComponent({
             });
           });
     };
-   
+    const vigenciaExtendida = () => {
+      loading.value = true;
+        storeVehiculo.updateVehiculoExtension(cotizacionDetails.value)
+          .then(() => {
+            loading.value = false;
+            location.href = "/info-vehiculo/" + cotizacionDetails.value.cotizacionId;
+          })
+          .catch(() => {
+            const [error] = Object.values(storeVehiculo.vehiculoErrors);
+            Swal.fire({
+                text: error,
+                icon: "error",
+                buttonsStyling: false,
+                confirmButtonText: "Ok",
+                heightAuto: false,
+                customClass: {
+                confirmButton: "btn fw-semobold btn-light-primary",
+                },
+            });
+          });
+    };
     const route = useRoute();
     const cotizacionId = route.params.id;
     const carro = JSON.parse(store.getCarro());
@@ -364,11 +352,9 @@ export default defineComponent({
     onMounted(async () => {     
       obtenerAnios();
       loading.value = true;
-      await obtenerCotizacion(cotizacionId);
-      obtenerMarcas(store.currentCotizacion.codigoConvenio);
-      obtenerModelos(store.currentCotizacion.codigoConvenio, store.currentCotizacion.vehiculo.marca, store.currentCotizacion.vehiculo.tipoVehiculo);
+      await obtenerCotizacion(carro.carroId, cotizacionId);
       obtenerTipos(store.currentCotizacion.codigoConvenio);
-      obtenerCarro(carro.carroId);
+      //obtenerCarro(carro.carroId);
       loading.value=false;
       window.scrollTo({
         top: 650,
@@ -376,11 +362,12 @@ export default defineComponent({
         behavior: "smooth",
       });
     });
-    const obtenerMarcas =async  (campania:string) => {
-      await storeMarca.getMarcas(campania);
+    const obtenerMarcas = async  (tipoVehiculo: string) => {
+      await storeTipo.getTipoVehiculo(tipoVehiculo);
+      obtenerModelos(cotizacionDetails.value.vehiculo?.marca);
     };
-    const obtenerModelos = (campania:string, marca: string, tipoVehiculo: string) => {
-      storeModelo.getModelos(campania, marca, tipoVehiculo);
+    const obtenerModelos = (marca: string) => {
+      modelos.value = allMarcas.value?.find(c=>c.codigo==marca).modelos;
     };
     const obtenerTipos = (campania:string) => {
       storeTipo.getTipoVehiculos(campania)
@@ -401,12 +388,12 @@ export default defineComponent({
     const obtenerAnios = () => {
       storeAnio.getAnios();
     };
-    const obtenerCotizacion = async (cotizacionId) =>{
+    const obtenerCotizacion = async (carroId, cotizacionId) =>{
       await store
-        .getCotizacion(cotizacionId)
+        .getCotizacion({carroId, cotizacionId})
         .then(() => {
           cotizacionDetails.value = store.currentCotizacion;
-          cotizacionDetails.value.patente = store.currentCotizacion.vehiculo?.patente
+          cotizacionDetails.value.patente = store.currentCotizacion.vehiculo?.patente;
         })
         .catch(() => {
           const [error] = Object.values(store.cotizacionErrors);
@@ -422,13 +409,29 @@ export default defineComponent({
           })
         });
     }
+
+    const obtenerPrimaExtendida = async (tipoVehiculo) =>{
+      await storePrima
+        .getPrimaSoapExtendida(tipoVehiculo)
+        .then(() => {
+          loading.value = false;
+          if(storePrima.allPrimasVigencia.length>0)
+          {
+            let fecha = moment(store.currentCotizacion.fechaInicio); 
+            let hoy = moment(); // Esto obtiene la fecha y hora actual
+            if (fecha.isAfter(hoy, 'day')) {
+              mostrarVigencia.value = true;
+            }
+          }
+        });
+    } 
     const obtenerPrima= async (tipoVehiculo) =>{
       await storePrima
         .getPrimaSoap(cotizacionDetails.value.codigoConvenio, tipoVehiculo)
         .then(() => {
           loading.value = false;
-          cotizacionDetails.value.planPesos = storePrima.currentPrimaSoap.primaTecnica;
-          cotizacionDetails.value.montoPago = storePrima.currentPrimaSoap.primaTecnica + cotizacionDetails.value.aporte;
+          //cotizacionDetails.value.planPesos = storePrima.currentPrimaSoap.primaTecnica;
+          //cotizacionDetails.value.montoPago = storePrima.currentPrimaSoap.primaTecnica + cotizacionDetails.value.aporte;
         })
         .catch(() => {
           const [error] = Object.values(storePrima.primaSoapErrors);
@@ -450,7 +453,7 @@ export default defineComponent({
         .then(() => {
           cotizacionDetails.value.patente = cotizacionDetails.value.vehiculo.patente;
           cotizacionDetails.value.vehiculo = storeVehiculo.currentVehiculo;
-          obtenerModelos(store.currentCotizacion.codigoConvenio, storeVehiculo.currentVehiculo.marca, storeVehiculo.currentVehiculo.tipoVehiculo);
+          //obtenerModelos(store.currentCotizacion.codigoConvenio, storeVehiculo.currentVehiculo.marca, storeVehiculo.currentVehiculo.tipoVehiculo);
         })
         .catch(() => {
           const [error] = Object.values(storeVehiculo.vehiculoErrors);
@@ -484,16 +487,19 @@ export default defineComponent({
         });
     }
     const allMarcas = computed(() => {
-      return storeMarca.allMarcas;
+      return storeTipo.currentTipoVehiculo.marcas;
     });
     const allModelos = computed(() => {
-      return storeModelo.allModelos;
+      return modelos.value;
     });
     const allTipos = computed(() => {
       return storeTipo.allTipoVehiculos;
     });
     const allAnios = computed(() => {
       return storeAnio.allAnios;
+    });
+    const primasExtendidas = computed(() => {
+      return storePrima.allPrimasVigencia;
     });
     const currentCarroCompra = computed(() => {
       return storeCarro.currentCarroCompra;
@@ -549,15 +555,16 @@ export default defineComponent({
             patente:store.currentCotizacion?.vehiculo?.patente
     
   });
-    watch(() => cotizacionDetails.value.vehiculo?.tipoVehiculo, (newValue) =>  {
+    watch(async () => cotizacionDetails.value.vehiculo?.tipoVehiculo, async (newValue) =>  {
       if(cotizacionDetails.value.vehiculo)
-        obtenerPrima(newValue);
-        obtenerModelos(store.currentCotizacion.codigoConvenio, store.currentCotizacion.vehiculo.marca, newValue);
+        //obtenerPrima(await newValue);
+        obtenerPrimaExtendida(await newValue);
+        await obtenerMarcas(await newValue);
     });
     watch(() => cotizacionDetails.value.vehiculo?.marca, (newValue) =>  {
-      if(cotizacionDetails.value.vehiculo)
-        obtenerModelos(store.currentCotizacion.codigoConvenio, newValue, store.currentCotizacion.vehiculo.tipoVehiculo);
-    });
+      if(allMarcas.value && allMarcas.value?.length>0)
+        obtenerModelos(newValue);
+    }); 
     /*watch(() => cotizacionDetails.value.vehiculo?.patente, (newValue) =>  {
       if(cotizacionDetails.value.vehiculo)
         obtenerVehiculo(newValue);
@@ -574,7 +581,10 @@ export default defineComponent({
       obtenerVehiculo,
       datosConfirmados,
       loading,
-      visible
+      visible,
+      vigenciaExtendida,
+      mostrarVigencia,
+      primasExtendidas
     };
   },
 });

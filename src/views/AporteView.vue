@@ -1,240 +1,161 @@
 <template>
-  <div class="content-wrapper flex-row-fluid container space-2 space-3--lg">
-    <!-- start page main wrapper -->
-    <div
-      id="mt-50 main-wrapper portal-content d-flex content d-flex flex-column flex-column-fluid container-fluid"
-      style="padding-top: 30px"
-    >
-      <div class="row">
-        <div
-          data-aos="fade-right fade-left"
-          data-aos-delay="100"
-          class="
-            buyPatent
-            donation-info
-            col-lg-4
-            aos-init aos-animate
-            text-center
-            d-lg-block
-            mx-auto
-            resume-content
-          "
-        >
-          <div class="buyPatent-info lift lift-lg sticky-top" style="min-height:230px;background: url('/media/img/latfirefighter.png');background-position: center 0; background-size: cover;">
 
-            <div>
-              <span
-                >{{cotizacionDetails.vehiculo?.patente}}
-                               {{cotizacionDetails.vehiculo?.marca}} / {{cotizacionDetails.vehiculo?.modelo}} / {{cotizacionDetails.vehiculo?.anio}}
-              </span>
-            </div>
-            <div class="donation-info__model">
-              <div class="donation-soap">
-                <div class="soap">
-                   <h3>{{$filters.formatCurrency(cotizacionDetails.planPesos)}}</h3>
-                  <label>Valor SOAP</label>
-                </div>
-                <div>
-                  <span class="plus text-align-center"
-                    ><i class="fas fa-plus-circle"></i
-                  ></span>
-                </div>
-                <div
-                  class="donation"
-                  :class="contributing ? 'aporte-breath' : ''"
-                >
-                  <h3>{{$filters.formatCurrency(cotizacionDetails.aporte)}}</h3>
-                  <label><i class="fas fa-heart"></i> Tu Aporte</label>
-                </div>
-              </div>
-            </div>
-            <div class="donation-info__price">
-              <label>Total</label>
-              <h3>{{$filters.formatCurrency(cotizacionDetails.montoPago)}}</h3>
-            </div>
-            <div class="donation-info__img">
-              
-              <div class="arrow autohide">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          data-aos="fade-up"
-          data-aos-delay="100"
-          class="
-            col-md-12 col-lg-8
-            aos-init aos-animate
-            content
-            d-flex
-            flex-column
-            mt-1
-            mb-5
-            mx-auto
-          "
-        >
-          <div class="card card-white v-application border border-1">
-            <div class="card-body">
-              <Form
+
+<section class="breadcrumb-section">
+
+  <!-- Breadcrumb arriba -->
+  <nav class="breadcrumb">
+    <img src="/media/misc/ico-home.webp" alt="Icono Home" class="home-icon">
+    <router-link :to="{name:'home'}">Inicio</router-link>
+    <span>/</span>
+    <a>Suscripción del vehículo</a>
+  </nav>
+
+  <div class="volver-container">
+    <!-- Botón Volver -->
+    <router-link v-if="cotizacionDetails.cotizacionId" :to="{ name: 'info-vehiculo', params: { id: cotizacionDetails.cotizacionId }}" class="btn-volver">
+    <img src="/media/misc/ico-atras.webp" alt="Flecha Volver" class="arrow-icon">
+    <span>Volver</span>
+  </router-link>
+    <!-- Título a la derecha -->
+    <h1 class="section-title">Suscripción del vehículo</h1>
+  </div>
+
+</section>
+
+
+<section class="realiza-aporte-section">
+  <Form
                                       id="kt_account_edificio_details_form"
-                                      class="form d-flex flex-column flex-lg-row"
                                       novalidate="novalidate"
                                       @submit="saveChanges1()"
                                       :validation-schema="cotizacionsValidator"
                                     >
-                <div class="tab-content" id="myTabContent">
-                  <div
-                    class="tab-pane fade show active"
-                    id="home3"
-                    role="tabpanel"
-                  >
-                    <div class="row m-b-lg">
-                      <div class="col-md-12">
-                        <h5 id="form-quote">
-                          Con tu seguro estás aportando a Bomberos:
-                        </h5>
+  <div class="realiza-aporte-container">
+    <!-- Encabezado -->
+    <div class="encabezado">
+      <h2>REALIZA TU APORTE</h2>
+    </div>
 
-                        <div class="row">
-                          <div class="form-group col-md-12">
-                            <div class="card-row card-bancos " style="display:flex; flex-wrap: wrap;">
-                              
-                              <template v-for="(item, x) in allMontosAporte" v-bind:key="x + '-ammount'">
-                                <div class="aporte" >
-                                  <div 
-                                        :class="{'donation-selected' : cotizacionDetails.aporte === item.monto}" 
-                                        @click="actualizarAporte(item.monto)">
-                                          <div class="mt-2 donation bg icon-floating bg-secondary floating  hover-shadow-lg hover-translate-y-n10"><span></span>{{item.monto|currency}} 
-                                          <p>Pesos</p>
-                                          <div class="radar"> </div> <div class="radar"> </div> <div class="radar"> </div> <div class="radar"> </div> 
-                                          <div style="left:80%;position:absolute; top:0;" v-if="cotizacionDetails.aporte === item.monto">
-                                            <svg class="w-6 h-6" width="25px" height="25px" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                                <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                    <g id="checkmark-outline" fill-rule="nonzero">
-                                                        <path d="M31.1442786,171.840796 C5.2779518,146.858262 -5.09578082,109.862896 4.01023318,75.0738981 C13.1162472,40.2848999 40.2848999,13.1162472 75.0738981,4.01023318 C109.862896,-5.09578082 146.858262,5.2779518 171.840796,31.1442786 C209.549474,70.1869539 209.010186,132.247241 170.628714,170.628714 C132.247241,209.010186 70.1869539,209.549474 31.1442786,171.840796 Z" id="Shape" fill="#97EBDC"></path>
-                                                        <polygon id="Path" fill="#00836D" points="66.6666667 89.4527363 89.5522388 112.437811 132.338308 69.6517413 146.268657 83.7810945 89.5522388 140.298507 52.7363184 103.482587 66.6666667 89.3532338"></polygon>
-                                                    </g>
-                                                </g>
-                                            </svg>
-                                          </div>
-                                        </div>
-                                      </div>
-                                </div>
-                              </template>
-                            </div>
-                          </div>
-                          <div class="row">
-                              <div class="form-group col-md-12">
-                                <h5>
-                                  ¿A cuál compañía de bomberos quieres realizar el
-                                  aporte?:
-                                </h5>
-                              </div>
-                              <div class="alert alert-primary" v-if="currentConvenio.mensaje">{{currentConvenio.mensaje}}</div>
-                              <div
-                                class="form-group col-md-6"
-                                v-if="!currentConvenio.nombre || (currentConvenio && currentConvenio.esEmbajador)"
-                              >
-                                <label>*Comuna</label>
-                                <Field 
-                                                                    v-slot="{ field,handleChange }"
-                                                                    v-model="cotizacionDetails.comuna"
-                                                                    name="comuna"
-                                                                    value="value"
-                                                                  >
-                                                                  <Prime-Dropdown filter v-model="cotizacionDetails.comuna" :options="allComunas" 
-                                                                    optionLabel="nombre" optionValue="codigoComuna" placeholder="Seleccione Comuna" class="w-100"
-                                                                    
-                                                                    @update:modelValue="handleChange" :model-value="field.value" />
-                                                                  </Field>
-                                                                  <div class="fv-plugins-message-container">
-                                                                      <div class="fv-help-block">
-                                                                        <ErrorMessage name="comuna" />
-                                                                      </div>
-                                                                    </div> 
-                              </div>
-                              <div v-else class="form-group col-md-6">
-                                <Field  type="hidden"
-                                                                    v-model="cotizacionDetails.compania"
-                                                                    name="comuna"
-                                                                 />
-                              </div>
+    <!-- Información del vehículo -->
+    <div class="info-vehiculo">
+      <div class="vehiculo-imagen">
+        <img src="/media/misc/auto.webp" alt="Imagen del vehículo">
+      </div>
+      <div class="plate-info">
+          <span type="text" v-mask="'#### ##'" v-if="cotizacionDetails.vehiculo" disabled="disabled" maxlength="7" :value="cotizacionDetails.vehiculo.patente" placeholder="ABCD 20" class="form-control valor-patente">
+            {{$filters.formatPatente(cotizacionDetails.vehiculo.patente)}}
+          </span>
+        <p>{{cotizacionDetails.vehiculo?.marca}} / {{cotizacionDetails.vehiculo?.modelo}} / {{cotizacionDetails.vehiculo?.anio}}</p>
+        <p>{{cotizacionDetails.cliente?.nombre}} {{cotizacionDetails.cliente?.apellidoPaterno}} / Rut: {{cotizacionDetails.cliente?.rut}}</p>
+      </div>
+    </div>
 
-                              
-                              <div v-if="!currentConvenio.codigo || (currentConvenio && currentConvenio.esComuna) || (currentConvenio && currentConvenio.esEmbajador)"
-                                class="form-group col-md-6"
-                              >
-                                <label>*Compañía </label>
-                                <Field 
-                                                                    v-slot="{ field,handleChange }"
-                                                                    v-model="cotizacionDetails.compania"
-                                                                    name="compania"
-                                                                    value="value"
-                                                                    disabled="currentConvenio.nombre!='' && !currentConvenio.esComuna"
-                                                                  >
-                                                                  <Prime-Dropdown filter v-model="cotizacionDetails.compania" :options="allCompanias" 
-                                                                    optionLabel="nombre" optionValue="nombre" placeholder="Seleccione Compañía" class="w-100"
-                                                                    
-                                                                    @update:modelValue="handleChange" :model-value="field.value" />
-                                                                  </Field>
-                                                                  <div class="fv-plugins-message-container">
-                                                                      <div class="fv-help-block">
-                                                                        <ErrorMessage name="compania" />
-                                                                      </div>
-                                                                    </div> 
-                              </div>
-                              <div v-else>
-                                 <Field  type="hidden"
-                                                                    v-model="cotizacionDetails.compania"
-                                                                    name="compania"
-                                                                 />
-                              </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!--h2>Medios de Pago</h2>-->
-                  <div class="ml-pay"></div>
-                  
-                  <div class="col-12 m-t-20 mt-20">
-                    <router-link v-if="cotizacionDetails.cotizacionId  "
-                      :to="{
-                        name: 'info-persona', params:{id:cotizacionDetails.cotizacionId }
-                      }"
-                      class="btn btn-secondary"
-                    >
-                      Volver</router-link
-                    >
-
-                    <Prime-Button  onclick="gtag('event', 'Info_aporte')"
-                                                      type="submit"
-                                                      id="kt_account_edificio_details_submit"
-                                                      :loading="loading"
-                                                      :disabled="loading"
-                                                      class="btn btn-primary"
-                                                      label="Continuar"
-                                                      />
-                  </div>
-
-                  <div class="mt-20 alert alert-secondary ml-pago">
-                      <img src="/media/img/wp-mercadopago.png" style="max-width:213px"/>
-                      <div class="text-black">Ahora puedes pagar con la confianza de Mercado Pago. 
-                      Usa tus tarjetas de débito, crédito o prepago.
-                      <p>Recuerda. Si tu tarjeta de débito tiene los 3 números en el reverso de la tarjeta, usa la opción <strong>con CVV</strong></p></div>
-                  </div>
-                </div>
-              </Form>
-            </div>
-          </div>
+    <!-- Aporte y cálculo -->
+    <div class="aporte-calculo">
+      <p><strong>Valor SOAP :</strong> <span class="valor-soap">{{$filters.formatCurrency(cotizacionDetails.planPesos)}}</span></p>
+      <p><strong><img src="/media/misc/heart-icon.webp" alt="Corazón" class="shield-icon"> Tu Aporte :</strong></p>
+      <div class="amount-options-container">
+      <div class="amount-options">
+          <template v-for="(item, x) in allMontosAporte" v-bind:key="x + '-ammount'">
+          <input type="radio" :id="item.monto" name="contribution" :value="item.monto" checked v-if="cotizacionDetails.aporte === item.monto">
+          <input type="radio" :id="item.monto" name="contribution" :value="item.monto" v-else>
+          <label :for="item.monto" @click="actualizarAporte(item.monto)">{{$filters.formatCurrency(item.monto)}} </label>
+          </template>
         </div>
       </div>
-      <!-- Row -->
+      <p><strong>Total a pagar :</strong> <span class="total-pagar">{{$filters.formatCurrency(cotizacionDetails.montoPago)}}</span></p>
     </div>
-    <!-- end page main wrapper -->
+
+    <!-- Selección de compañía -->
+    <div class="seleccion-compania">
+      <p class="seleccion-compania-titulo">¿A cuál compañía de bomberos quieres realizar el aporte?</p>
+        <label for="comuna">*Comuna</label>
+        
+        <Field 
+                v-slot="{ field,handleChange }"
+                v-model="cotizacionDetails.comuna"
+                name="comuna"
+                value="value"
+              >
+              <Prime-Dropdown filter v-model="cotizacionDetails.comuna" :options="allComunas" 
+                optionLabel="nombre" optionValue="codigoComuna" placeholder="Seleccione Comuna" class="w-100"
+                
+                @update:modelValue="handleChange" :model-value="field.value" />
+              </Field>
+              <div class="fv-plugins-message-container">
+                  <div class="fv-help-block">
+                    <ErrorMessage name="comuna" />
+                  </div>
+                </div> 
+
+        <label for="compania">*Compañía de bomberos</label>
+        <Field 
+            v-slot="{ field,handleChange }"
+            v-model="cotizacionDetails.compania"
+            name="compania"
+            value="value"
+            disabled="currentConvenio.nombre!='' && !currentConvenio.esComuna"
+          >
+          <Prime-Dropdown filter v-model="cotizacionDetails.compania" :options="allCompanias" 
+            optionLabel="nombre" optionValue="nombre" placeholder="Seleccione Compañía" class="w-100"
+            
+            @update:modelValue="handleChange" :model-value="field.value" />
+          </Field>
+          <div class="fv-plugins-message-container">
+              <div class="fv-help-block">
+                <ErrorMessage name="compania" />
+              </div>
+            </div> 
+ 
+    </div>
+
+     
+
+    <!-- Botones -->
+    <div class="botones">
+      <router-link v-if="cotizacionDetails.cotizacionId  "
+                      :to="{
+                        name: 'info-persona', params:{id:cotizacionDetails.cotizacionId }
+                      }" class="volver-button">VOLVER</router-link>
+      <Prime-Button  onclick="gtag('event', 'Info_aporte')"
+          type="submit"
+          id="kt_account_edificio_details_submit"
+          :loading="loading"
+          :disabled="loading"
+          class="continuar-button"
+          label="Continuar"
+          />
+                                                      
+    </div>
   </div>
+</Form>
+</section>
+
+
+<section class="auto-payment-section">
+  <div class="auto-payment-content">
+    <h2>¡LIBÉRATE DE LOS PAGOS!</h2>
+    <p>Vincula tu Tarjeta de Crédito y los siguientes pagos se realizarán de manera automática.</p>
+  </div>
+</section>
+
+
+
+<div class="mercado-pago-banner">
+  <img src="/media/misc/logo-mercado-pago2.webp" alt="Mercado Pago Logo" class="mercado-logo">
+  <div class="mercado-text">
+    <p>Ahora puedes pagar con la confianza de Mercado Pago. Usa tus tarjetas de débito, crédito o prepago.</p>
+    <p><strong>Recuerda:</strong> Si tu tarjeta de débito tiene los 3 números en el reverso de la tarjeta, usa la opción <strong>con CVV</strong></p>
+  </div>
+</div>
+
+<section class="image-section">
+  <div class="image-container">
+    <img src="/media/misc/imagen-bomberos.webp" alt="Descripción de la imagen">
+  </div>
+</section>
+
 </template>
 
 <script lang="ts">
@@ -288,6 +209,7 @@ export default defineComponent({
               router.push({ name: "info-confirmacion", params:{id:cotizacionDetails.value.carroId} });
           })
           .catch(() => {
+            loading.value = false;
             const [error] = Object.values(store.cotizacionErrors);
             Swal.fire({
                 text: error,
@@ -309,7 +231,7 @@ export default defineComponent({
     onMounted(async () => {     
       obtenerMontos(campania);
       obtenerComunas();
-      await obtenerCotizacion(cotizacionId);
+      await obtenerCotizacion(carro.carroId, cotizacionId);
       await obtenerCarro(carro.carroId);
       if(storeCarro.currentCarroCompra.convenioAporte)
         await obtenerConvenio(storeCarro.currentCarroCompra.convenioAporte);
@@ -378,9 +300,9 @@ export default defineComponent({
     };
 
     
-    const obtenerCotizacion = async (cotizacionId) =>{
+    const obtenerCotizacion = async (carroId, cotizacionId) =>{
       await store
-        .getCotizacion(cotizacionId)
+        .getCotizacion({carroId, cotizacionId})
         .then(() => {
           cotizacionDetails.value = store.currentCotizacion;
         })

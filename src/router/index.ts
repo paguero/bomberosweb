@@ -32,6 +32,60 @@ const routes: Array<RouteRecordRaw> = [
         },
       },
       {
+        path: "/iniciar-sesion",
+        name: "iniciar-sesion",
+        component: () => import("@/views/IniciarSesionView.vue"),
+        meta: {
+          pageTitle: "Dashboard",
+          breadcrumbs: ["Dashboards"],
+        },
+      },
+      {
+        path: "/mis-polizas",
+        name: "mis-polizas",
+        component: () => import("@/views/MisPolizasView.vue"),
+        meta: {
+          pageTitle: "Dashboard",
+          breadcrumbs: ["Dashboards"],
+        },
+      },
+      {
+        path: "/registro",
+        name: "registro",
+        component: () => import("@/views/RegistroView.vue"),
+        meta: {
+          pageTitle: "Dashboard",
+          breadcrumbs: ["Dashboards"],
+        },
+      },
+      {
+        path: "/mis-datos",
+        name: "mis-datos",
+        component: () => import("@/views/MisDatosView.vue"),
+        meta: {
+          pageTitle: "Dashboard",
+          breadcrumbs: ["Dashboards"],
+        },
+      },
+      {
+        path: "/cambiar-clave",
+        name: "cambiar-clave",
+        component: () => import("@/views/CambiarClaveView.vue"),
+        meta: {
+          pageTitle: "Dashboard",
+          breadcrumbs: ["Dashboards"],
+        },
+      },
+      {
+        path: "/recuperar-clave",
+        name: "recuperar-clave",
+        component: () => import("@/views/RecuperarClaveView.vue"),
+        meta: {
+          pageTitle: "Dashboard",
+          breadcrumbs: ["Dashboards"],
+        },
+      },
+      {
         path: "/yo-apoyo/:id",
         name: "yo-apoyo",
         component: () => import("@/views/HomeView.vue"),
@@ -49,6 +103,43 @@ const routes: Array<RouteRecordRaw> = [
           breadcrumbs: ["Dashboards"],
         },
       },
+      {
+        path: "/aprende-del-soap",
+        name: "aprende-soap",
+        component: () => import("@/views/AprendeSoapView.vue"),
+        meta: {
+          pageTitle: "Dashboard",
+          breadcrumbs: ["Dashboards"],
+        },
+      },
+      {
+        path: "/promo-grua",
+        name: "promo-grua",
+        component: () => import("@/views/PromoGruaView.vue"),
+        meta: {
+          pageTitle: "Dashboard",
+          breadcrumbs: ["Dashboards"],
+        },
+      },
+      {
+        path: "/promo-urgencia",
+        name: "promo-urgencia",
+        component: () => import("@/views/PromoUrgenciaView.vue"),
+        meta: {
+          pageTitle: "Dashboard",
+          breadcrumbs: ["Dashboards"],
+        },
+      },
+      {
+        path: "/promo-accidente",
+        name: "promo-accidente",
+        component: () => import("@/views/PromoAccidenteView.vue"),
+        meta: {
+          pageTitle: "Dashboard",
+          breadcrumbs: ["Dashboards"],
+        },
+      },
+
       {
         path: "/aportes",
         name: "aportes",
@@ -104,6 +195,25 @@ const routes: Array<RouteRecordRaw> = [
         },
       },
       {
+        path: "/info-suscripcion/:id",
+        name: "info-suscripcion",
+        component: () => import("@/views/SuscripcionView.vue"),
+        meta: {
+          pageTitle: "Dashboard",
+          breadcrumbs: ["Dashboards"],
+        },
+      },
+      {
+        path: "/info-asistencias/:id",
+        name: "info-asistencias",
+        component: () => import("@/views/AsistenciasView.vue"),
+        meta: {
+          pageTitle: "Dashboard",
+          breadcrumbs: ["Dashboards"],
+        },
+      },
+
+      {
         path: "/info-confirmacion/:id?",
         name: "info-confirmacion",
         component: () => import("@/views/ConfirmacionView.vue"),
@@ -158,9 +268,27 @@ const routes: Array<RouteRecordRaw> = [
         },
       },
       {
-        path: "/modifica-tu-poliza/:id",
+        path: "/modifica-tu-poliza/:carroId/:id",
         name: "modifica-tu-poliza",
         component: () => import("@/views/ModificaTuPolizaView.vue"),
+        meta: {
+          pageTitle: "Dashboard",
+          breadcrumbs: ["Dashboards"],
+        },
+      },
+      {
+        path: "/modificar-mi-poliza/:carroId/:id",
+        name: "modificar-mi-poliza",
+        component: () => import("@/views/ModificarMiPolizaView.vue"),
+        meta: {
+          pageTitle: "Dashboard",
+          breadcrumbs: ["Dashboards"],
+        },
+      },
+      {
+        path: "/contacto",
+        name: "contacto",
+        component: () => import("@/views/ContactoView.vue"),
         meta: {
           pageTitle: "Dashboard",
           breadcrumbs: ["Dashboards"],

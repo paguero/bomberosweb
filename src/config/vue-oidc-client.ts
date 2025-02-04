@@ -5,7 +5,8 @@ import {
   Log,
   User,
   UserManager,
-  WebStorageStateStore
+  WebStorageStateStore, 
+  OidcClient,
 } from 'oidc-client'
 
 
@@ -95,6 +96,9 @@ export interface OidcAuth {
    * @param router - the vue router instance.
    */
   useRouter(router: Router): void
+
+  storeUser(user:User): Promise<void>;
+
   /**
    * Starts the login flow explicitly.
    * @param args
@@ -199,7 +203,15 @@ export function createOidcAuth(
           }
     ),
     events: mgr.events,
+    storeUser(user:User){
+      //const oidcClient = new OidcClient(mgr.settings);
+      /*oidcClient.processSigninResponse(oidcClient.settings.metadataUrl, mgr.settings.userStore).then((r)=>{
+          console.log(r);
+      });*/
+      return mgr.storeUser(user);
+    },
     signIn(args?: any) {
+      
       return signInReal(defaultSignInType, args)
     },
     signOut(args?: any) {

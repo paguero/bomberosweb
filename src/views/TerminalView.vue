@@ -1,22 +1,42 @@
 <template>
-  <div class="d-flex flex-column flex-center flex-column-fluid">
-    <!--begin::Content-->
-    <div class="d-flex flex-column flex-center text-center p-10">
-      <!--begin::Wrapper-->
-      <div class="card card-flush w-lg-650px py-5">
-        <div class="card-body py-15 py-lg-20">
-          <!--begin::Title-->
-          <h1 class="fw-bolder fs-2hx text-gray-900 mb-4">Hola</h1>
-          <!--end::Title-->
-          <!--begin::Text-->
-          <div class="fw-semibold fs-6 text-gray-500 mb-7">
-            a continuación ingresa el identificador de la términal asignada y tu email para continuar
-          </div>
-          <!--end::Text-->
-          <!--begin::Illustration-->
-          <div class="mb-3">
-            <div class="text-start d-flex justify-content-center align-items-center login p-20">
-              <Form
+
+<section class="breadcrumb-section">
+
+<!-- Breadcrumb arriba -->
+<nav class="breadcrumb">
+  <img src="/media/misc/ico-home.webp" alt="Icono Home" class="home-icon">
+  <router-link :to="{name:'home'}">Inicio</router-link>
+  <span>/</span>
+  <a href="#">Acceso terminal POS</a>
+</nav>
+
+<div class="volver-container">
+  <!-- Botón Volver -->
+  <router-link  :to="{ name: 'home'}" class="btn-volver">
+  <img src="/media/misc/ico-atras.webp" alt="Flecha Volver" class="arrow-icon">
+  <span>Volver</span>
+</router-link>
+
+  <!-- Título a la derecha -->
+  <h1 class="section-title">Acceso terminal POS</h1>
+</div>
+
+</section>
+
+
+
+<section class="login-section">
+    <div class="login-content">
+      <!-- Imagen al lado izquierdo -->
+      <div class="login-image">
+        <img src="/media/misc/foto-registro.webp" alt="Bomberos">
+      </div>
+      <!-- Formulario de inicio de sesión -->
+      <div class="login-container">
+        <p class="new-user">
+          A continuación ingresa el identificador de la términal asignada y tu email para continuar
+        </p>
+        <Form
                                                 id="kt_account_edificio_details_form"
                                                 class="form"
                                                 novalidate="novalidate"
@@ -63,15 +83,9 @@
                 />
                 <div></div>
               </Form>
-            </div>
-          </div>
-          <!--end::Illustration-->
-        </div>
       </div>
-      <!--end::Wrapper-->
     </div>
-    <!--end::Content-->
-  </div>
+  </section>
 </template>
 
 <script lang="ts">

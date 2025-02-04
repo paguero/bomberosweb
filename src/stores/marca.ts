@@ -2,14 +2,14 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import ApiService from "@/core/services/ApiService";
 import JwtService from "@/core/services/JwtService";
-
+import type { IModelo } from "@/stores/modelo";
 
 export interface IMarca {
 		codigo: string;
     nombre: string;
     activo: string;
     orden: string;
-
+    modelos: IModelo[];
 }
 
 export const useMarcaStore = defineStore("marca", () => {

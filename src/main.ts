@@ -6,6 +6,7 @@ import App from "./App.vue";
 /*
 TIP: To get started with clean router change path to @/router/clean.ts.
  */
+import * as bootstrap from 'bootstrap'
 import router from "./router";
 import ElementPlus from "element-plus";
 import i18n from "@/core/plugins/i18n";
@@ -14,7 +15,7 @@ import "primevue/resources/primevue.min.css";
 import "primevue/resources/themes/saga-blue/theme.css";
 import "primeicons/primeicons.css";
 //import "prismjs/themes/prism-coy.css";
-
+import vue3GoogleLogin from 'vue3-google-login'
 //imports for app initialization
 import ApiService from "@/core/services/ApiService";
 import { initApexCharts } from "@/core/plugins/apexcharts";
@@ -65,7 +66,7 @@ declare module '@vue/runtime-core' {
 idsrvAuth.startup().then((ok) => {
   if (ok) {
     const app = createApp(App);
-
+    
     app.component("Prime-InputText", InputText);
     app.component("Prime-Slider", Slider);
     app.component("Prime-InputNumber", InputNumber);
@@ -99,7 +100,10 @@ idsrvAuth.startup().then((ok) => {
     app.use(ToastService);
     app.use(ConfirmationService);
     app.use(VueSignalR, { connection });
-    app.use(VueReCaptcha, { siteKey: '6Lc53_okAAAAADSAVXr57bSrpnjDTiXb8ex98o-L' })
+    app.use(VueReCaptcha, { siteKey: '6Lc53_okAAAAADSAVXr57bSrpnjDTiXb8ex98o-L' });
+    app.use(vue3GoogleLogin, {
+      clientId: '986012678077-a0tq53hi8c1mcbj8bnsjonm6rt4s9r00.apps.googleusercontent.com'
+    });
     ApiService.init(app);
     initApexCharts(app);
     initInlineSvg(app);
@@ -199,6 +203,17 @@ idsrvAuth.startup().then((ok) => {
                 return 'success';
             default:
                 return 'danger';
+        }
+      },
+      formatPatente(patente: string): string {
+        // Verificar que la patente tenga al menos 2 caracteres
+        if (patente.length >= 2) {
+            // Tomar todas las partes menos los últimos 2 caracteres
+            const prefix = patente.substring(0, patente.length - 2);
+            // Tomar los últimos 2 caracteres
+            const suffix = patente.substring(patente.length - 2);
+            // Combinar las partes con un espacio
+            return `${prefix} ${suffix}`;
         }
       }
     };

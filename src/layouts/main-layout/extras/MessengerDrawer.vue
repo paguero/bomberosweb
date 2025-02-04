@@ -15,53 +15,30 @@
     <!--begin::Messenger-->
     <div class="card w-100" id="kt_drawer_chat_messenger">
       <!--begin::Card header-->
-      <div class="card-header pe-5" id="kt_drawer_chat_messenger_header">
+      <div class="w-100 cart-header pe-5 d-flex flex-row justify-content-between" id="kt_drawer_chat_messenger_header">
         <!--begin::Title-->
         <div class="card-title">
-          <!--begin::User-->
           <div class="d-flex justify-content-center flex-column me-3">
-            <a
-              href="#"
-              class="fs-4 fw-bold text-gray-900 text-hover-primary me-1 mb-2 lh-1"
-              >Carrito de compras</a
+            <h2
+              >Carrito de compras</h2
             >
-
-            <!--begin::Info-->
-            <div class="mb-0 lh-1">
-              <span
-                class="badge badge-success badge-circle w-10px h-10px me-1"
-              ></span>
-              <span class="fs-7 fw-semobold text-gray-400">Active</span>
-            </div>
-            <!--end::Info-->
           </div>
-          <!--end::User-->
         </div>
-        <!--end::Title-->
-
-        <!--begin::Card toolbar-->
         <div class="card-toolbar">
-          <!--begin::Menu-->
           <div class="me-2">
             
           </div>
-          <!--end::Menu-->
-
-          <!--begin::Close-->
           <div
             class="btn btn-sm btn-icon btn-active-icon-primary"
             id="kt_drawer_chat_close"
           >
             <KTIcon icon-name="cross" icon-class="fs-2x" />
           </div>
-          <!--end::Close-->
         </div>
-        <!--end::Card toolbar-->
       </div>
-      <!--end::Card header-->
 
       <!--begin::Card body-->
-      <div class="card-body" id="kt_drawer_chat_messenger_body">
+      <div class="cart-body" id="kt_drawer_chat_messenger_body">
         <!--begin::Messages-->
         <div
           class="scroll-y me-n5 pe-5"
@@ -78,15 +55,15 @@
                            <!-- list group -->
                            <li class="list-group-item py-3 ps-0 border-top" v-for="(cotizacion, x) in allCotizaciones" v-bind:key="x">
                               <!-- row -->
-                              <div class="row align-items-center p-4">
-                                 <div class="col-8 col-md-6 col-lg-7">
-                                    <div class="d-flex">
+                              <div class="row align-items-start p-4">
+                                 <div class="col-9 col-md-6 col-lg-9">
+                                    <div class="d-flex item-info">
                                         <i class="fa-solid fa-car-side"></i>
                                        
-                                       <div class="ms-3">
+                                       <div class="ms-3 text-start">
                                           <!-- title -->
-                                          <router-link :to="{name:'info-vehiculo', params:{id:cotizacion.cotizacionId}}" class="text-inherit">
-                                             <h6 class="mb-0">{{cotizacion.vehiculo.patente}} {{cotizacion.vehiculo.modelo}} / {{cotizacion.vehiculo.anio}}</h6>
+                                          <router-link :to="{name:'info-persona', params:{id:cotizacion.cotizacionId}}" class="text-inherit">
+                                             <p class="mb-0">{{cotizacion.vehiculo.patente}} {{cotizacion.vehiculo.modelo}} / {{cotizacion.vehiculo.anio}}</p>
                                           </router-link>
                                           <span><small class="text-muted text-upper">{{cotizacion.cliente.nombre}} {{cotizacion.cliente.apellidoPaterno}}</small></span>
                                           <!-- text -->
@@ -107,14 +84,8 @@
                                     </div>
                                  </div>
                                  <!-- input group -->
-                                 <div class="col-1 col-md-3 col-lg-3">
-                                    <!-- input -->
-                                    <!-- input -->
-                                    
-                                 </div>
-                                 <!-- price -->
                                  <div class="col-3 text-lg-end text-start text-md-end col-md-2">
-                                    <span class="fw-bold">{{$filters.formatCurrency(cotizacion.montoPago)}}</span>
+                                    <span class="fw-bold text-nowrap">{{$filters.formatCurrency(cotizacion.montoPago)}}</span>
                                  </div>
                               </div>
                            </li>
@@ -127,7 +98,7 @@
       <!--end::Card body-->
 
       <!--begin::Card footer-->
-      <div class="card-footer pt-4" id="kt_drawer_chat_messenger_footer" v-if="carro.carroId">
+      <div class="cart-footer pt-4" id="kt_drawer_chat_messenger_footer" v-if="carro.carroId">
        
         <!--begin:Toolbar-->
         <div class="d-flex flex-stack">
@@ -190,42 +161,36 @@ export default defineComponent({
     onMounted(async () => { 
       if(carro.carroId) {
         obtenerCarro(carro.carroId);
-        obtenerCotizaciones(carro.carroId);
       }
     });
     bus.on('actualiza-carro-compra', (id  ) => {
        console.log("RECIBIENDO CARRO COMPRA" + JSON.stringify(id)  );
        obtenerCarro(id);
-       obtenerCotizaciones(id);
     }); 
 
     bus.on('limpia-carro-compra', () => {       
        obtenerCarro(0);   
     });
-    const obtenerCotizaciones = async(carroId) =>{
-      await store
-        .getCotizaciones(carroId).then(()=>{
-          bus.emit("unidades-carro-compra", store.allCotizacions.length);
-        });
-    }
 
     const obtenerCarro = (carroId) =>{
+      carro = {carroId};
       storeCarro
         .getCarroCompra(carroId).then(()=>{
+          bus.emit("unidades-carro-compra", storeCarro.currentCarroCompra.cotizaciones.length);
           if(storeCarro.currentCarroCompra.procesado && storeCarro.currentCarroCompra.exitoso){
             store.setCarro(JSON.stringify({carroId:null, cotizacionId:null}));   
           }
         });
     }
     const allCotizaciones = computed(() => {
-      return store.allCotizacions;
+      return storeCarro.currentCarroCompra.cotizaciones;
     });
     const currentCarroCompra = computed(() => {
       return storeCarro.currentCarroCompra;
     });
 
     const eliminarCotizacionCarro = (cotizacionId) => {
-        store.deleteCotizacion(cotizacionId)
+        store.deleteCotizacion({carroId:carro.carroId, cotizacionId})
           .then(() => {
             bus.emit("actualiza-carro-compra", storeCarro.currentCarroCompra.carroId);
             Swal.fire({
@@ -238,7 +203,6 @@ export default defineComponent({
               },
             }).then(async function () {
               obtenerCarro(currentCarroCompra.value.carroId);
-              await obtenerCotizaciones(currentCarroCompra.value.carroId);
               if(store.allCotizacions.length==0){
                 store.setCarro(JSON.stringify({carroId:null, cotizacionId:null}));
                 router.push({ name: "home"});

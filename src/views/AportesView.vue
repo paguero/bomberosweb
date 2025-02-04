@@ -1,115 +1,111 @@
 <template>
-  <div class="content-wrapper flex-row-fluid container space-2 space-3--lg">
-   <!-- start page main wrapper -->
-   <div
-      id="mt-50 main-wrapper portal-content d-flex content d-flex flex-column flex-column-fluid container-fluid"
-      style="padding-top: 30px"
-      >
-      <div class="row">
-         <div
-            data-aos="fade-up"
-            data-aos-delay="100"
-            class="col-12 col-md-8 col-lg-8 aos-init aos-animate content d-flex flex-column mt-1 mb-5 mx-auto"
-            >
-            <div class="row" style="min-height:calc(v65)">
-               
-               <div class="col-12 col-sm-6 d-flex mt-5">
-                  <div class="card illustration flex-fill">
-                     <div class="card-body p-0 d-flex flex-fill">
-                        <div class="row no-gutters w-100">
-                           <div class="col-12">
-                              <div class="illustration-text p-3 m-1">
-                                 <h4 class="illustration-text">Aportes recibidos</h4>
-                                 <p class="mb-0">Infórmate cómo va tu compañía seleccionando la comuna donde se ubica. No olvides compartir en tus redes para que tus amigos puedan ayudar a tu compañía.</p>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div class="col-12 col-sm-6 d-flex mt-5">
-                  <div class="card flex-fill">
-                     <div class="card-body py-4">
-                        <div class="media">
-                           <div class="d-inline-block mr-3">
-                                 <img src="/media/img/cash-payment.png"/>
-                           </div>
-                           <div class="media-body">
-                              <h3 class="mb-2 aporte">{{$filters.formatCurrency(currentAporte.montoAporte)}}</h3>
-                              <p class="mb-2">Monto total recaudado</p>
-                           </div>
-                           
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            <div class="buySuccess mt-10">
-            <div class="buySuccess-form">
-            <div class="row align-items-center">
-                <h3 data-v-02950284="" id="form-quote">Selecciona una comuna y consulta los aportes recibidos por las compañías.</h3>
-               <div class="form-group col-md-6">
-                  <label>*Comuna</label>
-                  <Prime-Dropdown filter v-model="comuna" :options="allComunas" 
-                     optionLabel="nombre" optionValue="nombre" placeholder="Seleccione Comuna" class="w-100"
-                      />
-               </div>
-               <div class="col-6">
-                  <button ref="kt_login_signin_submit" @click="buscarAporte(comuna)" :disabled="comuna==''" class="btn btn-primary mr-3 btn-sm">Consultar</button> 
-               </div>
-            </div>
-            </div>
-            </div>
 
-            <!--Row table-->
-      <div class="row text-center mt-5 ">
-         <div class="card card-flush h-lg-100 shadow">  
-    <!--begin::Header-->
-    <div class="card-header pt-5">
-        <!--begin::Title-->
-        <h3 class="card-title align-items-start flex-column">            
-            <span class="card-label fw-bold text-gray-900">Información de aportes</span>
-            <span class="text-gray-500 mt-1 fw-semibold fs-6">Compañías de la comuna</span>
-        </h3>
-        <!--end::Title-->
-    </div>
-    <!--end::Header-->
+<section class="breadcrumb-section">
 
-    <!--begin::Body-->
-    <div class="card-body pt-5">                 
-         <!--begin::Item-->
-         <Toast />
-         <template v-for="compania in allAportes" :key="compania.compania">
-            <div class="d-flex flex-stack">
-                <div class="text-gray-700 fw-semibold fs-6 me-2">{{compania.compania}}</div>                   
-                <div class="d-flex align-items-senter">
-                 <i class="bi bi-balloon-heart"></i>
-                  <span class="text-gray-900 fw-bolder fs-6">{{$filters.formatCurrency(compania.montoAporte)}}</span> 
-                  </div>  
-            </div>
-            <div v-if="compania.codigo" class="d-flex text-left align-items-start justify-content-start">
-              <a :href="`https://www.soapbomberos.cl/yo-apoyo/${compania.codigo}`" @click="copyClip(this.href)">https://www.soapbomberos.cl/yo-apoyo/{{compania.codigo}}</a></div>
-            <div class="separator separator-dashed my-3"></div>
-         </template>
-             
-            
-    </div>
-    <!--end::Body-->
+<!-- Breadcrumb arriba -->
+<nav class="breadcrumb">
+  <img src="/media/misc/ico-home.webp" alt="Icono Home" class="home-icon">
+  <router-link :to="{name:'home'}">Inicio</router-link>
+  <span>/</span>
+  <a>Aportes recibidos</a>
+</nav>
+
+<div class="volver-container">
+  <!-- Botón Volver -->
+  <router-link  :to="{ name: 'home'}" class="btn-volver">
+  <img src="/media/misc/ico-atras.webp" alt="Flecha Volver" class="arrow-icon">
+  <span>Volver</span>
+</router-link>
+  <!-- Título a la derecha -->
+  <h1 class="section-title">Aportes recibidos</h1>
 </div>
-        </div>
-      <!--Roe Table-->
-         </div>
-         <div class="d-none d-sm-block col-12 col-sm-4 mt-5 hidden-xs">
-                  <div class="illustration flex-fill">
-                      <img src="/media/img/overlay.png" style="max-height:412px" class="img-fluid illustration-img">
-                  </div>
-         </div>
-      </div>
-      <!-- Row -->
+
+</section>
+
+
+
+<section class="recaudado-section">
+    
+    <!-- COLUMNA IZQUIERDA -->
+    <div class="left-column">
+      <h2 class="section-title">Conoce lo Recaudado</h2>
+      <p>Infórmate cómo va tu compañía seleccionando la comuna donde se ubica.
+      No olvides compartir en tus redes para que tus amigos puedan ayudar a tu compañía.</p>
       
-   </div>
-   <!-- end page main wrapper -->
-</div>
+      
+
+      <!-- Recuadro con el total recaudado -->
+      <div class="total-container">
+        <img src="/media/misc/ahorro.webp" alt="Icono de ahorro" class="jar-icon" />
+        
+        <div class="total-info">
+          <span class="total-amount">{{$filters.formatCurrency(currentAporte.montoAporte)}}</span>
+          <button class="btn-total">Monto total recaudado</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- COLUMNA DERECHA -->
+    <div class="right-column">
+      <img src="/media/misc/dibujo-bomberos.webp" alt="Imagen bomberos" class="firefighters-img" />
+    </div>
+
+  </section>
+
+  <section class="aportes-section">
+    <!-- Columna Izquierda -->
+    <div class="left-column">
+
+      <!-- Tarjeta de selección de comuna -->
+      <div class="consulta-card">
+        <h2>Selecciona una comuna y consulta los aportes recibidos por las compañías.</h2>
+        
+        <form class="comuna-form">
+          <label for="select-comuna">*Comuna</label>
+          <Prime-Dropdown filter v-model="comuna" :options="allComunas" 
+                     optionLabel="nombre" optionValue="codigoComuna" placeholder="Seleccione Comuna" class="w-100"
+                      />
+          <button type="button" ref="kt_login_signin_submit" @click="buscarAporte(comuna)" :disabled="comuna==''" class="consultar-btn">Consultar</button> 
+        </form>
+      </div>
+
+      <!-- Tarjeta de información de aportes -->
+      <div class="info-aportes-card">
+        <h3>Información de aportes</h3>
+        <p class="subtitle">Compañías de la comuna</p>
+        <ul class="aportes-list">
+          <li v-for="compania in allAportes" :key="compania.compania">
+            <span>{{compania.compania}}</span>
+            <strong>{{$filters.formatCurrency(compania.montoAporte)}}</strong>
+          </li>
+          <!-- Agrega más items según tu necesidad -->
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Columna Derecha -->
+    <div class="right-column">
+      <!-- Imagen con bordes redondeados -->
+      <img src="/media/misc/bombero-traje.webp" alt="Bombero" class="bombero-img">
+    </div>
+  </section>
+
+
+
+  <section class="our-allies">
+    <h2>Nuestros Aliados</h2>
+    <div class="allies-container">
+      <!-- Logos: Sustituye src con las rutas de tus imágenes -->
+      <img src="/media/misc/logo-saca-tu-permiso.webp" alt="Logo 1" class="ally-logo">
+      <img src="/media/misc/logo-asegura.webp" alt="Logo 2" class="ally-logo">
+      <img src="/media/misc/logo-seguro-las-condes.webp" alt="Logo 3" class="ally-logo">
+      <img src="/media/misc/logo-seguros-bci.webp" alt="Logo 4" class="ally-logo">
+      <img src="/media/misc/logo-mercado-pago.webp" alt="Logo 5" class="ally-logo">
+      <img src="/media/misc/logo-balloon.webp" alt="Logo 6" class="ally-logo">
+    </div>
+  </section>
+
 </template>
 <script lang="ts">
 import { ref, defineComponent, onMounted, computed } from "vue";

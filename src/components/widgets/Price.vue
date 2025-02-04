@@ -1,47 +1,53 @@
 <template>
-    <section class="price">
-      <div class="price-container container">
-        
-        <div class="price-info">
-          
-          <div
+         
+  <template
             v-for="(patente) in patentes"
-            :key="patente.index"
-            
+            :key="patente.index" 
           >
-            <Form class="price-info__item" autocomplete="off" novalidate="novalidate" @submit="saveChanges1(patente)">
-            <img :src="`/media/img/tarifas/${patente.icon}`" />
-            <p>{{ patente.name }}</p>
-            <label>{{ patente.price }}</label>
-            
-            <Field
-                                  v-maska data-maska="#### ##"
-                                  type="text"
-                                  maxlength="7"
-                                  :name="patente.id" v-mask="'AAAA AA'"
-                                  class="
-                                    form-control form-control-lg form-control-solid
-                                    mb-3 mb-lg-0
-                                  "
-                                  placeholder="SOAP 24"
-                                 v-model="patente.patente"
-                                 :rules="requiredRules"
-                                />
-             <div class="fv-plugins-message-container">
-                <div class="fv-help-block">
-                   <ErrorMessage :name="patente.id" />
-                </div>
-              </div>
-            
-            <button type="submit" ref="submitButton1" onclick="gtag('event', 'Info_patente_inferior')" class="btn banner-form__button btn-quotation">COMPRAR</button> 
-          </Form>
+    <Form class="w-200px" autocomplete="off" novalidate="novalidate" @submit="saveChanges1(patente)">
+      <div class="card">
+          <div class="card-header">
+            <img :src="patente.icon" :alt="patente.name" class="card-image">
+            <h3 class="card-title text-nowrap">{{ patente.name }}</h3>
           </div>
-        </div>
+          <div class="card-price">
+            <p class="price">{{ patente.price }}</p>
+            <p class="price-desc">
+              <img src="/media/misc/heart-icon.webp" alt="Corazón" class="icon"> Tu aporte a Bomberos
+            </p>
+          </div>
+          <div class="card-patente">
+            <p class="patente-label">Ingrese su patente</p>
+              <div class="plate-format-card">
+                  <Field 
+                            v-maska data-maska="#### ##"
+                            type="text"
+                            maxlength="7"
+                            :name="patente.id" v-mask="'AAAA AA'"
+                            class="
+                              form-control form-control-lg
+                              mb-3 mb-lg-0
+                            "
+                            placeholder="SOAP 25"
+                            v-model="patente.patente"
+                            :rules="requiredRules"
+                          />
+                </div>
+                <div class="fv-plugins-message-container">
+                    <div class="fv-help-block">
+                      <ErrorMessage :name="patente.id" />
+                    </div>
+                  </div>
+          </div>
+          <Prime-Button :loading="loading" type="submit"  label="COMPRAR"  class="buy-button"/> 
+
       </div>
-    </section>
+    </Form>
+  </template>
 </template>
 <script lang="ts">
 import { ref, defineComponent, watch } from "vue";
+import { VueReCaptcha, useReCaptcha } from 'vue-recaptcha-v3'
 import { ErrorMessage, Field, Form } from "vee-validate";
 import type { PropType } from "vue";
 import _ from "lodash";
@@ -76,7 +82,7 @@ export default defineComponent({
     const router = useRouter();
      const store = useCotizacionStore();
      const submitButton1 = ref<HTMLElement | null>(null);
-
+     const loading = ref(false);
      const cotizacionDetails= ref<ICotizacion>({
       vehiculo : {
         patente : store.currentCotizacion?.patente    
@@ -93,15 +99,15 @@ export default defineComponent({
       });
     });
     const patentes = ref([
-            { id:"item0", name: "Auto", price: "$5.490", icon: "auto.png", buy: false, patente:null, placeholder:'SOAP 24' },
-            { id:"item1", name: "Camioneta", price: "$7.790", icon: "camioneta.png", buy: false, patente:null, placeholder:'SOAP 24' },
-            { id:"item2", name: "Moto", price: "$33.990", icon: "moto.png", buy: false, patente:null, placeholder:'SOAP 23' },
-            { id:"item3", name: "Minibús", price: "$17.990", icon: "minibus.png", buy: false, patente:null, placeholder:'SOAP 24' },
+            { id:"item0", name: "Auto", price: "$5.490", icon: "/media/misc/auto.webp", buy: false, patente:null, placeholder:'SOAP 25' },
+            { id:"item1", name: "Camioneta", price: "$7.990", icon: "/media/misc/camioneta.webp", buy: false, patente:null, placeholder:'SOAP 25' },
+            { id:"item2", name: "Moto", price: "$35.990", icon: "/media/misc/moto.webp", buy: false, patente:null, placeholder:'SOAP 25' },
+            { id:"item3", name: "Minibús", price: "$17.990", icon: "/media/misc/minibus.webp", buy: false, patente:null, placeholder:'SOAP 25' },
             {
             id:"item4", name: "Carro de Arrastre",
-            price: "$3.950",
-            icon: "carro.png",
-            buy: false,patente:null, placeholder:'SOAP 24'
+            price: "$4.190",
+            icon: "/media/misc/carro.webp",
+            buy: false,patente:null, placeholder:'SOAP 25'
             },
         ]);
 
@@ -112,12 +118,20 @@ export default defineComponent({
       //patentes.value.forEach((key) => patentes[key] = string().required());
       item0: Yup.string().nullable().required("Es obligatorio").label("Patente")
     });
-    const saveChanges1 = (patente) => {
-        console.log('enviando ' + patente.patente);
+    const { executeRecaptcha, recaptchaLoaded } = useReCaptcha()
+    const recaptcha = async () => {
+      await recaptchaLoaded()
+      const token = await executeRecaptcha('login')
+      return token;
+    }
+
+    const saveChanges1 = async (patente) => {
+        loading.value = true;
         const cotizacionDetails= ref<ICotizacion>({
           vehiculo : {
             patente : patente.patente    
         }}); 
+        cotizacionDetails.value.token = await recaptcha();
         // Activate indicator
         store.createCotizacion(cotizacionDetails.value)
           .then(() => {
@@ -125,6 +139,7 @@ export default defineComponent({
             router.push({ name: "info-vehiculo", params:{id:store.currentCotizacion.cotizacionId} });
           })
           .catch(() => {
+            loading.value = false;
             const [error] = Object.values(store.cotizacionErrors);
             console.log('eror ' + error);
           });
@@ -141,7 +156,8 @@ export default defineComponent({
       cotizacionDetails,
       saveChanges1,
       cotizacionValidator,
-      requiredRules
+      requiredRules,
+      recaptcha,loading
     };
   },
 });

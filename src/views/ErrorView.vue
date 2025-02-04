@@ -113,7 +113,7 @@
                                     <div class="me-auto">
                                        <div>Aportes</div>
                                     </div>
-                                    <span>{{$filters.formatCurrency(currentCarroCompra.aporte)}}</span>
+                                    <span>{{$filters.formatCurrency(currentCarroCompra.totalAportes)}}</span>
                                  </li>
 
                                  <li class="list-group-item d-flex justify-content-between align-items-start">
@@ -228,7 +228,7 @@ export default defineComponent({
 
     const saveChanges1 = async () => {
         loading.value = true;
-        storeCarro.iniciarEmision({carroId:carroId, hash:''})
+        storeCarro.iniciarEmision({carroId:carro.carroId, hash:''})
           .then(() => {
             loading.value = false;
             if(storeCarro.currentCarroCompra.urlPago=='RDC'){
@@ -255,7 +255,7 @@ export default defineComponent({
 
     const eliminarCotizacion = (cotizacionId) => {
         loading.value = true;
-        store.deleteCotizacion(cotizacionId)
+        store.deleteCotizacion({carroId:carro.carroId, cotizacionId})
           .then(() => {
             loading.value = false;
             Swal.fire({
@@ -287,21 +287,20 @@ export default defineComponent({
     };
    
     const route = useRoute();
-    const carroId = route.params.id;
     const carro = JSON.parse(store.getCarro());
 
-    signalr.invoke('JoinNotificationGroup', carroId);
+    signalr.invoke('JoinNotificationGroup', carro.carroId);
 
     //signalr.invoke('SendMessage', { 'hello' });
     signalr.on('ClientReceiveNotification', (user, message) => {
       console.log('recibiendo mensaje');
       console.log('carro ' + user);
       console.log('message ' + message);
-      if(user == carroId && message=="0"){
+      if(user == carro.carroId && message=="0"){
         mostrarMensaje.value = true;
-      } else if(user == carroId && message=="1"){
-        router.push({ name: "info-comprobante", params:{id:carroId} });
-      } else if(user == carroId && message=="-1"){
+      } else if(user == carro.carroId && message=="1"){
+        router.push({ name: "info-comprobante", params:{id:carro.carroId} });
+      } else if(user == carro.carroId && message=="-1"){
         history.go();
       }
     });
@@ -309,13 +308,11 @@ export default defineComponent({
 
 
     onMounted(async () => {     
-      obtenerCarro(carroId);
-      obtenerCotizaciones(carroId);
+      obtenerCarro(carro.carroId);
     });
 
     const refrescarCarro = () => {     
-      obtenerCarro(carroId);
-      obtenerCotizaciones(carroId);
+      obtenerCarro(carro.carroId);
       modalPOS.value = false;
     };
     
@@ -359,7 +356,7 @@ export default defineComponent({
         });
     }
     const allCotizaciones = computed(() => {
-      return store.allCotizacions;
+      return storeCarro.currentCarroCompra.cotizaciones;
     });
     const currentCarroCompra = computed(() => {
       return storeCarro.currentCarroCompra;
@@ -370,7 +367,7 @@ export default defineComponent({
           header: 'Confirmación',
           icon: 'pi pi-exclamation-triangle',
           accept: () => {
-              eliminarCotizacion(cotizacionId);
+              eliminarCotizacion({carroId:carro.carroId, cotizacionId});
           },
           reject: () => {
               

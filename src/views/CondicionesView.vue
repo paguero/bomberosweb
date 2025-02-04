@@ -1,4 +1,26 @@
 <template>
+  <section class="breadcrumb-section">
+
+<!-- Breadcrumb arriba -->
+<nav class="breadcrumb">
+  <img src="/media/misc/ico-home.webp" alt="Icono Home" class="home-icon">
+  <router-link :to="{name:'home'}">Inicio</router-link>
+  <span>/</span>
+  <a>Términos y Condiciones</a>
+</nav>
+
+<div class="volver-container">
+  <!-- Botón Volver -->
+  <router-link  :to="{ name: 'home'}" class="btn-volver">
+  <img src="/media/misc/ico-atras.webp" alt="Flecha Volver" class="arrow-icon">
+  <span>Volver</span>
+</router-link>
+  <!-- Título a la derecha -->
+  <h1 class="section-title">Términos y Condiciones</h1>
+</div>
+
+</section>
+
   <div class="content-wrapper flex-row-fluid container space-2 space-3--lg">
     <!-- start page main wrapper -->
     <div

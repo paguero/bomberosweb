@@ -1,103 +1,94 @@
 <template>
-  <!--begin::Header-->
-  
- <header
-    id="kt_header_mobile"
-    class="_fixed-top bg-blue"
-    v-bind:class="headerClasses"
-  >     
-  <div class="sticky-wrapper" style="min-height: 70px;">
-    <div class="header-main _sticky-header _sticky-active">
+  <!-- start page header -->
+  <header class="main-header">
+    <!-- Sección superior: Botón "Conoce aquí lo recaudado" -->
+    <div class="section-button">
+      <div class="button-container">
+        <router-link :to="{ name: 'aportes'}" class="recaudado-button">Conoce aquí lo recaudado</router-link>
+      </div>
+    </div>
 
-  <div id="header-wrapper">
-
-      <div>
-          <nav class="Navbar">
-            <div class="brand">
-              <router-link to="/">
-                <img src="/media/img/asegura-logo.png" />
-              </router-link>
-            </div>
-            <div class="navbar-center d-none d-sm-block">
-              <img src="/media/img/logotipo.png" />
-            </div>
-            <div class="rrss-icons">
-                <a target="_blank" href="https://www.instagram.com/soapbomberos/"
-                  ><img src="/media/logos/instagram.png"
-                /></a>
-                <a target="_blank" href="https://web.facebook.com/soapbomberosoficial/?_rdc=1"
-                  ><img src="/media/logos/facebook.png"
-                /></a>
-                <a target="_blank" href="https://twitter.com/SoapBomberos"
-                  ><img src="/media/logos/twitter.png"
-                /></a>
-                <a target="_blank" href="https://www.tiktok.com/@soapbomberos?lang=es"
-                  ><img src="/media/logos/tik-tok.png"
-                /></a>
-                <a target="_blank" href="https://www.youtube.com/channel/UCX5HLqeLRbNt-87GzSfZSVA"
-                  ><img src="/media/logos/youtube.png"
-                /></a>
-                <a target="_blank" href="https://www.linkedin.com/company/soap-bomberos/"
-                  ><img src="/media/logos/linkedin.png" />
-                </a>
-              </div>
-            <div class="navbar-end navbar-menu">
-              <div v-if="terminal" class="d-flex flex-row justify-content-center position-absolute top-0 align-items-center pe-5">
-                  <span class="text-white me-3">Hola {{terminal.responsable}}, revisa tu configuración    </span>
-                  <Prime-Button severity="secondary" type="button" icon="pi pi-ellipsis-v" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu" />
-                  <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
-              </div>
-              <div>
-                <router-link :to="{ name: 'modifica-tu-poliza-ingresar'}" class="banner-form__button-secondary text-nowrap mx-2">
-                                              Modifica tu póliza</router-link>
-                <router-link :to="{ name: 'info-documento'}" class="banner-form__button-secondary text-nowrap mx-2">
-                                              Descarga tu póliza</router-link>
-              </div>
-            
-              <div class="list-inline-item">
-                       <!--begin::Chat-->
-                        <div  class="app-navbar-item ms-1 ms-lg-3">
-                          <!--begin::Menu wrapper-->
-                          <div
-                            class="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-35px h-35px w-md-40px h-md-40px position-relative rounded-circle"
-                            id="kt_drawer_chat_toggle"
-                          >
-                            <span class="svg-icon svg-icon-1">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-bag">
-                                          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                                          <line x1="3" y1="6" x2="21" y2="6"></line>
-                                          <path d="M16 10a4 4 0 0 1-8 0"></path>
-                                        </svg>
-                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-white">
-                                        {{unidadesCarro}}
-                                        <span class="visually-hidden">unread messages</span>
-                                        </span>
-                            </span>
-                            <span v-if="isOpen"
-                              class="bullet bullet-dot bg-success h-6px w-6px position-absolute translate-middle top-0 start-50 animation-blink"
-                            ></span>  
-                          </div>
-                          <!--end::Menu wrapper-->
-                        </div>
-                        <!--end::Chat-->
-                    </div>
-                    </div>
-          </nav>
+    <!-- Sección inferior: Logo + Botones (Iniciar sesión, Registrarse, Carrito) -->
+    <div class="section-logo">
+      <div class="logo-container">
+        <!-- LOGO -->
+        <router-link :to="{name:'home'}">
+        <div class="logo">
+          <span class="soap">SOAP</span>
+          <span class="bomberos">BOMBEROS</span>
         </div>
-      </div> </div> </div>
-    </header>
-  <!--end::Header-->
+        </router-link>
+        <!-- Botones a la derecha -->
+        <div class="buttons-right" id="buttons-right">
+          <router-link v-if="!$oidc.isAuthenticated" :to="{name:'iniciar-sesion'}" class="action-button">Iniciar sesión</router-link>
+          <router-link v-if="!$oidc.isAuthenticated" :to="{name:'registro'}" class="action-button">Regístrate</router-link>
+          <div v-else
+                class="px-2 d-flex flex-row align-items-center"
+              >
+          <Avatar
+                  icon="pi pi-user"
+                  style="background-color: #090; color: #fff"
+                  shape="circle"
+                />
+                
+                <div class="ps-2 dropdown dropdown-europ">
+                  <button
+                    class="dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    {{ currentUser?.given_name }} {{ currentUser?.family_name }}
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <router-link :to="{name:'mis-datos'}"
+                        class="dropdown-item esp"
+                        >Mis datos</router-link
+                      >
+                    </li>
+                    <li>
+                      <router-link :to="{name:'mis-polizas'}"
+                        class="dropdown-item px-4 py-4"
+                        >Mis SOAP</router-link>
+                    </li>
+                    <li>
+                      <span @click="cerrar_sesion"
+                        class="dropdown-item px-4 py-4 cursor-pointer"
+                        >Desconectar</span>
+                    </li>
+                  </ul>
+                </div>
+          </div>
+          <div v-if="terminal" class="d-flex flex-row justify-content-center align-items-center pe-5">
+              <span class="me-3">Hola {{terminal.responsable}}, revisa tu configuración    </span>
+              <Prime-Button severity="secondary" type="button" icon="pi pi-ellipsis-v" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu" />
+              <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
+          </div>
+          <div class="cart-icon" id="kt_drawer_chat_toggle">
+            <span class="cart-badge">{{unidadesCarro}}</span>
+            <img src="/media/misc/carrito-ico.webp" alt="Carrito de compras" class="cart-img">
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+    
+  <!-- end page header -->
 </template>
 
 <script lang="ts">
 import { getAssetPath } from "@/core/helpers/assets";
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, computed, getCurrentInstance } from "vue";
 import { useBus } from "../../../core/bus/bus"; 
 import Menu from 'primevue/menu';
+import { useAuthStore } from "@/stores/auth";
 import { useRouter, useRoute} from "vue-router";
 import { useTerminalStore } from "@/stores/terminal";
 import KTHeaderMenu from "@/layouts/main-layout/header/menu/Menu.vue";
 import KTHeaderNavbar from "@/layouts/main-layout/header/Navbar.vue";
+import Avatar from "primevue/avatar";
+
 const { bus } = useBus();
 import {
   headerDisplay,
@@ -111,17 +102,27 @@ export default defineComponent({
   components: {
     KTHeaderMenu,
     KTHeaderNavbar,
-    Menu
+    Menu,
+    Avatar
   },
   setup() {
     const isOpen = ref(false);  
     const store = useTerminalStore();
     const router = useRouter();
     const terminal = ref();
+    const storeAuth = useAuthStore();
+    const app = getCurrentInstance();
     var jsonTerminal = store.getTerminalStorage();
     if(jsonTerminal){
       terminal.value = JSON.parse(jsonTerminal);
     }
+
+
+    const cerrar_sesion = () => {
+      storeAuth.logout();
+      location.href='/';
+      
+    };
 
     bus.on('unidades-carro-compra', (total ) => {
        console.log("RECIBIENDO UNIDADES COMPRA" + JSON.stringify(total)  );  
@@ -186,6 +187,9 @@ export default defineComponent({
     const toggle = (event) => {
         menu.value.toggle(event);
     };
+    const currentUser = computed(() => {
+      return app?.appContext.config.globalProperties.$oidc.userProfile;
+    });
     return {
       layout,
       headerWidthFluid,
@@ -196,7 +200,9 @@ export default defineComponent({
       toggle,
       items,
       menu,
-      terminal
+      terminal,
+      currentUser,
+      cerrar_sesion
     };
   },
 });

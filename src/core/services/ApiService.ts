@@ -35,6 +35,17 @@ class ApiService {
   }
 
   /**
+   * @description set the default HTTP request headers
+   */
+   public static setAccessHeader(): void {
+    ApiService.vueInstance.axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${JwtService.getAccessToken()}`;
+    ApiService.vueInstance.axios.defaults.headers.common["Accept"] =
+      "application/json";
+  }
+
+  /**
    * @description send the GET HTTP request
    * @param resource: string
    * @param params: AxiosRequestConfig

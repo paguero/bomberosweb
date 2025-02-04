@@ -32,7 +32,7 @@ export const useMontoAporteStore = defineStore("montoAporte", () => {
   }
 
   function getMontoAportes(canal:string) {
-    return ApiService.get("soap/montos", canal)
+    return ApiService.get("montoAporte/v1", canal)
       .then(({ data }) => {
         setMontoAportes(data);
       })

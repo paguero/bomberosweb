@@ -34,7 +34,7 @@ export const useAporteStore = defineStore("aporte", () => {
   }
 
   function getAportes() {
-    return ApiService.get("soap/aportes")
+    return ApiService.get("aporte/v1/aportes")
       .then(({ data }) => {
         setAporte(data);
       })
@@ -45,7 +45,7 @@ export const useAporteStore = defineStore("aporte", () => {
   }
 
   function getAporte(comuna: string) {
-    return ApiService.get("soap/aportes", comuna)
+    return ApiService.get("aporte/v1/aportes", comuna)
       .then(({ data }) => {
         setAportes(data);
       })

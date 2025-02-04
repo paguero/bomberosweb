@@ -11,7 +11,7 @@ export const useAnioStore = defineStore("anio", () => {
   }
 
   function getAnios() {
-    return ApiService.get("soap/anios")
+    return ApiService.get("vehiculo/v1/anios")
       .then(({ data }) => {
         setAnios(data);
       });
