@@ -205,8 +205,8 @@ export default defineComponent({
               obtenerCarro(currentCarroCompra.value.carroId);
               if(store.allCotizacions.length==0){
                 store.setCarro(JSON.stringify({carroId:null, cotizacionId:null}));
-                router.push({ name: "home"});
               }
+              location.href='/';
             });
           })
           .catch(() => {
