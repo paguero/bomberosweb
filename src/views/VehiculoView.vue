@@ -564,7 +564,8 @@ export default defineComponent({
     watch(() => cotizacionDetails.value.vehiculo?.marca, (newValue) =>  {
       if(allMarcas.value && allMarcas.value?.length>0)
         obtenerModelos(newValue);
-    }); 
+    });
+    
     /*watch(() => cotizacionDetails.value.vehiculo?.patente, (newValue) =>  {
       if(cotizacionDetails.value.vehiculo)
         obtenerVehiculo(newValue);

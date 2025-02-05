@@ -166,8 +166,7 @@ export default defineComponent({
           .then(() => {
             loading.value = false;
             store.setCarro(JSON.stringify({carroId:currentCotizacion.value.carroId, cotizacionId:currentCotizacion.value.cotizacionId, tokenModificacion:currentCotizacion.value.tokenModificacion}));
-            console.log(JSON.stringify({carroId:currentCotizacion.value.carroId, cotizacionId:currentCotizacion.value.cotizacionId}));
-            router.push({ name: "modifica-tu-poliza", params:{carroId:currentCotizacion.value.carroId, cotizacionId:currentCotizacion.value.cotizacionId} });
+            router.push({ name: "modifica-tu-poliza", params:{carroId:currentCotizacion.value.carroId, id:currentCotizacion.value.cotizacionId} });
           })
           .catch((e) => {
             loading.value = false;
