@@ -44,7 +44,7 @@ export const usePrimaSoapStore = defineStore("primaSoap", () => {
   function getPrimaSoap(campania: string, tipoVehiculo: string) {
     return ApiService.get(`primasoap/v1/primaSoaps/${campania}/${tipoVehiculo}`)
       .then(({ data }) => {
-        setPrimaSoap(data);
+        setPrimaSoap(data[0]);
       })
       .catch(({ response }) => {
         setPrimaSoapError(response.data.errores);

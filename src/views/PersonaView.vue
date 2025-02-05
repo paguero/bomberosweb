@@ -308,7 +308,7 @@ export default defineComponent({
         storeCliente.updateCliente(cotizacionDetails.value)
           .then(() => {
             loading.value = false;
-            router.push({ name: "info-vehiculo", params:{id:cotizacionDetails.value.cotizacionId} });
+            router.push({ name: "info-aporte", params:{id:cotizacionDetails.value.cotizacionId} });
           })
           .catch(() => {
             const [error] = Object.values(store.cotizacionErrors);

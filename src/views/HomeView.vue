@@ -320,10 +320,10 @@ export default defineComponent({
                   confirmButton: "btn fw-bold btn-light-primary",
                 },
               }).then(function () {
-                router.push({ name: "info-persona", params:{id:store.currentCotizacion.cotizacionId} });
+                router.push({ name: "info-vehiculo", params:{id:store.currentCotizacion.cotizacionId} });
               });
             } else {
-              router.push({ name: "info-persona", params:{id:store.currentCotizacion.cotizacionId} });
+              router.push({ name: "info-vehiculo", params:{id:store.currentCotizacion.cotizacionId} });
             }
           })
           .catch(() => {

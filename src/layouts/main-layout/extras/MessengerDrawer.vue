@@ -62,7 +62,7 @@
                                        
                                        <div class="ms-3 text-start">
                                           <!-- title -->
-                                          <router-link :to="{name:'info-persona', params:{id:cotizacion.cotizacionId}}" class="text-inherit">
+                                          <router-link :to="{name:'info-vehiculo', params:{id:cotizacion.cotizacionId}}" class="text-inherit">
                                              <p class="mb-0">{{cotizacion.vehiculo.patente}} {{cotizacion.vehiculo.modelo}} / {{cotizacion.vehiculo.anio}}</p>
                                           </router-link>
                                           <span><small class="text-muted text-upper">{{cotizacion.cliente.nombre}} {{cotizacion.cliente.apellidoPaterno}}</small></span>

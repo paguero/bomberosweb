@@ -65,6 +65,7 @@
   <div class="header-green">
     <h2>Datos del vehículo a asegurar</h2>
     <p>Verifica los datos con el padrón del auto.</p>
+    <span>El valor de tu SOAP es <strong> {{$filters.formatCurrency(cotizacionDetails.planPesos)}}</strong></span>
   </div>
 
   <!-- Contenido / Formulario del vehículo -->
@@ -308,7 +309,7 @@ export default defineComponent({
         storeVehiculo.updateVehiculo(cotizacionDetails.value)
           .then(() => {
             loading.value = false;
-            router.push({ name: "info-aporte", params:{id:cotizacionDetails.value.cotizacionId} });
+            router.push({ name: "info-persona", params:{id:cotizacionDetails.value.cotizacionId} });
           })
           .catch(() => {
             const [error] = Object.values(storeVehiculo.vehiculoErrors);
@@ -425,12 +426,12 @@ export default defineComponent({
           }
         });
     } 
-    const obtenerPrima= async (tipoVehiculo) =>{
+    const obtenerPrima = async (tipoVehiculo) =>{
       await storePrima
         .getPrimaSoap(cotizacionDetails.value.codigoConvenio, tipoVehiculo)
         .then(() => {
           loading.value = false;
-          //cotizacionDetails.value.planPesos = storePrima.currentPrimaSoap.primaTecnica;
+          cotizacionDetails.value.planPesos = storePrima.currentPrimaSoap.primaTecnica;
           //cotizacionDetails.value.montoPago = storePrima.currentPrimaSoap.primaTecnica + cotizacionDetails.value.aporte;
         })
         .catch(() => {
@@ -557,7 +558,7 @@ export default defineComponent({
   });
     watch(async () => cotizacionDetails.value.vehiculo?.tipoVehiculo, async (newValue) =>  {
       if(cotizacionDetails.value.vehiculo)
-        //obtenerPrima(await newValue);
+        obtenerPrima(await newValue);
         obtenerPrimaExtendida(await newValue);
         await obtenerMarcas(await newValue);
     });
