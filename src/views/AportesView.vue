@@ -76,7 +76,7 @@
         <ul class="aportes-list">
           <li v-for="compania in allAportes" :key="compania.compania">
             <div>
-              <span>{{compania.compania}}</span>
+              <span @click="toggle($event, compania)" class="cursor-pointer">{{compania.compania}}</span>
               <strong>{{$filters.formatCurrency(compania.montoAporte)}}</strong>
             </div>
             <p>{{compania.url}}</p>
@@ -108,10 +108,30 @@
       <img src="/media/misc/logo-balloon.webp" alt="Logo 6" class="ally-logo">
     </div>
   </section>
-
+  <OverlayPanel ref="op" appendTo="body">
+    <div class="d-flex flex-column gap-4 w-[25rem]">
+        <div>
+            <span class="font-medium block mb-2">Comparte la url de la compañía</span>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" :value="compania.url" aria-label="Recipient's username" aria-describedby="basic-addon2">
+              <span class="input-group-text" id="basic-addon2" @click="copyClip(compania.url)"><i class="pi pi-copy"></i></span>
+            </div>
+            
+        </div>
+        <div>
+            <div class="font-medium block mb-2">o envía este QR</div>
+            <div ref="canvasContainer">
+            <vue-qrcode :value="compania.url" :options="{ width: 200 }"></vue-qrcode>
+            </div>
+            <button @click="copiarAlPortapapeles" class="btn btn-sm">Copiar QR</button>
+        </div>
+        
+    </div>
+</OverlayPanel>
+<Toast />
 </template>
 <script lang="ts">
-import { ref, defineComponent, onMounted, computed } from "vue";
+import { ref, defineComponent, onMounted, computed, nextTick } from "vue";
 import _ from "lodash";
 import { useRouter } from "vue-router";
 import { useConvenioStore } from "@/stores/convenio";
@@ -119,8 +139,12 @@ import { useAporteStore } from "@/stores/aporte";
 import { useComunaStore } from "@/stores/comuna";
 import type { IAporte } from "@/stores/aporte";
 import * as Yup from "yup";
+import Toast from 'primevue/toast';
+import ToastService from 'primevue/toastservice';
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import { useToast } from 'primevue/usetoast';
+import VueQrcode from '@chenfengyuan/vue-qrcode';
+import OverlayPanel from 'primevue/overlaypanel';
 
 import moment from "moment";
 moment.locale("es");
@@ -128,20 +152,40 @@ moment.locale("es");
 export default defineComponent({
   name: "aporte-list",
   components: {
+    VueQrcode, 
+    OverlayPanel, Toast
   },
   
   setup() {
     const router = useRouter();
+    const toast = useToast();
     const aporte = ref<IAporte>();
     const store = useAporteStore();
     const storeConvenio = useConvenioStore();
     const storeComuna = useComunaStore();
-    const toast = useToast();
     const comuna = ref('');
+    const compania = ref({});
+    const canvasContainer = ref(null);
+    const op = ref();
     onMounted(async () => {
       buscarAportes();
       obtenerComunas();
     });
+    const copiarAlPortapapeles = () => {
+      const canvas = canvasContainer.value.querySelector('canvas');
+      if (canvas && navigator.clipboard) {
+        canvas.toBlob(blob => {
+          navigator.clipboard.write([
+            new ClipboardItem({
+              'image/png': blob,
+            }),
+          ]);
+        });
+        toast.add({ severity: 'info', summary: 'Info', detail: 'Imagen QR copiada al porta papeles. Ya puedes compartir "pegandola donde quieras"', life: 3000 });
+      } else {
+        toast.add({ severity: 'error', summary: 'Info', detail: 'No pudimos copiar el QR a tu porta papeles', life: 3000 });
+      }
+    }
     const buscarAportes = () => {
       store.getAportes()
         .then(() => {
@@ -161,6 +205,15 @@ export default defineComponent({
           })
         });
     };
+    const toggle = (event, param) => {
+      console.log('=======>>>>>>>' + JSON.stringify(param));
+        op.value.hide();
+        console.log('x' + param);
+        compania.value = param;
+        nextTick(() => {
+          op.value.show(event);
+        });
+    }
     const buscarConvenios = async () => {
       await storeConvenio.getConvenios()
         .catch(() => {
@@ -199,9 +252,7 @@ export default defineComponent({
       store.getAporte(comuna)
         .then(() => {
           loading.value = false;
-          console.log('filtro convenios '  + JSON.stringify(storeConvenio.allConvenios));
           var convenios = storeConvenio.allConvenios.filter(c=>c.comuna==comuna);
-          console.log('filtro convenios '  + JSON.stringify(convenios));
           store.allAportes.forEach((aporte, index) => {
             var convenio = convenios.find(c=>c.nombre == aporte.compania);
             if(convenio){
@@ -246,8 +297,9 @@ export default defineComponent({
       buscarAportes,
       allAportes,
       comuna,
+      compania,
       aporte, currentAporte, buscarAporte,
-      allComunas, toast, copyClip
+      allComunas, toast, copyClip, toggle, op, canvasContainer, copiarAlPortapapeles
     };
   },
 });

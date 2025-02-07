@@ -151,29 +151,30 @@ export default defineComponent({
     const store = useCotizacionStore();
     const storeCarro = useCarroCompraStore();
     const datosConfirmados = ref(false);
-    var jsonCarro = store.getCarro();
     let carro = {carroId:''};
-    if(jsonCarro){
-      carro = JSON.parse(store.getCarro());
-    }
     const confirm = useConfirm();
-
     onMounted(async () => { 
-      if(carro.carroId) {
+      var jsonCarro = await store.getCarro();
+      if(jsonCarro){
+        carro = JSON.parse(store.getCarro());
+      }
+      if(carro.carroId!=null) {
         obtenerCarro(carro.carroId);
       }
     });
     bus.on('actualiza-carro-compra', (id  ) => {
+       carro.carroId = id;
        console.log("RECIBIENDO CARRO COMPRA" + JSON.stringify(id)  );
        obtenerCarro(id);
-    }); 
+    });  
 
     bus.on('limpia-carro-compra', () => {       
        obtenerCarro(0);   
     });
-
+    const carrito = computed(() => {
+      return carro;
+    });
     const obtenerCarro = (carroId) =>{
-      carro = {carroId};
       storeCarro
         .getCarroCompra(carroId).then(()=>{
           bus.emit("unidades-carro-compra", storeCarro.currentCarroCompra.cotizaciones.length);
@@ -203,7 +204,7 @@ export default defineComponent({
               },
             }).then(async function () {
               obtenerCarro(currentCarroCompra.value.carroId);
-              if(store.allCotizacions.length==0){
+              if(store.currentCotizacion.cantidadEnCarro==0){
                 store.setCarro(JSON.stringify({carroId:null, cotizacionId:null}));
               }
               location.href='/';
@@ -242,7 +243,7 @@ export default defineComponent({
       getAssetPath,
       allCotizaciones,
       currentCarroCompra,
-      carro,
+      carro,carrito,
       eliminarCotizacionCarro,
       confirmarEliminarCotizacionCarro
     };

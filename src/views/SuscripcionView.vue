@@ -1,7 +1,8 @@
 <template>
     <div>
       <h1>Pago Recurrente con Mercado Pago</h1>
-      
+      <p>Vas a inscribir tu PAC por <b>{{suscripcionAsistencia.prima}}</b> UF mensuales, por el pago de tus asistencias contratadas</p>
+      <p>A partir del 4 mes se iniciará el cobro en forma automática</p>
       <div id="paymentBrick_container"></div>
       <div v-if="cardToken">
         <h3>Card Token ID:</h3>
@@ -151,7 +152,7 @@ onMounted(async () => {
     await getSuscripcionAsistencia(route.params.id.toString());
     mPago(suscripcionAsistencia.value);
   });
-
+  
   
 });
 
