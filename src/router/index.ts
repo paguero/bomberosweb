@@ -294,6 +294,15 @@ const routes: Array<RouteRecordRaw> = [
           breadcrumbs: ["Dashboards"],
         },
       },
+      {
+        path: "/comentanos",
+        name: "comentanos",
+        component: () => import("@/views/ComentanosView.vue"),
+        meta: {
+          pageTitle: "Dashboard",
+          breadcrumbs: ["Dashboards"],
+        },
+      },
     ],
   },
   {
