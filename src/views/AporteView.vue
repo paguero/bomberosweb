@@ -70,6 +70,11 @@
     <!-- Selección de compañía -->
     <div class="seleccion-compania">
       <p class="seleccion-compania-titulo">¿A cuál compañía de bomberos quieres realizar el aporte?</p>
+      <div class="alert alert-primary" v-if="currentConvenio.mensaje">{{currentConvenio.mensaje}}</div>
+      <div
+                                class="form-group col-md-6"
+                                v-if="!currentConvenio.nombre || (currentConvenio && currentConvenio.esEmbajador)"
+                              >
         <label for="comuna">*Comuna</label>
         
         <Field 
@@ -88,7 +93,15 @@
                     <ErrorMessage name="comuna" />
                   </div>
                 </div> 
-
+              </div>
+                              <div v-else class="form-group col-md-6">
+                                <Field  type="hidden"
+                                                                    v-model="cotizacionDetails.compania"
+                                                                    name="comuna"
+                                                                 />
+                              </div>
+                              <div v-if="!currentConvenio.codigo || (currentConvenio && currentConvenio.esComuna) || (currentConvenio && currentConvenio.esEmbajador)"
+                                class="form-group col-md-6">
         <label for="compania">*Compañía de bomberos</label>
         <Field 
             v-slot="{ field,handleChange }"
@@ -106,11 +119,16 @@
               <div class="fv-help-block">
                 <ErrorMessage name="compania" />
               </div>
-            </div> 
- 
+            </div>
+                              </div>
+            <div v-else>
+                                 <Field  type="hidden"
+                                                                    v-model="cotizacionDetails.compania"
+                                                                    name="compania"
+                                                                 />
     </div>
 
-     
+    </div>
 
     <!-- Botones -->
     <div class="botones">

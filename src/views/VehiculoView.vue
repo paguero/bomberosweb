@@ -354,7 +354,7 @@ export default defineComponent({
       obtenerAnios();
       loading.value = true;
       await obtenerCotizacion(carro.carroId, cotizacionId);
-      obtenerTipos(store.currentCotizacion.codigoConvenio);
+      await obtenerTipos(store.currentCotizacion.codigoConvenio);
       //obtenerCarro(carro.carroId);
       loading.value=false;
       window.scrollTo({
@@ -364,14 +364,21 @@ export default defineComponent({
       });
     });
     const obtenerMarcas = async  (tipoVehiculo: string) => {
-      await storeTipo.getTipoVehiculo(tipoVehiculo);
+      loading.value = true;
+      await storeTipo.getTipoVehiculo(tipoVehiculo).then(()=>
+      {
+       // loading.value = false;
+        console.log(0);
+      });
       obtenerModelos(cotizacionDetails.value.vehiculo?.marca);
     };
     const obtenerModelos = (marca: string) => {
+      loading.value = true;
       modelos.value = allMarcas.value?.find(c=>c.codigo==marca).modelos;
+     
     };
-    const obtenerTipos = (campania:string) => {
-      storeTipo.getTipoVehiculos(campania)
+    const obtenerTipos = async(campania:string) => {
+      await storeTipo.getTipoVehiculos(campania)
         .catch(() => {
           const [error] = Object.values(storeTipo.tipoVehiculoErrors);
           Swal.fire({
@@ -415,7 +422,6 @@ export default defineComponent({
       await storePrima
         .getPrimaSoapExtendida(tipoVehiculo)
         .then(() => {
-          loading.value = false;
           if(storePrima.allPrimasVigencia.length>0)
           {
             let fecha = moment(store.currentCotizacion.fechaInicio); 
@@ -430,7 +436,6 @@ export default defineComponent({
       await storePrima
         .getPrimaSoap(cotizacionDetails.value.codigoConvenio, tipoVehiculo)
         .then(() => {
-          loading.value = false;
           cotizacionDetails.value.planPesos = storePrima.currentPrimaSoap.primaTecnica;
           //cotizacionDetails.value.montoPago = storePrima.currentPrimaSoap.primaTecnica + cotizacionDetails.value.aporte;
         })
@@ -558,13 +563,19 @@ export default defineComponent({
   });
     watch(async () => cotizacionDetails.value.vehiculo?.tipoVehiculo, async (newValue) =>  {
       if(cotizacionDetails.value.vehiculo)
-        obtenerPrima(await newValue);
-        obtenerPrimaExtendida(await newValue);
+        loading.value = true;  
+        await obtenerPrima(await newValue);
+        await obtenerPrimaExtendida(await newValue);
         await obtenerMarcas(await newValue);
+        loading.value = false;
     });
-    watch(() => cotizacionDetails.value.vehiculo?.marca, (newValue) =>  {
-      if(allMarcas.value && allMarcas.value?.length>0)
-        obtenerModelos(newValue);
+    watch(async () => cotizacionDetails.value.vehiculo?.marca, async (newValue) =>  {
+      if(allMarcas.value && allMarcas.value?.length>0) {
+        loading.value = true;  
+        await obtenerModelos(await newValue);
+        loading.value = false;  
+      }
+        
     });
     
     /*watch(() => cotizacionDetails.value.vehiculo?.patente, (newValue) =>  {

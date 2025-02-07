@@ -44,7 +44,7 @@ export const useConvenioStore = defineStore("convenio", () => {
       });
   }
   function getConvenio(id: string) {
-    return ApiService.get("convenio", id)
+    return ApiService.get("convenio/v1/convenio", id)
       .then(({ data }) => {
         setConvenio(data);
       })

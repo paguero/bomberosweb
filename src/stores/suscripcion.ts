@@ -60,7 +60,7 @@ export const useSuscripcionStore = defineStore("suscripcion", () => {
   }
 
  function createSuscripcion(params: ISuscripcion) {
-    return ApiService.post("suscripcionAsistencia/v1/suscripcion", params)
+    return ApiService.post("suscripcion/v1/suscripcion", params)
       .then(({ data }) => {
         setSuscripcion(data);
       })
