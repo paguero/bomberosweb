@@ -256,7 +256,7 @@ export default defineComponent({
           store.allAportes.forEach((aporte, index) => {
             var convenio = convenios.find(c=>c.nombre == aporte.compania);
             if(convenio){
-              aporte.url = 'https;//www.soapbomberos.cl/yo-apoyo/' + convenio.codigo;
+              aporte.url = 'https://www.soapbomberos.cl/yo-apoyo/' + convenio.codigo;
             }
             
           });
