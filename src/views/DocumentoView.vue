@@ -337,7 +337,7 @@ export default defineComponent({
   width: 40px;
   height: 40px;
   padding: 5px;
-  margin: 0 10px;
+  margin: 0 5px;
   font-size: 20px;
   border-radius: 4px;
   border: 1px solid rgba(0, 0, 0, 0.3);
