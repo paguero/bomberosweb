@@ -71,7 +71,6 @@
           </tbody>
       </table>
   </div>
-
   </section>
 </template>
 <script setup lang="ts">
