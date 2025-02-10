@@ -52,7 +52,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: "/mis-cotizaciones",
         name: "mis-cotizaciones",
-        component: () => import("@/views/MisTransaccionesView.vue"),
+        component: () => import("@/views/MisCotizacionesView.vue"),
         meta: {
           pageTitle: "Dashboard",
           breadcrumbs: ["Dashboards"],
