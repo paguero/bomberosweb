@@ -51,7 +51,7 @@
         <img src="/media/misc/ico-lapiz.webp" alt="Editar" class="button-icon">
         Modificar Póliza
       </router-link>
-      <router-link :to="{ name: 'info-documento'}" class="custom-button">
+      <router-link :to="{ name: 'info-documento'}" class="custom-button" style="background: #ff9900;">
         <img src="/media/misc/ico-descarga.webp" alt="Descargar" class="button-icon">
         Descargar Póliza
       </router-link>
