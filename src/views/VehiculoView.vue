@@ -374,7 +374,7 @@ export default defineComponent({
     };
     const obtenerModelos = (marca: string) => {
       loading.value = true;
-      modelos.value = allMarcas.value?.find(c=>c.codigo==marca).modelos;
+      modelos.value = allMarcas.value?.find(c=>c.codigo==marca)?.modelos;
      
     };
     const obtenerTipos = async(campania:string) => {
