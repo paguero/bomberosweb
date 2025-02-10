@@ -29,7 +29,7 @@
     </div>
   
     <!-- Contenedor Blanco -->
-    <div class="tabla-coberturas">
+    <div class="tabla-coberturas" style="">
 
       <table>
           <thead>
@@ -47,14 +47,14 @@
                     <i v-if="data.emitida" @click="editarPoliza(data)" class="pi true-icon pi-check-circle pointer" title="Editar"></i>
                     <i v-if="data.emitida"  class="pi true-icon pi-refresh pointer ms-3" title="Generar de nuevo el pdf"></i>
                 </td>
-                  <td>
+                  <td class="text-nowrap" style="min-width:120px">
                       
-                      <label for="asistencia-vial"><span class="image-text">{{data.cliente.nombre}} {{data.cliente.apellidoPaterno}}</span>
+                      <label for="asistencia-vial"><span class="image-text">{{data.cliente.nombre}} {{data.cliente.apellidoPaterno}}</span><br/>
                                                         <span class="d-block fs-8">{{data.cliente.rut}}</span>
                                                         <span class="d-block fs-8">{{data.cliente.email}}</span></label>
                   </td>
-                  <td>
-                      <span style="color: red;">{{data.numeroPoliza}}</span>
+                  <td class="text-nowrap" style="min-width:120px">
+                      <span style="color: red;">{{data.numeroPoliza}}</span><br/>
                       <span style="font-size: 12px; color: red;">{{data.vehiculo.patente}} / {{data.vehiculo.marca}} / {{data.vehiculo.modelo}}</span>
                   </td>
                   <td>
@@ -64,7 +64,7 @@
                     <span v-if="data.emitida">Emitida Correctamente</span>
                     <span v-else>Cotización no finalizada</span>
                     <a v-if="data.emitida" :href="data.urlPoliza" target="_blank"><i  class="pi pi-file-pdf"></i></a>
-                    <p v-if="data.pago?.tokenMedioPago">Este es tu ID de pago de Mercado Pago: {{data.pago?.tokenMedioPago}}</p>
+                    <p v-if="data.pago?.tokenMedioPago"><small>Este es tu ID de pago de Mercado Pago: {{data.pago?.tokenMedioPago}}</small></p>
                   </td>
               </tr>
               
