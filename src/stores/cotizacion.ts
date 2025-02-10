@@ -109,6 +109,20 @@ export const useCotizacionStore = defineStore("cotizacion", () => {
       });
   }
 
+  function getCotizacionesTotales(email: string) {
+    ApiService.setHeader();
+    return ApiService.post("poliza/v1/missoaps/cotizaciones", {email})
+      .then(({ data }) => {
+        setCotizacions(data);
+      })
+      .catch(({ response }) => {
+        setCotizacionError(response.data.errores);
+		throw new Error();
+      });
+  }
+
+  
+
   function getCotizacion(cotizacion: ICotizacion) {
     return ApiService.get(`cotizacion/v1/${cotizacion.carroId}/cotizacion`, cotizacion.cotizacionId)
       .then(({ data }) => {
@@ -220,6 +234,7 @@ export const useCotizacionStore = defineStore("cotizacion", () => {
     allCotizacions,
     getCotizacion,
     getCotizaciones,
+    getCotizacionesTotales,
     createCotizacion,
     updateCotizacion,
     deleteCotizacion,

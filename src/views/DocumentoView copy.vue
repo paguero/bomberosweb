@@ -22,52 +22,40 @@
     </div>
 </section>
 
-<section class="section-slider"  v-if="visible">
+<section class="section-slider">
     <div class="slider-container">
         <div data-bs-ride="carousel" data-v-38c47deb="" class="recuperar-poliza">
             <div class="carousel-inner" data-v-38c47deb="">
                 <div class="p-10 pt-5 text-white" data-v-38c47deb="" style="background-image: url('/media/banners/vigencia-extendida-.png') !important;">
                     <div class="flex-column align-items-start justify-content-center pb-10" data-v-38c47deb="">
-                      <Form
-                                      id="kt_account_edificio_details_form"
-                                      class="form">
-                <div class="tab-content" id="myTabContent">
-                  <div
-                    class="tab-pane fade show active"
-                    id="home3"
-                    role="tabpanel"
-                  >
-                    <div class="row m-b-lg">
-                      <div class="col-md-12">
-                       <div class="buySuccess-form">
-                          <h5 class="text-white">
-                            Por favor ingresa el código que hemos enviado al correo electronico <b>{{email}}</b>
-                          </h5>
-                            <div class="mb-5">
-                              <label for="patente" class="mb-5">Ingresa el Código de validación</label>
-
-                                <v-otp-input
+                        <h2 class="text-white">Porque la vida sí puede ser más fácil</h2>
+                        <p>
+                            Puedes buscar tus pólizas contratadas usando sólo tu correo electrónico.
+                        </p>
+                        <div class="w-100 w-md-50">
+                          <div class="d-flex flex-row mb-4">
+                            <input type="text" class="form-control form-control-sm me-3" placeholder="misoap@soapbomberos.cl" aria-describedby="button-addon2">
+                            <button class="btn btn-warning w-auto text-nowrap" type="button" id="button-addon2">Enviar Código</button>
+                          </div>
+                          <div style="display: flex; flex-direction: row">
+                                      <v-otp-input
                                         ref="otpInput"
                                         input-classes="otp-input"
                                         :conditionalClass="['one', 'two', 'three', 'four']"
                                         separator="-"
                                         inputType="letter-numeric"
-                                        :num-inputs="6"
+                                        :num-inputs="4"
                                         v-model:value="bindValue"
                                         :should-auto-focus="true"
                                         :should-focus-order="true"
                                         @on-change="handleOnChange"
                                         @on-complete="handleOnComplete"
-                                        :placeholder="['*', '*', '*', '*', '*', '*']"
+                                        :placeholder="['*', '*', '*', '*']"
                                       />
-                            </div>
-
+                                    </div>
+                            <p>Te enviaremos un código para validar en el siguiente paso</p>
                         </div>
-                      </div>
-                  </div>
-                </div>
-              </div>
-              </Form>
+                        <p>¿Por qué hacemos esto?. A veces uno se descuidada y escribe mal la patente y no la podemos recuperar desde el formulario de abajo.</p>
                     </div>
                 </div>
             </div>
@@ -76,11 +64,11 @@
 </section>
 
 
-<section class="login-section" v-else>
+<section class="login-section">
     <div class="login-content align-items-start">
       <!-- Formulario de inicio de sesión -->
-      <div class="login-container" style="max-width:350px">
-              <Form 
+      <div class="login-container w-100" style="max-width:100%">
+              <Form
                                       id="kt_account_edificio_details_form"
                                       class="form"
                                       novalidate="novalidate"
@@ -97,8 +85,35 @@
                       <div class="col-md-12">
                        <div class="buySuccess-form">
                           <h5>
-                            Para buscar tu póliza, ingresa la Patente del vehículo y te enviaremos un código de 6 números al correo electrónico utilizado en la compra.
+                            Para buscar tu póliza, debes ingresar tu Rut y Patente
                           </h5>
+
+                          <div class="mb-5">
+                            <label for="rut">Rut</label>
+                              <Field 
+                                                                v-slot="{ field,handleChange }"
+                                                                v-model="cotizacionDetails.rut"
+                                                                name="rut"
+                                                               value="value"
+                                                              >
+                                                                <Prime-InputText
+                                                              class="form-control form-rut"
+                                                              size="lg"
+                                                              id="rut"
+                                                              name="rut"
+                                                              maxlength="11"
+                                                              placeholder="Rut"
+                                                              v-bind="field"
+                                                              @update:modelValue="handleChange" :model-value="field.value"
+                                                              v-model="cotizacionDetails.rut"
+                                                              />
+                                                              </Field>    
+                                                                <div class="fv-plugins-message-container">
+                                                                  <div class="fv-help-block">
+                                                                    <ErrorMessage name="rut" />
+                                                                  </div>
+                                                                </div>
+                            </div>
                             <div class="mb-5">
                               <label for="patente">Patente</label>
 
@@ -126,23 +141,59 @@
                                                                   </div>
                                                                 </div> 
                             </div>
-                          </div>
-                          <div class="row">
+                            </div><div class="row">
                             <div class="form-group col-md-2">
                               <Prime-Button 
                                                       type="submit"
                                                       class="btn btn-primary"
-                                                      label="Continuar"
+                                                      label="Buscar"
                                                       :loading="loading"/>
                             </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Form>
-              
+                          <div class="card-body p-2">
+                              <ul class="list-unstyled" v-if="currentCotizacion.vehiculo && currentCotizacion.emitida">
+                                <!-- Notif item -->
+                                <li>
+                                  <div class="rounded badge-unread d-sm-flex border-0 mb-1 p-3 position-relative">
+                                    <!-- Avatar -->
+                                    <div class="avatar text-center">
+                                      <img class="avatar-img rounded-circle" src="/media/img/tarifas/auto.png" alt="">
+                                    </div>
+                                    <!-- Info -->
+                                    <div class="mx-sm-3 my-2 my-sm-0">
+                                      <p class="small mb-2"><b>{{currentCotizacion.vehiculo.patente}}</b>, tiene una póliza vigente.</p>
+                                    <!-- Button -->
+                                    <div class="d-flex">
+                                      <span class="btn btn-sm py-1 btn-primary me-2">{{currentCotizacion.vehiculo.marca}} / {{currentCotizacion.vehiculo.modelo}} / {{currentCotizacion.vehiculo.anio}}</span>
+                                      <span class="btn btn-sm py-1 btn-danger">Nº póliza: {{currentCotizacion.numeroPoliza}} </span>
 
+                                    </div>
+                                  </div>
+                                  <!-- Action -->
+                                  <div class="d-flex ms-auto align-items-center flex-row">
+                                    <p class="small me-5 text-nowrap">Acciones</p>
+                                    <!-- Notification action START -->
+                                    <div class="dropdown position-absolute end-0 top-0 mt-3 me-3">
+                                      <a href="#" class="z-index-1 text-secondary btn position-relative py-0 px-2" id="cardNotiAction1" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-three-dots"></i>
+                                      </a>
+                                      <!-- Card share action dropdown menu -->
+                                      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cardNotiAction1">
+                                        <li><a class="dropdown-item" :href="currentCotizacion.urlPoliza"> <i class="bi bi-download fa-fw pe-2"></i>Descargar PDF</a></li>
+                                      </ul>
+                                    </div>
+                                    <!-- Notification action END -->
+                                    </div>
+                                  </div>
+                                </li>
+                                <!-- Notif item -->                                
+                              </ul>
+                            </div>
+                        </div>
+                  </div>
+                </div>
+              </Form>
               <div class="divider">
           <hr>
         </div>
@@ -157,14 +208,8 @@
 import { ref, defineComponent, onMounted, computed, watch} from "vue";
 import { ErrorMessage, Field, Form } from "vee-validate";
 import _ from "lodash";
-import {
-  User
-} from 'oidc-client'
-import idsrvAuth from "../config/idsrvAuth";
 import { useRouter, useRoute} from "vue-router";
 import { useCotizacionStore } from "@/stores/cotizacion";
-import { useUsuarioStore } from "@/stores/usuario";
-import { useAuthStore } from "@/stores/auth";
 import type {IConsultaCotizacion} from "@/stores/cotizacion";
 import { useVehiculoStore } from "@/stores/vehiculo";
 import * as Yup from "yup";
@@ -191,7 +236,7 @@ export default defineComponent({
     const bindModal = ref("");
 
     const handleOnComplete = (value: string) => {
-      saveChanges2(value);
+      console.log("OTP completed: ", value);
     };
 
     const handleOnChange = (value: string) => {
@@ -208,20 +253,18 @@ export default defineComponent({
     };
 
     const router = useRouter();
-    const storeAuth = useAuthStore();
     const store = useCotizacionStore();
-    const storeUsuario = useUsuarioStore();
+    const storeVehiculo = useVehiculoStore();
     const loading = ref(false);
     const visible = ref(false);
-    const email = ref('');
     const value = ref(null);
     const cotizacionsValidator = Yup.object().shape({
       patente: Yup.string().required("Es obligatorio").label("Patente").test("yupIsPatente", "Patente ingresada no es valida", function (value) {
           return patenteEsValido(value);
-        })/*,
+        }),
 		  rut: Yup.string().required("Es obligatorio").label("Marca").test("yupIsRut", "Rut ingresado no es valido", function (value) {
           return rutEsValido(value);
-        }),*/
+        }),
     });
 
     Yup.addMethod(Yup.string, "yupIsRut", function (mensaje) {
@@ -253,9 +296,7 @@ export default defineComponent({
       loading.value = true;
         store.getEmision(cotizacionDetails.value)
           .then(() => {
-            visible.value = true;
             loading.value = false;
-            email.value = store.currentCotizacion.email;
           })
           .catch(() => {
             loading.value = false;
@@ -272,37 +313,7 @@ export default defineComponent({
             });
           });
     };
-    
-    const saveChanges2 = (token) => { 
-      loading.value = true;
-      storeUsuario.validarToken({usuarioId: currentCotizacion.value.usuarioId, token})
-          .then(() => {
-            let user = new User(storeUsuario.usuario as any);
-                let profile = storeUsuario.usuario as any;
-                user.profile = profile,
-                idsrvAuth.storeUser(user).then(()=>{
-                  storeAuth.setAuthOIDC(user);
-                 location.href='/mis-polizas';
-                }).catch((e)=>{
-                  console.log('e ' + e); 
-                });
-
-          })
-          .catch((e) => {
-                loading.value = false;
-                const [error] = Object.values(storeUsuario.errors);
-                Swal.fire({
-                  text: e+ ' ' + error,
-                  icon: "error",
-                  buttonsStyling: false,
-                  confirmButtonText: "Intentar nuevamente!",
-                  customClass: {
-                    confirmButton: "btn fw-bold btn-light-danger",
-                  },
-                });
-              });
-    };
-
+   
     const route = useRoute();
     
     const cotizacionDetails = ref<IConsultaCotizacion>({
@@ -316,7 +327,6 @@ export default defineComponent({
 
     return {
       saveChanges1,
-      saveChanges2,
       currentCotizacion,
       loading,
       visible,
@@ -324,8 +334,7 @@ export default defineComponent({
       cotizacionsValidator,
       value,
       handleOnChange,
-      handleOnComplete,
-      email
+      handleOnComplete
     };
   },
 });

@@ -53,7 +53,6 @@ export const useAuthStore = defineStore("auth", () => {
     return user.value;
   }
 
-
   function setAuthOIDC(authUser: any) {
     isAuthenticated.value = true;
     user.value = authUser;

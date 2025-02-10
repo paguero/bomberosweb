@@ -50,6 +50,15 @@ const routes: Array<RouteRecordRaw> = [
         },
       },
       {
+        path: "/mis-cotizaciones",
+        name: "mis-cotizaciones",
+        component: () => import("@/views/MisTransaccionesView.vue"),
+        meta: {
+          pageTitle: "Dashboard",
+          breadcrumbs: ["Dashboards"],
+        },
+      },
+      {
         path: "/registro",
         name: "registro",
         component: () => import("@/views/RegistroView.vue"),

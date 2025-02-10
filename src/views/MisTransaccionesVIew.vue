@@ -6,7 +6,7 @@
         <img src="/media/misc/ico-home.webp" alt="Icono Home" class="home-icon" />
         <router-link :to="{name:'home'}">Inicio</router-link>
         <span>/</span>
-        <a href="#">Mis Pólizas SOAP</a>
+        <a href="#">Mis Cotizaciones SOAP</a>
     </nav>
 
     <div class="volver-container">
@@ -17,7 +17,7 @@
         </router-link>
 
         <!-- Título a la derecha -->
-        <h1 class="section-title">Mis Pólizas SOAP</h1>
+        <h1 class="section-title">Mis Cotizaciones SOAP</h1>
     </div>
 </section>
 
@@ -25,7 +25,7 @@
 <section class="additional-coverage">
     <!-- Contenedor Azul -->
     <div class="coverage-header">
-      <h2>Estas son los SOAP asociados a tu cuenta</h2>
+      <h2>Estas son las cotizaciones que haz realizado</h2>
     </div>
   
     <!-- Contenedor Blanco -->
@@ -36,9 +36,9 @@
             <tr>
                 <th></th>
                 <th>Propietario</th>
-                <th>N° Póliza</th>
-                <th>Pesos pagados</th>
-                <th></th>
+                <th>Vehículo</th>
+                <th>Valores</th>
+                <th>Estado</th>
             </tr>
           </thead>
           <tbody>
@@ -61,17 +61,18 @@
                       <span style="color: green;">SOAP: {{$filters.formatCurrency(data.planPesos)}}<br/>APORTE:{{$filters.formatCurrency(data.aporte)}}<br/>FINAL:{{$filters.formatCurrency(data.montoPago)}}</span>
                   </td>
                   <td>
-                    <a v-if="data.urlPoliza!=''" :href="data.urlPoliza" target="_blank"><i  class="pi pi-file-pdf"></i></a>
+                    <span v-if="data.emitida">Emitida Correctamente</span>
+                    <span v-else>Cotización no finalizada</span>
+                    <a v-if="data.emitida" :href="data.urlPoliza" target="_blank"><i  class="pi pi-file-pdf"></i></a>
+                    <p v-if="data.pago?.tokenMedioPago">Este es tu ID de pago de Mercado Pago: {{data.pago?.tokenMedioPago}}</p>
                   </td>
               </tr>
               
           </tbody>
       </table>
-    
   </div>
- 
-  </section> 
-  <div class="mb-10">¿No encontraste lo que buscabas?. Prueba a consultar  <router-link :to="{name:'mis-cotizaciones'}">todas tus cotizaciones</router-link></div>
+
+  </section>
 </template>
 <script setup lang="ts">
 import { ref, onMounted, nextTick, computed, getCurrentInstance } from "vue";
@@ -104,7 +105,7 @@ const polizas = computed(() => {
     return store.allCotizacions;
 });
 const obtenerCotizaciones = async  () => {
-    await store.getCotizaciones(currentUser.value?.profile?.email);
+    await store.getCotizacionesTotales(currentUser.value?.profile?.email);
   };
 
   const editarPoliza = (data) => {

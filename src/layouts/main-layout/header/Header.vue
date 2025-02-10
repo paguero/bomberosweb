@@ -53,6 +53,11 @@
                         >Mis SOAP</router-link>
                     </li>
                     <li>
+                      <router-link :to="{name:'mis-cotizaciones'}"
+                        class="dropdown-item px-4 py-4"
+                        >ver todas mis cotizaciones</router-link>
+                    </li>
+                    <li>
                       <span @click="cerrar_sesion"
                         class="dropdown-item px-4 py-4 cursor-pointer"
                         >Desconectar</span>

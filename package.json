@@ -73,6 +73,7 @@
     "vue3-apexcharts": "^1.4.1",
     "vue3-carousel": "^0.3.1",
     "vue3-google-login": "^2.0.33",
+    "vue3-otp-input": "^0.5.21",
     "vuedraggable": "^4.1.0",
     "xlsx": "^0.18.5",
     "yup": "^0.32.8"
