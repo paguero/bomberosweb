@@ -183,7 +183,7 @@ export const useCotizacionStore = defineStore("cotizacion", () => {
   }
 
   function endoso(params: ICotizacion|any) {
-    ApiService.setHeader();
+    //ApiService.setHeader();
     return ApiService.post("cotizacion/v1/endoso/soap", params)
       .then(({ data }) => {
         setCotizacion(data);

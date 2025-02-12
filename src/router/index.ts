@@ -312,6 +312,16 @@ const routes: Array<RouteRecordRaw> = [
           breadcrumbs: ["Dashboards"],
         },
       },
+      {
+        path: "/redirecciona-mis-polizas",
+        name: "redirecciona-mis-polizas",
+        component: () => import("@/views/RedireccionModificaView.vue"),
+        meta: {
+          pageTitle: "Dashboard",
+          breadcrumbs: ["Dashboards"],
+        },
+      },
+      
     ],
   },
   {
