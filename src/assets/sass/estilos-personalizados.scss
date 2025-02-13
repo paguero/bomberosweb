@@ -6672,3 +6672,25 @@ ol {
   z-index: 999;
 
 }
+
+.grecaptcha-badge {display:none;}
+
+/* Cambiar el color de fondo de la ventana de chat */
+df-messenger {
+  --df-messenger-chat-window-background-color: #f0f0f0;
+}
+
+/* Cambiar el color de fondo de los mensajes del usuario */
+df-messenger-chat-bubble.user {
+  background-color: #007bff;
+}
+
+/* Cambiar el color de fondo de los mensajes del agente */
+df-messenger-chat-bubble.agent {
+  background-color: #ffffff;
+}
+
+/* Cambiar la fuente de texto */
+df-messenger {
+  --df-messenger-font-family: 'Arial', sans-serif;
+}

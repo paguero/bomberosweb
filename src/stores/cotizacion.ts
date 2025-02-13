@@ -85,7 +85,7 @@ export const useCotizacionStore = defineStore("cotizacion", () => {
   }
 
   function setCarro(carro: any) {
-    localStorage.carro = carro;
+    localStorage.carro = carro; 
     cotizacionErrors.value = {};
   }
 

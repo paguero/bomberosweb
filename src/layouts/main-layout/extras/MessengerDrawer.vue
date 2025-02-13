@@ -38,7 +38,7 @@
       </div>
 
       <!--begin::Card body-->
-      <div class="cart-body" id="kt_drawer_chat_messenger_body">
+      <div class="cart-body w-100" id="kt_drawer_chat_messenger_body">
         <!--begin::Messages-->
         <div
           class="scroll-y me-n5 pe-5"

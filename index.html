@@ -28,20 +28,9 @@
     <meta name="twitter:description" content="Compra tu SOAP 2025 y ayuda a Bomberos aportando desde tan solo $1.000 pesos. Soap con sentido. Soap Solidario. #HEROESDEVERDAD">
     <meta name="twitter:image" content="https://www.soapbomberos.cl/media/img/logotipo.png">
     
-    <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','GTM-NRQTC7S');</script>
-  <!-- End Google Tag Manager -->
+    <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
+    <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
 
-  
-  <!-- Google Tag Manager (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NRQTC7S"
-  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
-    <!-- Facebook Pixel Code -->
     <!-- Hotjar Tracking Code for Bomberos -->
     <script>
       (function(h,o,t,j,a,r){
@@ -99,6 +88,153 @@
     <!--end::Loading markup-->
 
     <script type="module" src="/src/main.ts"></script>
+
+<!--
+  <df-messenger
+    location="us-central1"
+    project-id="clientes-contratos"
+    agent-id="9da97596-dd6a-4320-9690-302b11bf1471"
+    language-code="es"
+    storage-option="none"
+    max-query-length="-1">
+    <df-messenger-chat-bubble
+    chat-icon="https:&#x2F;&#x2F;demo.camelsecure.com&#x2F;images&#x2F;sofia&#x2F;img-sofia.png"
+    chat-title="pIA"
+    >
+    </df-messenger-chat-bubble>
+    <div slot="header">
+      <img src="https:&#x2F;&#x2F;demo.camelsecure.com&#x2F;images&#x2F;sofia&#x2F;img-sofia.png" alt="Logo">
+    </div>
+  </df-messenger>
+
+  
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+  const dfMessenger = document.querySelector('df-messenger');
+  // Espera a que el componente df-messenger esté completamente cargado y el agente esté disponible
+    window.addEventListener('df-messenger-loaded', () => {
+      const dfMessenger = document.querySelector('df-messenger');
+      const agent = dfMessenger.agent;
+    });
+    window.addEventListener('df-chat-open-changed', (event) => {
+      console.log(`Chat is ${event.detail.isOpen ? 'open' : 'closed'}`);
+    });
+
+    window.addEventListener('df-user-input-entered', (event) => {
+      console.log(event.detail.input);
+    });
+
+    window.addEventListener('df-request-sent', (event) => {
+      console.log('Request', event.detail.data.requestBody);
+    });
+
+    window.addEventListener('df-response-received', async (event) => {
+      // Remove all non-text messages.
+      console.log('df-response-received ' + JSON.stringify(event.detail));
+      if(event.detail.raw?.queryResult && event.detail.raw?.queryResult.webhookPayloads && event.detail.raw?.queryResult.webhookPayloads.length>0){
+        var cotiza = event.detail.raw?.queryResult?.webhookPayloads[0].parameters;
+        console.log('df-response-received ' + JSON.stringify(cotiza));
+        
+        localStorage.carro = JSON.stringify({carroId:cotiza.carro_id, cotizacionId:cotiza.cotizacion_id});
+        dfMessenger.renderCustomText('Estamos listos, redirigiendo...');
+        location.href = '/info-vehiculo/'+cotiza.cotizacion_id;
+      }
+      // Verifica si hay un customPayload
+     /* if (event.detail.data.messages) {
+        event.detail.data.messages.forEach(message => {
+          if (message.type=="customCard") {
+            const payload = message;
+            // Renderiza el contenido del customPayload
+            message.richElements.forEach(item => {
+              //content.forEach(item => {
+                  
+                if (item.type === 'image') {
+                  const img = document.createElement('img');
+                  img.src = item.rawUrl;
+                  img.alt = item.accessibilityText;
+                  document.body.appendChild(img);
+                } else if (item.type === 'info') {
+                  const card = document.createElement('div');
+                  card.innerHTML = `<h3>${item.title}</h3><p>${item.subtitle}</p><a href="${item.actionLink}">Enlace</a>`;
+                  document.body.appendChild(card);
+                } else if (item.type === 'selectableOptions') {
+                  const optionsContainer = document.createElement('div');
+                  item.options.forEach(option => {
+                    console.log('item.options ', JSON.stringify(option));    
+                    const button = document.createElement('button');
+                    button.textContent = option.text;
+                    button.value = option.value;
+
+                    // Agrega un evento click a cada botón
+                    button.addEventListener('click', () => {
+                      // Envía la opción seleccionada al agente
+                      agent.setParameters({
+                        "opcion_seleccionada": option.value
+                      });
+
+                      // Puedes opcionalmente enviar un evento
+                      agent.triggerEvent('OPCION_SELECCIONADA');
+                    });
+
+                    optionsContainer.appendChild(button);
+                  });
+
+                  document.body.appendChild(optionsContainer);
+                }
+             // });
+            });
+          }
+        });
+      }    */                 
+
+
+      console.log('Response', event.detail.data.messages);
+      /*event.detail.data.messages = event.detail.data.messages.filter(message => {
+        return message.type === 'text';
+      });*/
+    });
+      
+      
+      agent.on('request', (event) => {
+        console.log("Solicitud enviada a Dialogflow:", event.requestBody.queryInput.text);
+        // ... (resto de tu código)
+      });
+
+      agent.on('response', (event) => {
+        console.log("Respuesta recibida de Dialogflow:", event.responseBody);
+        // ... (resto de tu código)
+      });
+
+      agent.on('error', (error) => {
+        console.error("Error en la comunicación con Dialogflow:", error);
+        // ... (resto de tu código)
+      });
+      agent.on("EVENT_CREATE_SHOP", function(event) {
+        // Ejecuta tu función JavaScript aquí
+        miFuncionJavaScript();
+      });
+      function miFuncionJavaScript() {
+        alert("¡La función JavaScript se ha ejecutado!");
+      }
+
+});
+</script>
+
+  <style>
+    df-messenger {
+      z-index: 999;
+      position: fixed;
+      --df-messenger-font-color: #000;
+      --df-messenger-font-family: Google Sans;
+      --df-messenger-chat-background: #f3f6fc;
+      --df-messenger-message-user-background: #d3e3fd;
+      --df-messenger-message-bot-background: #fff;
+      bottom: 16px;
+      right: 16px;
+    }
+  </style>
+-->
+
 </body>
 
 </html>
