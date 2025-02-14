@@ -177,7 +177,7 @@
           >
             <Prime-InputText
                         class="form-control"
-                        maxlength="12"
+                        maxlength="9"
                         placeholder="978542514"
                         v-model="cotizacionDetails.cliente.telefono"
                         v-bind="field"
@@ -244,8 +244,7 @@ import * as Yup from "yup";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import moment from "moment";
 import { rutEsValido } from "@/core/validators/YupRut";
-import MixedWidgetImage from "@/components/widgets/mixed/WidgetImage.vue";
-import Editor from "primevue/editor";
+import { useGtm } from '@gtm-support/vue-gtm';
 moment.locale("es");
 
 export default defineComponent({
@@ -253,9 +252,7 @@ export default defineComponent({
   components: {
     ErrorMessage,
     Field,
-    Form,
-    MixedWidgetImage,
-    Editor
+    Form
 
   },
   
@@ -266,7 +263,10 @@ export default defineComponent({
     const storeCarro = useCarroCompraStore();
     const datosConfirmados = ref(false);
     const loading = ref(false);
-    const esPersona= ref(false); 
+    const esPersona= ref(false);
+    var gtm = useGtm(); 
+    const regex = /^(9\d{8}|2\d{7}|8\d{8}|8\d{8})$/;
+
     const cotizacionsValidator = Yup.object().shape({
       rut: Yup.string().required("Es obligatorio").label("Rut").test("yupIsRut", "Rut ingresado no es valido", function (value) {
           return rutEsValido(value);
@@ -279,7 +279,7 @@ export default defineComponent({
           return  (esPersona.value && value!='')|| !esPersona.value;
         }),
 		  email: Yup.string().required("Es obligatorio").email("Email inválido").label("Email"),
-      telefono: Yup.string().required("Es obligatorio").label("telefono"),
+      telefono: Yup.string().required("Es obligatorio").matches(regex, 'Número de teléfono inválido. Ingresa sólo números (largo 9 e iniciando con 8, 9 o 2)').label("telefono"),
       datosConfirmados: Yup.bool().required("Es obligatorio").label("datosConfirmados")
 
     });
@@ -308,6 +308,7 @@ export default defineComponent({
         storeCliente.updateCliente(cotizacionDetails.value)
           .then(() => {
             loading.value = false;
+            pushGtag(cotizacionDetails.value);
             router.push({ name: "info-aporte", params:{id:cotizacionDetails.value.cotizacionId} });
           })
           .catch(() => {
@@ -413,7 +414,23 @@ export default defineComponent({
      watch(() => cotizacionDetails.value.cliente?.rut, (newValue) =>  {
       esPersona.value = parseInt(newValue.split('-')[0])<50000000;
     });
- 
+    
+    const pushGtag = (cotizacion) => {
+        gtm.push({"event": "datos_propietario", 
+          "category":"compra_soap",
+          "label":"paso_03",
+          "action":"datos_propietario",
+          item_list_id: "CLIENT",
+          item_list_name: "CLIENT",
+          items: [
+            cotizacion.cliente
+          ]
+        });
+        gtm.push(function() {
+          this.reset();
+        });
+        console.log('loaded pushGtag');
+    };
     return {
       loading,
       saveChanges1,

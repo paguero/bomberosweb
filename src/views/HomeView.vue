@@ -47,11 +47,11 @@
 
     </div>
     <div class="button-group">
-      <router-link :to="{ name: 'modifica-tu-poliza-ingresar'}" class="custom-button">
+      <router-link @click="pushGtagModificar" :to="{ name: 'modifica-tu-poliza-ingresar'}" class="custom-button">
         <img src="/media/misc/ico-lapiz.webp" alt="Editar" class="button-icon">
         Modificar Póliza
       </router-link>
-      <router-link :to="{ name: 'info-documento'}" class="custom-button" style="background: #ff9900;">
+      <router-link @click="pushGtagDescargar" :to="{ name: 'info-documento'}" class="custom-button" style="background: #ff9900;">
         <img src="/media/misc/ico-descarga.webp" alt="Descargar" class="button-icon">
         Descargar Póliza
       </router-link>
@@ -199,6 +199,8 @@ import { vMaska } from "maska"
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import { patenteEsValido } from "@/core/validators/YupPatente";
 import router from "@/router";
+import { useGtm } from '@gtm-support/vue-gtm';
+
 
 export interface IVehiculo {
   patente: string
@@ -229,6 +231,7 @@ export default defineComponent({
     const storeCarro = useCarroCompraStore();
     let loading = ref(false);
     const { bus } = useBus();
+    var gtm = useGtm();
     const mostrarChatBot = ref(false);
     const botonChatBot = ref(false);
     const cotizacionValidator = Yup.object().shape({
@@ -305,6 +308,7 @@ export default defineComponent({
         cotizacionDetails.value.token = await recaptcha();
         store.createCotizacion(cotizacionDetails.value)
           .then(() => {
+            pushGtag(cotizacionDetails.value.vehiculo.patente);
             loading.value = false;
             bus.emit("actualiza-carro-compra", store.currentCotizacion.carroId);
             store.setCarro(JSON.stringify({carroId:store.currentCotizacion.carroId, cotizacionId:store.currentCotizacion.cotizacionId}));
@@ -344,7 +348,48 @@ export default defineComponent({
     const currentConvenio = computed(() => {
       return storeConvenio.currentConvenio;
     });
-    
+    const pushGtag = (plate) => {
+        gtm.push({"event": "formulario_principal_patente_enviado", 
+          "category":"compra_soap",
+          "label":"paso_01",
+          "action":"formulario_principal_patente_enviado",
+          item_list_id: "PLATE",
+          item_list_name: "PLATE",
+          items: [
+          {
+              item_id: plate,
+              item_name: plate
+          }
+          ]
+        });
+        gtm.push(function() {
+          this.reset();
+        });
+        console.log('loaded pushGtag');
+    };
+    const pushGtagModificar = () => {
+        gtm.push({"event": "boton_modificar_poliza", 
+          "category":"modificar_poliza_soap",
+          "label":"paso_01",
+          "action":"boton_modificar_poliza"
+        });
+        gtm.push(function() {
+          this.reset();
+        });
+        console.log('loaded pushGtag');
+    };
+    const pushGtagDescargar = () => {
+        gtm.push({"event": "boton_descargar_poliza", 
+          "category":"descargar_poliza_soap",
+          "label":"paso_01",
+          "action":"boton_descargar_poliza"
+        });
+        gtm.push(function() {
+          this.reset();
+        });
+        console.log('loaded pushGtag');
+    };
+
     return {
       saveChanges1,
       cotizacionDetails,
@@ -353,7 +398,9 @@ export default defineComponent({
       botonChatBot,
       loading,
       currentConvenio,
-      recaptcha
+      recaptcha,
+      pushGtagDescargar,
+      pushGtagModificar
     };
   },
 });

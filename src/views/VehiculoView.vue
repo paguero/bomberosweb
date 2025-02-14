@@ -238,8 +238,6 @@ import _ from "lodash";
 import { useRouter, useRoute} from "vue-router";
 import { useCarroCompraStore } from "@/stores/carroCompra";
 import { useCotizacionStore } from "@/stores/cotizacion";
-import { useMarcaStore } from "@/stores/marca";
-import { useModeloStore } from "@/stores/modelo";
 import { useTipoVehiculoStore } from "@/stores/tipoVehiculo";
 import { useVehiculoStore } from "@/stores/vehiculo";
 import { useAnioStore } from "@/stores/anio"; 
@@ -250,8 +248,7 @@ import Swal from "sweetalert2/dist/sweetalert2.js";
 import moment from "moment";
 import { vMaska } from "maska"
 import { patenteEsValido } from "@/core/validators/YupPatente";
-import MixedWidgetImage from "@/components/widgets/mixed/WidgetImage.vue";
-import Editor from "primevue/editor";
+import { useGtm } from '@gtm-support/vue-gtm';
 moment.locale("es");
 
 export default defineComponent({
@@ -259,17 +256,12 @@ export default defineComponent({
   components: {
     ErrorMessage,
     Field,
-    Form,
-    MixedWidgetImage,
-    Editor
-
+    Form
   },
   
   setup() {
     const router = useRouter();
     const store = useCotizacionStore();
-    const storeMarca = useMarcaStore();
-    const storeModelo = useModeloStore();
     const storeTipo = useTipoVehiculoStore();
     const storeAnio = useAnioStore();
     const storeCarro = useCarroCompraStore();
@@ -280,7 +272,7 @@ export default defineComponent({
     const visible = ref(false);
     const mostrarVigencia = ref(false);
     const modelos = ref([]);
-
+    var gtm = useGtm();
     const cotizacionsValidator = Yup.object().shape({
       patente: Yup.string().required("Es obligatorio").label("Patente").test("yupIsPatente", "Patente ingresada no es valida", function (value) {
           return patenteEsValido(value);
@@ -309,6 +301,7 @@ export default defineComponent({
         storeVehiculo.updateVehiculo(cotizacionDetails.value)
           .then(() => {
             loading.value = false;
+            pushGtag(cotizacionDetails.value);
             router.push({ name: "info-persona", params:{id:cotizacionDetails.value.cotizacionId} });
           })
           .catch(() => {
@@ -578,6 +571,22 @@ export default defineComponent({
         
     });
     
+    const pushGtag = (cotizacion) => {
+        gtm.push({"event": "datos_vehiculo", 
+          "category":"compra_soap",
+          "label":"paso_02",
+          "action":"datos_vehiculo",
+          item_list_id: "VEHICLE",
+          item_list_name: "VEHICLE",
+          items: [
+            cotizacion.vehiculo
+          ]
+        });
+        gtm.push(function() {
+          this.reset();
+        });
+        console.log('loaded pushGtag');
+    };
     /*watch(() => cotizacionDetails.value.vehiculo?.patente, (newValue) =>  {
       if(cotizacionDetails.value.vehiculo)
         obtenerVehiculo(newValue);

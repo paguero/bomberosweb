@@ -58,7 +58,6 @@
         <span>{{$filters.formatCurrency(currentCarroCompra.totalPagar)}}</span>
       </div>
       <Prime-Button id="kt_account_edificio_details_submit"
-                               onclick="gtag('event', 'Info_confirmacion')"
                               :disabled="!currentCarroCompra.totalPagar || currentCarroCompra.totalPagar==0"
                                class="pay-button" type="submit"
                                :loading="loading" label="Ir a Pagar">
@@ -135,6 +134,7 @@ import moment from "moment";
 import { useSignalR } from '@dreamonkey/vue-signalr';
 import CryptoJS from 'crypto-js';
 import ProgressSpinner from 'primevue/progressspinner';
+import { useGtm } from '@gtm-support/vue-gtm';
 
 moment.locale("es");
 
@@ -159,7 +159,7 @@ export default defineComponent({
     const modalPOS = ref(false);
     const mostrarMensaje = ref(false);
     const signalr = useSignalR();
-
+    var gtm = useGtm(); 
     
      bus.on('actualiza-carro-compra', (id  ) => {
        console.log("RECIBIENDO CARRO COMPRA" + JSON.stringify(id)  );
@@ -180,6 +180,7 @@ export default defineComponent({
         storeCarro.iniciarEmision({carroId:carro.carroId, hash:''})
           .then(() => {
             loading.value = false;
+            pushGtag();
             if(storeCarro.currentCarroCompra.urlPago=='RDC'){
               modalPOS.value = true;
             } else {
@@ -312,6 +313,21 @@ export default defineComponent({
           }
       });
     }
+
+    const pushGtag = () => {
+        gtm.push({"event": `boton_realizar_pago`, 
+          "category":"compra_soap",
+          "label":"paso_05",
+          "action":`boton_realizar_pago`,
+          item_list_id: "PAYMENT_INTENT",
+          item_list_name: "PAYMENT_INTENT"
+        });
+        gtm.push(function() {
+          this.reset();
+        });
+        console.log('loaded pushGtag');
+    };
+
     return {
       loading,
       saveChanges1,

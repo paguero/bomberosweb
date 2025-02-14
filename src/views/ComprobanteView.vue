@@ -47,7 +47,7 @@
             <tbody>
                 <tr v-for="(data, x) in allCotizaciones" v-bind:key="x">
                     <td class="align-middle border-top-0">
-                      <a v-if="data.urlPoliza!=''" :href="data.urlPoliza" target="_blank"><i  class="p-1 pi pi-file-pdf"></i>Póliza</a>
+                      <a v-if="data.urlPoliza!=''" :href="data.urlPoliza" target="_blank" @click="pushGtagDescargar"><i  class="p-1 pi pi-file-pdf"></i>Póliza</a>
                     </td>
                     <td class="align-middle border-top-0">
                         <h6 class="mb-0">{{data.vehiculo.patente}}</h6><span><small class="text-muted"> {{data.vehiculo.marca}} / {{data.vehiculo.modelo}}</small></span>
@@ -342,6 +342,7 @@ import * as Yup from "yup";
 import { useBus } from "@/core/bus/bus";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import moment from "moment";
+import { useGtm } from '@gtm-support/vue-gtm';
 moment.locale("es");
 
 export default defineComponent({
@@ -364,7 +365,7 @@ export default defineComponent({
     const storeAsistencia = useAsistenciaStore();
     const loading = ref(false);
     const visible = ref([false, false, false]);
-
+    var gtm = useGtm();
      bus.on('actualiza-carro-compra', (id  ) => {
        console.log("RECIBIENDO CARRO COMPRA" + JSON.stringify(id)  );
        obtenerCarro(id);
@@ -383,6 +384,7 @@ export default defineComponent({
       store.setCarro(JSON.stringify({carroId:null, cotizacionId:null}));   
       await obtenerCarro(carroId);
       obtenerAsistencias(carroId);
+      pushGtag();
     });
 
     const obtenerCarro = async (carroId) =>{
@@ -477,6 +479,32 @@ export default defineComponent({
             });
           });
     };
+
+    const pushGtag = () => {
+        gtm.push({"event": `confirmacion_compra_soap`, 
+          "category":"soap_pagado",
+          "label":"paso_06",
+          "action":`confirmacion_compra_soap`,
+          item_list_id: "PAYMENT_SUCCESS",
+          item_list_name: "PAYMENT_SUCCESS"
+        });
+        gtm.push(function() {
+          this.reset();
+        });
+        console.log('loaded pushGtag');
+    };
+
+    const pushGtagDescargar = () => {
+        gtm.push({"event": `descargar_poliza_post_compra`, 
+          "category":"soap_pagado",
+          "label":"paso_06",
+          "action":`descargar_poliza_post_compra`
+        });
+        gtm.push(function() {
+          this.reset();
+        });
+        console.log('loaded pushGtag');
+    };
     return {
       loading,
       allCotizaciones,
@@ -484,7 +512,8 @@ export default defineComponent({
       visible,
       descargarCertificado,
       allAsistencias,
-      saveChanges
+      saveChanges,
+      pushGtagDescargar
     };
   },
 });

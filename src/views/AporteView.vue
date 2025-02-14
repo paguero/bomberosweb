@@ -191,6 +191,7 @@ import type { ICotizacion } from "@/stores/cotizacion";
 import * as Yup from "yup";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import moment from "moment";
+import { useGtm } from '@gtm-support/vue-gtm';
 moment.locale("es");
 
 export default defineComponent({
@@ -212,6 +213,7 @@ export default defineComponent({
     const storeConvenio = useConvenioStore();
     const datosConfirmados = ref(false);
     const loading = ref(false);
+    var gtm = useGtm();
     const campania = import.meta.env.VITE_APP_CONVENIO;
     const cotizacionsValidator = Yup.object().shape({
       comuna: Yup.string().required("Es obligatorio").label("Comuna"),
@@ -224,6 +226,7 @@ export default defineComponent({
         store.updateCotizacion(cotizacionDetails.value)
           .then(() => {
             loading.value = false;
+            pushGtag(cotizacionDetails.value);
               router.push({ name: "info-confirmacion", params:{id:cotizacionDetails.value.carroId} });
           })
           .catch(() => {
@@ -437,6 +440,21 @@ export default defineComponent({
       if(cotizacionDetails.value.comuna)
         obtenerCompanias(newValue);
     });
+
+    const pushGtag = (cotizacion) => {
+        gtm.push({"event": `boton_aporte_${cotizacion.aporte}`, 
+          "category":"compra_soap",
+          "label":"paso_04",
+          "action":`boton_aporte_${cotizacion.aporte}`,
+          item_list_id: "CONTRIBUTION",
+          item_list_name: "CONTRIBUTION"
+        });
+        gtm.push(function() {
+          this.reset();
+        });
+        console.log('loaded pushGtag');
+    };
+
     return {
       saveChanges1,
       actualizarAporte,
