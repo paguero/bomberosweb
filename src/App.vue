@@ -34,6 +34,8 @@ export default defineComponent({
       themeStore.setThemeMode(themeConfigValue.value);
     });
 
+
+
     onMounted(() => {
       nextTick(() => {
         initializeComponents();

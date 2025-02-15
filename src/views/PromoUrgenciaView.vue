@@ -109,7 +109,7 @@ Para llamados: +56 223407008</li>
       <img src="/media/misc/logo-saca-tu-permiso.webp" alt="Logo 1" class="ally-logo">
       <img src="/media/misc/logo-asegura.webp" alt="Logo 2" class="ally-logo">
       <img src="/media/misc/logo-seguro-las-condes.webp" alt="Logo 3" class="ally-logo">
-      <img src="/media/misc/logo-seguros-bci.webp" alt="Logo 4" class="ally-logo">
+      <img src="/media/misc/logo-seguros-southbridge.webp" alt="Logo 4" class="ally-logo">
       <img src="/media/misc/logo-mercado-pago.webp" alt="Logo 5" class="ally-logo">
       <img src="/media/misc/logo-balloon.webp" alt="Logo 6" class="ally-logo">
     </div>

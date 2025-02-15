@@ -31,12 +31,11 @@
 
   <section class="purchase-success">
     <div class="success-container">
-      <img src="/media/misc/foto-activa-seguros.webp" alt="Bomberos exitosos">
-      <h2>¡Has comprado tu SOAP y aportaste a Bomberos de Chile con éxito!</h2>
-      <div class="table-responsive table-responsive-xxl border border-1">
-        <table id="example" class="tabla-soap table-centered mt-0 table" style="width: 100%;">
+      
+      <div class="table-responsive table-responsive-xxl border border-1 mb-10">
+        <table id="example" class="tabla-soap table-centered mt-0 table table-bordered" style="width: 100%;">
             <thead class="bg-light">
-                <tr>
+                <tr class="table-dark">
                     <th colspan="1"><div class=""></div></th>
                     <th colspan="1"><div class="">Vehículo</div></th>
                     <th colspan="1"><div class="">Póliza</div></th>
@@ -47,7 +46,7 @@
             <tbody>
                 <tr v-for="(data, x) in allCotizaciones" v-bind:key="x">
                     <td class="align-middle border-top-0">
-                      <a v-if="data.urlPoliza!=''" :href="data.urlPoliza" target="_blank" @click="pushGtagDescargar"><i  class="p-1 pi pi-file-pdf"></i>Póliza</a>
+                      <a v-if="data.urlPoliza!=''" :href="data.urlPoliza" target="_blank" @click="pushGtagDescargar"><i  class="fs-2 p-1 pi pi-file-pdf"></i>Descarga tu Póliza</a>
                     </td>
                     <td class="align-middle border-top-0">
                         <h6 class="mb-0">{{data.vehiculo.patente}}</h6><span><small class="text-muted"> {{data.vehiculo.marca}} / {{data.vehiculo.modelo}}</small></span>
@@ -64,7 +63,8 @@
             </tbody>
         </table>
     </div>
-
+    <img src="/media/misc/foto-activa-seguros.webp" alt="Bomberos exitosos">
+    <h2>¡Has comprado tu SOAP y aportaste a Bomberos de Chile con éxito!</h2>
     </div>
   </section>
   <Form
