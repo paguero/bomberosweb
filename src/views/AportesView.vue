@@ -275,7 +275,7 @@ export default defineComponent({
             url: 'https://www.soapbomberos.cl',
             description: 'Compra el SOAP en '+ compania.value.url + 'y haz un aporte a ' + compania.value.compania + '.',
             quote: 'Hola. Te invito a que tu tambien ayudes a Bomberos de Chile.',
-            hashtags: 'soap,ayuda,heroes,hazlo por ellos',
+            hashtags: 'soap,ayuda,heroes,hazloporellos',
             twitterUser: '',
             media:
               'https://www.soapbomberos.cl/media/logos/default.png',
