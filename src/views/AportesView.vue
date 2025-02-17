@@ -87,7 +87,7 @@
       </div>
     </div>
     <!-- Columna Derecha -->
-    <div class="right-column">
+    <div class="right-column" id="share-div" >
       <!-- Imagen con bordes redondeados -->
       <div class="d-flex flex-column gap-4 w-100 card border border-1 border-dark-subtle" v-if="share">
         <h3 class="mt-5">{{ compania.compania}}</h3>
@@ -106,7 +106,7 @@
             </div>
             
         </div>
-        <div class="d-flex flex-row gap-3 mb-5">
+        <div class="d-flex flex-row gap-3 mb-5 flex-wrap justify-content-center">
         <share-network
         v-for="network in networks"
         :key="network.network"
@@ -261,7 +261,6 @@ export default defineComponent({
         });
     };
     const toggle = (event, param) => {
-      console.log('=======>>>>>>>' + JSON.stringify(param));
         op.value.hide();
         console.log('x' + param);
         compania.value = param;
@@ -269,7 +268,12 @@ export default defineComponent({
         nextTick(() => {
           //op.value.show(event);
           share.value = true;
-
+          const miDiv = document.getElementById("share-div");
+          window.scrollTo({
+            top: miDiv.offsetTop,
+            left: 0,
+            behavior: "smooth",
+          });
           sharingInfo.value = {
             title: 'Hola. Te invito a que tu también ayudes a Bomberos de Chile.',
             url: 'https://www.soapbomberos.cl',
