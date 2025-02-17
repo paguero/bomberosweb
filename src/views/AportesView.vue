@@ -76,21 +76,63 @@
         <ul class="aportes-list">
           <li v-for="compania in allAportes" :key="compania.compania">
             <div>
-              <span @click="toggle($event, compania)" class="cursor-pointer">{{compania.compania}}</span>
+              <span class="cursor-pointer">{{compania.compania}}</span>
               <strong>{{$filters.formatCurrency(compania.montoAporte)}}</strong>
+              <a href="javascript:;" @click="toggle($event, compania)" class="w-auto btn-share btn-warning"> <span class="pi pi-share-alt"></span></a>
             </div>
             <p>{{compania.url}}</p>
           </li>
           <!-- Agrega más items según tu necesidad -->
         </ul>
       </div>
-
     </div>
-
     <!-- Columna Derecha -->
     <div class="right-column">
       <!-- Imagen con bordes redondeados -->
-      <img src="/media/misc/bombero-traje.webp" alt="Bombero" class="bombero-img">
+      <div class="d-flex flex-column gap-4 w-100 card border border-1 border-dark-subtle" v-if="share">
+        <h3 class="mt-5">{{ compania.compania}}</h3>
+        <div class="card-body w-100">
+            <div class="font-medium block mb-2">Copia y comparte este QR</div>
+            <div ref="canvasContainer">
+            <vue-qrcode :value="compania.url" :options="{ width: 200 }"></vue-qrcode>
+            </div>
+            <button @click="copiarAlPortapapeles" class="btn btn-sm">Copiar QR</button>
+        </div>
+        <div class="card-footer w-100">
+            <span class="font-medium block mb-2">Comparte la URL de la compañía</span>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" :value="compania.url" aria-label="Recipient's username" aria-describedby="basic-addon2">
+              <span class="input-group-text" id="basic-addon2" @click="copyClip(compania.url)"><i class="pi pi-copy"></i></span>
+            </div>
+            
+        </div>
+        <div class="d-flex flex-row gap-3 mb-5">
+        <share-network
+        v-for="network in networks"
+        :key="network.network"
+        v-slot="{ share }"
+        :network="network.network"
+        :title="sharingInfo.title"
+        :url="sharingInfo.url"
+        :description="sharingInfo.description"
+        :quote="sharingInfo.quote"
+        :hashtags="sharingInfo.hashtags"
+        :twitterUser="sharingInfo.twitterUser"
+        :media="sharingInfo.media"
+      >
+        <div
+          class="social-network"
+          @click="share"
+          :style="{ backgroundColor: network.color }"
+        >
+          <i :class="network.icon"></i>
+          <span>{{ network.name }}</span>
+        </div>
+      </share-network>
+      </div>
+      </div>
+      <img src="/media/misc/bombero-traje.webp" alt="Bombero" class="bombero-img" v-else>
+      
     </div>
   </section>
 
@@ -145,6 +187,7 @@ import Swal from "sweetalert2/dist/sweetalert2.js";
 import { useToast } from 'primevue/usetoast';
 import VueQrcode from '@chenfengyuan/vue-qrcode';
 import OverlayPanel from 'primevue/overlaypanel';
+import { ShareNetwork } from "vue3-social-sharing";
 
 import moment from "moment";
 moment.locale("es");
@@ -153,7 +196,7 @@ export default defineComponent({
   name: "aporte-list",
   components: {
     VueQrcode, 
-    OverlayPanel, Toast
+    OverlayPanel, Toast, ShareNetwork
   },
   
   setup() {
@@ -167,6 +210,18 @@ export default defineComponent({
     const compania = ref({});
     const canvasContainer = ref(null);
     const op = ref();
+    const sharingInfo = ref({
+        title: 'My perfect test title',
+        url: 'https://example.com',
+        description: 'My perfect description',
+        quote: 'My perfect quote',
+        hashtags: 'tag1,tag2',
+        twitterUser: 'POTUS',
+        media:
+          'https://www.soapbomberos.cl/media/logos/default.png',
+      });
+
+    const share = ref(false);
     onMounted(async () => {
       buscarAportes();
       obtenerComunas();
@@ -210,8 +265,22 @@ export default defineComponent({
         op.value.hide();
         console.log('x' + param);
         compania.value = param;
+        share.value = false;
         nextTick(() => {
-          op.value.show(event);
+          //op.value.show(event);
+          share.value = true;
+
+          sharingInfo.value = {
+            title: 'Hola. Te invito a que tu también ayudes a Bomberos de Chile.',
+            url: 'https://www.soapbomberos.cl',
+            description: 'Compra el SOAP en '+ compania.value.url + 'y haz un aporte a ' + compania.value.compania + '.',
+            quote: 'Hola. Te invito a que tu tambien ayudes a Bomberos de Chile.',
+            hashtags: 'soap,ayuda,heroes,hazlo por ellos',
+            twitterUser: '',
+            media:
+              'https://www.soapbomberos.cl/media/logos/default.png',
+          };
+          
         });
     }
     const buscarConvenios = async () => {
@@ -292,6 +361,48 @@ export default defineComponent({
       toast.add({ severity: 'info', summary: 'Info', detail: 'Url copiada al porta papeles', life: 3000 });
     }
     const loading = ref(true);
+
+    const networks = [
+  {
+    network: 'facebook',
+    name: 'Facebook',
+    icon: 'fab fah fa-lg fa-facebook-f',
+    color: '#1877f2',
+  },
+  
+  {
+    network: 'linkedin',
+    name: 'LinkedIn',
+    icon: 'fab fah fa-lg fa-linkedin',
+    color: '#007bb5',
+  },
+
+  {
+    network: 'sms',
+    name: 'SMS',
+    icon: 'far fah fa-lg fa-comment-dots',
+    color: '#333333',
+  },
+  {
+    network: 'telegram',
+    name: 'Telegram',
+    icon: 'fab fah fa-lg fa-telegram-plane',
+    color: '#0088cc',
+  },
+  {
+    network: 'x',
+    name: 'X',
+    icon: 'fab fah fa-lg fa-x-twitter',
+    color: '#1da1f2',
+  },
+   {
+    network: 'whatsapp',
+    name: 'Whatsapp',
+    icon: 'fab fah fa-lg fa-whatsapp',
+    color: '#25d366',
+  }
+];
+
     return {
       loading,
       buscarAportes,
@@ -299,12 +410,20 @@ export default defineComponent({
       comuna,
       compania,
       aporte, currentAporte, buscarAporte,
-      allComunas, toast, copyClip, toggle, op, canvasContainer, copiarAlPortapapeles
+      allComunas, toast, copyClip, toggle, op, canvasContainer, copiarAlPortapapeles, share, networks, sharingInfo
     };
   },
 });
 </script>
 <style lang="scss" scoped>
+.social-network {
+  padding: 3px;
+  gap: 0.5rem !important;
+  color:#fff;
+  cursor: pointer;
+  i {color:#fff!important; margin-right: 3px;}
+}
+
 .l-share a {color:#B5B5C3;}
 .l-share i {font-size:1rem;}
 .aporte {color: #FF0082; font-size:2rem;}
