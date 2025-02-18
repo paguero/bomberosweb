@@ -349,42 +349,43 @@ export default defineComponent({
       return storeConvenio.currentConvenio;
     });
     const pushGtag = (plate) => {
-        gtm.push({"event": "formulario_principal_patente_enviado", 
-          "category":"compra_soap",
-          "label":"paso_01",
-          "action":"formulario_principal_patente_enviado",
-          item_list_id: "PLATE",
-          item_list_name: "PLATE",
-          items: [
+        gtm.trackEvent(
           {
-              item_id: plate,
-              item_name: plate
-          }
+            event: "begin_checkout", 
+            step:"1",
+            label:"paso_01",
+            form_name:"formulario_principal",
+            item_list_id: "PLATE",
+            item_list_name: "PLATE",
+            items: [
+            {
+                item_id: "plate",
+                item_name: plate
+            }
           ]
         });
-        gtm.push(function() {
+        gtm.trackEvent(function() {
           this.reset();
         });
         console.log('loaded pushGtag');
     };
     const pushGtagModificar = () => {
-        gtm.push({"event": "boton_modificar_poliza", 
-          "category":"modificar_poliza_soap",
-          "label":"paso_01",
-          "action":"boton_modificar_poliza"
+        gtm.trackEvent(
+          {event: "select_item", 
+          item_name:"modificar_poliza",
+          button:"modificar_poliza_home"
         });
-        gtm.push(function() {
+        gtm.trackEvent(function() {
           this.reset();
         });
         console.log('loaded pushGtag');
     };
     const pushGtagDescargar = () => {
-        gtm.push({"event": "boton_descargar_poliza", 
-          "category":"descargar_poliza_soap",
-          "label":"paso_01",
-          "action":"boton_descargar_poliza"
+        gtm.trackEvent({event: "select_item", 
+          item_name:"descargar_poliza",
+          button:"descargar_poliza_home"
         });
-        gtm.push(function() {
+        gtm.trackEvent(function() {
           this.reset();
         });
         console.log('loaded pushGtag');

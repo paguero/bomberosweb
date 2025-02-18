@@ -442,14 +442,12 @@ export default defineComponent({
     });
 
     const pushGtag = (cotizacion) => {
-        gtm.push({"event": `boton_aporte_${cotizacion.aporte}`, 
-          "category":"compra_soap",
-          "label":"paso_04",
-          "action":`boton_aporte_${cotizacion.aporte}`,
-          item_list_id: "CONTRIBUTION",
-          item_list_name: "CONTRIBUTION"
+        gtm.trackEvent({"event": `checkout`, 
+          "form_name":"aporte_voluntario",
+          "step":"4",
+          "value":`${cotizacion.aporte}`
         });
-        gtm.push(function() {
+        gtm.trackEvent(function() {
           this.reset();
         });
         console.log('loaded pushGtag');

@@ -246,7 +246,7 @@ import moment from "moment";
 import { rutEsValido } from "@/core/validators/YupRut";
 import { useGtm } from '@gtm-support/vue-gtm';
 moment.locale("es");
-
+import { sha512, sha384, sha512_256, sha512_224 } from 'js-sha512';
 export default defineComponent({
   name: "cotizacion-edit",
   components: {
@@ -416,17 +416,12 @@ export default defineComponent({
     });
     
     const pushGtag = (cotizacion) => {
-        gtm.push({"event": "datos_propietario", 
-          "category":"compra_soap",
-          "label":"paso_03",
-          "action":"datos_propietario",
-          item_list_id: "CLIENT",
-          item_list_name: "CLIENT",
-          items: [
-            cotizacion.cliente
-          ]
+      gtm.trackEvent({"event": "checkout", 
+          "form_name":"datos_propietario",
+          "user_id":sha512(cotizacion.cliente.email),
+          "step":"3"
         });
-        gtm.push(function() {
+        gtm.trackEvent(function() {
           this.reset();
         });
         console.log('loaded pushGtag');

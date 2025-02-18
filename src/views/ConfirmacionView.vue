@@ -180,7 +180,7 @@ export default defineComponent({
         storeCarro.iniciarEmision({carroId:carro.carroId, hash:''})
           .then(() => {
             loading.value = false;
-            pushGtag();
+            pushGtag(currentCarroCompra.value.totalPagar);
             if(storeCarro.currentCarroCompra.urlPago=='RDC'){
               modalPOS.value = true;
             } else {
@@ -314,15 +314,13 @@ export default defineComponent({
       });
     }
 
-    const pushGtag = () => {
-        gtm.push({"event": `boton_realizar_pago`, 
-          "category":"compra_soap",
-          "label":"paso_05",
-          "action":`boton_realizar_pago`,
-          item_list_id: "PAYMENT_INTENT",
-          item_list_name: "PAYMENT_INTENT"
+    const pushGtag = (monto) => {
+        gtm.trackEvent({"event": `checkout`, 
+          "form_name":"ir_a_pagar",
+          "total":monto,
+          "step":`5`
         });
-        gtm.push(function() {
+        gtm.trackEvent(function() {
           this.reset();
         });
         console.log('loaded pushGtag');

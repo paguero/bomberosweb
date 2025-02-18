@@ -572,17 +572,15 @@ export default defineComponent({
     });
     
     const pushGtag = (cotizacion) => {
-        gtm.push({"event": "datos_vehiculo", 
-          "category":"compra_soap",
-          "label":"paso_02",
-          "action":"datos_vehiculo",
-          item_list_id: "VEHICLE",
-          item_list_name: "VEHICLE",
-          items: [
-            cotizacion.vehiculo
-          ]
+        gtm.trackEvent({"event": "checkout", 
+          "form_name":"datos_vehiculo",
+          "vehicle_type":cotizacion.vehiculo.tipoVehiculo,
+          "step":"2",
+          marca_vehiculo: cotizacion.vehiculo.marca, 
+          modelo_vehiculo: cotizacion.vehiculo.modelo,
+          anno_vehiculo: cotizacion.vehiculo.anio
         });
-        gtm.push(function() {
+        gtm.trackEvent(function() {
           this.reset();
         });
         console.log('loaded pushGtag');

@@ -495,12 +495,11 @@ export default defineComponent({
     };
 
     const pushGtagDescargar = () => {
-        gtm.push({"event": `descargar_poliza_post_compra`, 
-          "category":"soap_pagado",
-          "label":"paso_06",
-          "action":`descargar_poliza_post_compra`
+        gtm.trackEvent({"event": `checkout`, 
+          "step":"6",
+          "form_name":"pago_realizado"
         });
-        gtm.push(function() {
+        gtm.trackEvent(function() {
           this.reset();
         });
         console.log('loaded pushGtag');
