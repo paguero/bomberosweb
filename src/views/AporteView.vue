@@ -184,7 +184,7 @@ import { useRouter, useRoute} from "vue-router";
 import { useCarroCompraStore } from "@/stores/carroCompra";
 import { useCotizacionStore } from "@/stores/cotizacion";
 import { useMontoAporteStore } from "@/stores/montoAporte";
-import { useComunaStore } from "@/stores/comuna";
+import { useComunaStore } from "@/stores/comuna"; 
 import { useDestinoAporteStore } from "@/stores/destinoAporte";
 import { useConvenioStore } from "@/stores/convenio";
 import type { ICotizacion } from "@/stores/cotizacion";

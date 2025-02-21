@@ -223,16 +223,37 @@ export default defineComponent({
           })
           .catch(() => {
             const [error] = Object.values(store.cotizacionErrors);
-            Swal.fire({
-                text: error,
-                icon: "error",
-                buttonsStyling: false,
-                confirmButtonText: "Ok",
-                heightAuto: false,
-                customClass: {
-                confirmButton: "btn fw-semobold btn-light-primary",
-                },
-            });
+            
+            //si el error es por poliza enviada a pago. ofrecemos limpiar el carro nosotros
+            if(store.currentCotizacion.borraCarro) {
+              Swal.fire({
+                html: error + '<br/><br/>¿Deseas que nosotros eliminemos el carro de compras completo e iniciar el proceso desde cero?',
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si',
+                cancelButtonText: 'No',
+                showLoaderOnConfirm: true,        
+                allowOutsideClick: () => !Swal.isLoading(),
+                allowEscapeKey: false,
+                preConfirm: function () {
+                  store.setCarro(JSON.stringify({carroId:null, cotizacionId:null}));
+                  location.href='/';
+                }
+              })
+            } else {
+              Swal.fire({
+                  text: error,
+                  icon: "error",
+                  buttonsStyling: false,
+                  confirmButtonText: "Ok",
+                  heightAuto: false,
+                  customClass: {
+                  confirmButton: "btn fw-semobold btn-light-primary",
+                  },
+              });
+            }
           });
     };
    

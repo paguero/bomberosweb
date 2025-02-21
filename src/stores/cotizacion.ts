@@ -214,6 +214,7 @@ export const useCotizacionStore = defineStore("cotizacion", () => {
         setCotizacion(data);
       })
       .catch(({ response }) => {
+        setCotizacion(response.data);
         setCotizacionError(response.data.errores);
 		throw new Error();
       });
