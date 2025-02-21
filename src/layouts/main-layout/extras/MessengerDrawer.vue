@@ -242,7 +242,7 @@ export default defineComponent({
                   confirmButton: "btn fw-semobold btn-light-primary",
                   },
               });
-            }
+            } 
           });
     };
 
