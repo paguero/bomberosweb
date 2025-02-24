@@ -321,6 +321,15 @@ const routes: Array<RouteRecordRaw> = [
           breadcrumbs: ["Dashboards"],
         },
       },
+      {
+        path: "/companias",
+        name: "info-companias",
+        component: () => import("@/views/CompaniasView.vue"),
+        meta: {
+          pageTitle: "Compañías",
+          breadcrumbs: ["Compañías"],
+        },
+      },
       
     ],
   },
