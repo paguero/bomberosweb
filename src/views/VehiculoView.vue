@@ -351,7 +351,7 @@ export default defineComponent({
       //obtenerCarro(carro.carroId);
       loading.value=false;
       window.scrollTo({
-        top: 650,
+        top: 250,
         left: 0,
         behavior: "smooth",
       });
