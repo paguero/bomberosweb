@@ -56,7 +56,7 @@
                       <span class="custom-badge badge bg-warning">{{$filters.formatCurrency(data.aporte)}}</span>
                       <br/>{{$filters.formatCurrency(data.montoPago)}}</td>
                     <td class="align-middle border-top-0">
-                      <span class="cursor-pointer" @click="descargarCertificado(data)"><i  class="p-1 pi pi-file-pdf"></i>Certificado</span>
+                      <span class="cursor-pointer" v-if="data.urlPoliza!=''" @click="descargarCertificado(data)"><i  class="p-1 pi pi-file-pdf"></i>Certificado</span>
                     </td>
                 </tr>
                 
@@ -380,11 +380,14 @@ export default defineComponent({
     const carroId = route.params.id;
     const carro = JSON.parse(store.getCarro());
 
-    onMounted(async () => {  
-      store.setCarro(JSON.stringify({carroId:null, cotizacionId:null}));   
+    onMounted(async () => { 
+      loading.value = true; 
+      store.setCarro(JSON.stringify({carroId:null, cotizacionId:null}));
+      await verificarPagoCarro(carroId);
       await obtenerCarro(carroId);
       obtenerAsistencias(carroId);
       pushGtag();
+      loading.value = false;
     });
 
     const obtenerCarro = async (carroId) =>{
@@ -424,6 +427,8 @@ export default defineComponent({
     }
 
     const descargarCertificado = async(cotizacion) => {
+      if(cotizacion.urlPoliza=='' || !cotizacion.emitida)
+        return;
       loading.value = true;
       await storeCertificado.getCertificado(cotizacion).then(()=>{
         window.open(storeCertificado.currentCertificado.urlCertificado);
@@ -442,6 +447,27 @@ export default defineComponent({
           })
         });
     }
+
+    const verificarPagoCarro = async (carroId) => {
+        loading.value = true;
+        await store.verificarPago(carroId)
+          .then(() => {
+            loading.value = false;
+          }).catch(() => {
+            const [error] = Object.values(store.cotizacionErrors);
+            loading.value = false;
+            Swal.fire({
+                text: error,
+                icon: "error",
+                buttonsStyling: false,
+                confirmButtonText: "Ok",
+                heightAuto: false,
+                customClass: {
+                confirmButton: "btn fw-semobold btn-light-primary",
+                },
+            });
+          });
+    };
 
     const allCotizaciones = computed(() => {
       return storeCarro.currentCarroCompra.cotizaciones;
@@ -512,7 +538,8 @@ export default defineComponent({
       descargarCertificado,
       allAsistencias,
       saveChanges,
-      pushGtagDescargar
+      pushGtagDescargar,
+      verificarPagoCarro
     };
   },
 });

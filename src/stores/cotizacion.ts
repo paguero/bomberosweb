@@ -220,6 +220,15 @@ export const useCotizacionStore = defineStore("cotizacion", () => {
       });
   }
 
+  function verificarPago(carroId:string) {
+    ApiService.setHeader();
+    return ApiService.put(`poliza/v1/verificapago/${carroId}`, carroId)
+      .catch(({ response }) => {
+        setCotizacionError(response.data.errores);
+		    throw new Error();
+      });
+  }
+
   function verPdf(id: string|undefined) {
     return ApiService.get(`soap/poliza/pdf/${id}`)
       .catch(({ response }) => {
@@ -245,7 +254,7 @@ export const useCotizacionStore = defineStore("cotizacion", () => {
     getEmision,
     getEmisionValidacion,
     getEmisionesValidacion,
-    endoso
+    endoso, verificarPago
   };
 });
 
