@@ -1,12 +1,10 @@
 <template>
-  <!--
-  <Transition @before-enter="beforeEnter" @enter="enter" @leave="leave">
+  <!--<Transition @before-enter="beforeEnter" @enter="enter" @leave="leave">
     <div class="div-asistencias" v-if="isVisible">
     <InviteFriendsModal @cerrarAsistencias="cerrarAsistencias"/>
     </div>
   </Transition>
-  -->
-
+-->
     <div class="overlayed-loader fullscreen-overlayed-loader" v-if="loading">
     <div class="fullscreen-overlayed-loader__overlay"></div> 
     <div class="ecw-loader-animation fullscreen-overlayed-loader__loader">
@@ -583,7 +581,7 @@ export default defineComponent({
       saveChanges,
       pushGtagDescargar,
       verificarPagoCarro,
-      /*beforeEnter, enter, leave, isVisible,*/
+      //beforeEnter, enter, leave, isVisible,
       cerrarAsistencias
     };
   },

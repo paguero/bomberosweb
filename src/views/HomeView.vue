@@ -177,6 +177,20 @@
       />
     </div>
   </main>
+
+
+  <Transition @before-enter="beforeEnter" @enter="enter" @leave="leave">
+    <div class="div-asistencias" v-if="isVisible">
+      <div class="position-relative">
+        <div class="w-700 position-relative" style="margin:auto;">      
+          <button type="button" class="position-absolute cursor-pointer btn-close top-0 end-0" aria-label="Close" @click="isVisible=false"></button>
+          <a href="/compra-soap"><img src="/media/banners/mercado-pago.jpeg" class="m-auto d-none d-md-block"/>
+          <img src="/media/banners/mercado-pago-mobile.jpg" class="m-auto d-md-none"/></a>
+        </div>
+      </div>
+    </div>
+  </Transition>
+
 </template>
 
 
@@ -200,7 +214,7 @@ import Swal from "sweetalert2/dist/sweetalert2.js";
 import { patenteEsValido } from "@/core/validators/YupPatente";
 import router from "@/router";
 import { useGtm } from '@gtm-support/vue-gtm';
-
+const isVisible = ref(false);
 
 export interface IVehiculo {
   patente: string
@@ -279,9 +293,17 @@ export default defineComponent({
       });
     });
     onMounted(() => {
-      if(convenioAporte)
+      if(convenioAporte){
         obtenerConvenio(convenioAporte);
-        obtenerCarro(carro.carroId);
+      }
+      obtenerCarro(carro.carroId);
+      setTimeout(function() {
+        isVisible.value = true;
+      },2000);
+
+      setTimeout(() => {
+        isVisible.value = false; 
+      }, 8000);
     });
 
     const obtenerCarro = (carroId) =>{
@@ -391,6 +413,27 @@ export default defineComponent({
         console.log('loaded pushGtag');
     };
 
+    const beforeEnter = (el) => {
+      el.style.transition = 'none';  // Sin transición al principio
+      el.style.transform = 'translateY(-100%)';  // Coloca el div fuera de la vista
+    };
+    const enter = (el, done) => {
+      el.offsetHeight; // Forzar reflow para aplicar el estilo de entrada
+      el.style.transition = 'transform 3s ease'; // Aplica la transición para entrar
+      el.style.transform = 'translateY(0)'; // Mueve el div a su posición final
+      done(); // Finaliza la transición
+    };
+
+    const leave = (el, done) => {
+      el.style.transition = 'transform 3s ease'; // Aplica la transición para salir
+      el.style.transform = 'translateY(-100%)'; // Mueve el div hacia arriba
+      // Debemos usar setTimeout para cambiar el valor de 'isVisible' después de la animación
+      setTimeout(() => {
+        isVisible.value = false; // Cambia a invisible después de que termina la animación de salida
+        done(); // Finaliza la transición
+      }, 3000); // 5000 ms para coincidir con la duración de la animación
+    };
+
     return {
       saveChanges1,
       cotizacionDetails,
@@ -401,12 +444,35 @@ export default defineComponent({
       currentConvenio,
       recaptcha,
       pushGtagDescargar,
-      pushGtagModificar
+      pushGtagModificar,beforeEnter, enter, leave, isVisible
     };
   },
 });
 </script>
-<style scoped>
+<style lang="scss" scoped>
+.div-asistencias {
+  position: absolute;  /* Posición absoluta */
+  z-index: 999;
+  transform: translateX(-100%);  /* Centra el div horizontalmente */
+  width: 100%;
+  display: inline-block;  /* Se comporta como un bloque en línea */
+  .position-relative{
+    text-align:center;
+    width:700px;
+    @media (max-width: 768px) {
+        width:100%;
+      }
+    img {
+      margin:auto;
+      width:700px;
+      @media (max-width: 768px) {
+        width:100%;
+      }
+    }
+  }
+  
+}
+
 .sticky-alert{text-align:center;position:absolute; top:0; left:0;width:100%;border-radius: 0;
 background-color:rgba(255, 0, 130, 0.72)!important; 
 border:0!important;
