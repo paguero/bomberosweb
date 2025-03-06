@@ -330,6 +330,15 @@ const routes: Array<RouteRecordRaw> = [
           breadcrumbs: ["Compañías"],
         },
       },
+      {
+        path: "/compra-soap",
+        name: "info-compra-soap",
+        component: () => import("@/views/CompraSoapView.vue"),
+        meta: {
+          pageTitle: "Compra Soap",
+          breadcrumbs: ["Compañías"],
+        },
+      },
       
     ],
   },

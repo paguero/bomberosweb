@@ -1,4 +1,12 @@
 <template>
+  <!--
+  <Transition @before-enter="beforeEnter" @enter="enter" @leave="leave">
+    <div class="div-asistencias" v-if="isVisible">
+    <InviteFriendsModal @cerrarAsistencias="cerrarAsistencias"/>
+    </div>
+  </Transition>
+  -->
+
     <div class="overlayed-loader fullscreen-overlayed-loader" v-if="loading">
     <div class="fullscreen-overlayed-loader__overlay"></div> 
     <div class="ecw-loader-animation fullscreen-overlayed-loader__loader">
@@ -338,6 +346,7 @@ import { useSuscripcionAsistenciaStore } from "@/stores/suscripcionAsistencia";
 import { useAsistenciaStore } from "@/stores/asistencia";
 import { useCotizacionStore } from "@/stores/cotizacion";
 import { useCertificadoStore } from "@/stores/certificado";
+import InviteFriendsModal from "@/components/modals/general/InviteFriendsModal.vue";
 import * as Yup from "yup";
 import { useBus } from "@/core/bus/bus";
 import Swal from "sweetalert2/dist/sweetalert2.js";
@@ -350,7 +359,8 @@ export default defineComponent({
   components: {
     ErrorMessage,
     Field,
-    Form
+    Form,
+    InviteFriendsModal
 
   },
   
@@ -365,6 +375,7 @@ export default defineComponent({
     const storeAsistencia = useAsistenciaStore();
     const loading = ref(false);
     const visible = ref([false, false, false]);
+    const isVisible = ref(false);
     var gtm = useGtm();
      bus.on('actualiza-carro-compra', (id  ) => {
        console.log("RECIBIENDO CARRO COMPRA" + JSON.stringify(id)  );
@@ -379,7 +390,7 @@ export default defineComponent({
     const route = useRoute();
     const carroId = route.params.id;
     const carro = JSON.parse(store.getCarro());
-
+    const id = ref('');
     onMounted(async () => { 
       loading.value = true; 
       store.setCarro(JSON.stringify({carroId:null, cotizacionId:null}));
@@ -388,11 +399,21 @@ export default defineComponent({
       obtenerAsistencias(carroId);
       pushGtag();
       loading.value = false;
+      isVisible.value = true;
     });
+
+    const cerrarAsistencias = (continuar) => {
+      isVisible.value = false;
+      if(continuar){
+        window.open(`http://127.0.0.1:5173/encuesta/${carroId}/${id.value}`);
+      }
+    };
 
     const obtenerCarro = async (carroId) =>{
       await storeCarro
-        .getCarroCompra(carroId)
+        .getCarroCompra(carroId).then(()=>{
+          id.value = storeCarro.currentCarroCompra.cotizaciones[0].cotizacionId;
+        })
         .catch(() => {
           const [error] = Object.values(storeCarro.carroCompraErrors);
           Swal.fire({
@@ -530,6 +551,28 @@ export default defineComponent({
         });
         console.log('loaded pushGtag');
     };
+
+    /*const beforeEnter = (el) => {
+      el.style.transition = 'none';  // Sin transición al principio
+      el.style.transform = 'translateY(-100%)';  // Coloca el div fuera de la vista
+    };
+    const enter = (el, done) => {
+      el.offsetHeight; // Forzar reflow para aplicar el estilo de entrada
+      el.style.transition = 'transform 5s ease'; // Aplica la transición para entrar
+      el.style.transform = 'translateY(0)'; // Mueve el div a su posición final
+      done(); // Finaliza la transición
+    };
+
+    const leave = (el, done) => {
+      el.style.transition = 'transform 5s ease'; // Aplica la transición para salir
+      el.style.transform = 'translateY(-100%)'; // Mueve el div hacia arriba
+      // Debemos usar setTimeout para cambiar el valor de 'isVisible' después de la animación
+      setTimeout(() => {
+        this.isVisible = false; // Cambia a invisible después de que termina la animación de salida
+        done(); // Finaliza la transición
+      }, 5000); // 5000 ms para coincidir con la duración de la animación
+    };*/
+
     return {
       loading,
       allCotizaciones,
@@ -539,7 +582,9 @@ export default defineComponent({
       allAsistencias,
       saveChanges,
       pushGtagDescargar,
-      verificarPagoCarro
+      verificarPagoCarro,
+      /*beforeEnter, enter, leave, isVisible,*/
+      cerrarAsistencias
     };
   },
 });
@@ -591,6 +636,16 @@ export default defineComponent({
 </style>
 
 <style lang="scss" scoped>
+.div-asistencias {
+  position: absolute;  /* Posición absoluta */
+  left: 0%;
+  z-index: 999;
+  transform: translateX(-100%);  /* Centra el div horizontalmente */
+  width: 100%;
+  display: inline-block;  /* Se comporta como un bloque en línea */
+
+}
+
 @keyframes radar{
 0%{
     width:25px;
