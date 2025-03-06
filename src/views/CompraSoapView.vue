@@ -296,13 +296,6 @@ export default defineComponent({
         obtenerConvenio(convenioAporte);
       }
       obtenerCarro(carro.carroId);
-      setTimeout(function() {
-        isVisible.value = true;
-      },2000);
-
-      setTimeout(() => {
-        isVisible.value = false; 
-      }, 8000);
     });
 
     const obtenerCarro = (carroId) =>{

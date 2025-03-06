@@ -303,7 +303,7 @@ export default defineComponent({
 
       setTimeout(() => {
         isVisible.value = false; 
-      }, 8000);
+      }, 9000);
     });
 
     const obtenerCarro = (carroId) =>{
@@ -458,7 +458,13 @@ export default defineComponent({
   display: inline-block;  /* Se comporta como un bloque en línea */
   .position-relative{
     text-align:center;
-    width:700px;
+    width:100%;
+    .w-700 {
+      width:700px;
+      @media (max-width: 768px) {
+        width:100%;
+      }
+    }
     @media (max-width: 768px) {
         width:100%;
       }
