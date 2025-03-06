@@ -62,6 +62,46 @@
             </p>
         </div>
     </section>
+    <!--Seccion principal Banner-->
+  <section class="section-patente" style="max-width: 413px;background:none;margin-top:-50px;">
+    <Form autocomplete="off" class="" novalidate="novalidate"
+                      @submit="saveChanges1()"
+                      :validation-schema="cotizacionValidator">
+
+    <div class="container-patente" style="margin-top:0;">
+      <h1>INGRESE SU PATENTE</h1>
+      <div class="input-box">
+        <div class="plate-format">
+          <Field 
+            v-slot="{ field,handleChange }"
+            v-model="cotizacionDetails.vehiculo.patente"
+            name="patente"
+            value="value"
+          >
+            <Prime-InputMask slotChar='' :unstyled="true"
+                          mask="**** **"
+                        class="form-control form-control-lg form-control-solid patente mb-3 mb-lg-0"
+                        maxlength="7"
+                        placeholder="SOAP 25"
+                        v-model="cotizacionDetails.vehiculo.patente"
+                        v-bind="field"
+                        @update:modelValue="handleChange" :model-value="field.value"
+                        /></Field>
+        </div>
+      </div>
+                                <div class="fv-plugins-message-container">
+                                  <div class="fv-help-block">
+                                    <ErrorMessage name="patente" />
+                                  </div>
+                                </div>
+      <p class="helper-text">Sin espacios, puntos o guión.</p>
+      <Prime-Button :loading="loading" type="submit"  label="COMPRAR"  class="buy-button"/> 
+
+    </div>
+    </Form>
+  </section>
+  <!--Fin Seccion principal Banner-->
+
     <!-- Seccion del texto fin -->
 
     <!-- Inicio de como obtener tu descuento -->
@@ -151,253 +191,294 @@
     <!-- Seccion del texto fin -->
   <Toast />
   </template>
-  <script lang="ts">
-  import { ref, defineComponent, onMounted, computed, nextTick } from "vue";
-  import _ from "lodash";
-  import { useRouter } from "vue-router";
-  import { useConvenioStore } from "@/stores/convenio";
-  import { useAporteStore } from "@/stores/aporte";
-  import { useComunaStore } from "@/stores/comuna";
-  import type { IAporte } from "@/stores/aporte";
-  import * as Yup from "yup";
-  import Toast from 'primevue/toast';
-  import ToastService from 'primevue/toastservice';
-  import Swal from "sweetalert2/dist/sweetalert2.js";
-  import { useToast } from 'primevue/usetoast';
-  import VueQrcode from '@chenfengyuan/vue-qrcode';
-  import OverlayPanel from 'primevue/overlaypanel';
-  import { ShareNetwork } from "vue3-social-sharing";
   
-  import moment from "moment";
-  moment.locale("es");
-  
-  export default defineComponent({
-    name: "aporte-list",
-    components: {
-      VueQrcode, 
-      OverlayPanel, Toast, ShareNetwork
-    },
-    
-    setup() {
-      const router = useRouter();
-      const toast = useToast();
-      const aporte = ref<IAporte>();
-      const store = useAporteStore();
-      const storeConvenio = useConvenioStore();
-      const storeComuna = useComunaStore();
-      const comuna = ref('');
-      const compania = ref({});
-      const canvasContainer = ref(null);
-      const op = ref();
-      const sharingInfo = ref({
-          title: 'My perfect test title',
-          url: 'https://example.com',
-          description: 'My perfect description',
-          quote: 'My perfect quote',
-          hashtags: 'tag1,tag2',
-          twitterUser: 'POTUS',
-          media:
-            'https://www.soapbomberos.cl/media/logos/default.png',
-        });
-  
-      const share = ref(false);
-      onMounted(async () => {
-        buscarAportes();
-        obtenerComunas();
-      });
-      const copiarAlPortapapeles = () => {
-        const canvas = canvasContainer.value.querySelector('canvas');
-        if (canvas && navigator.clipboard) {
-          canvas.toBlob(blob => {
-            navigator.clipboard.write([
-              new ClipboardItem({
-                'image/png': blob,
-              }),
-            ]);
-          });
-          toast.add({ severity: 'info', summary: 'Info', detail: 'Imagen QR copiada al porta papeles. Ya puedes compartir "pegandola donde quieras"', life: 3000 });
-        } else {
-          toast.add({ severity: 'error', summary: 'Info', detail: 'No pudimos copiar el QR a tu porta papeles', life: 3000 });
-        }
-      }
-      const buscarAportes = () => {
-        store.getAportes()
-          .then(() => {
-            loading.value = false;
-          })
-          .catch(() => {
-            const [error] = Object.values(store.aporteErrors);
-            Swal.fire({
-              text: error,
-              icon: "error",
-              buttonsStyling: false,
-              confirmButtonText: "Ok",
-              heightAuto: false,
-              customClass: {
-                confirmButton: "btn fw-semobold btn-light-primary",
-              },
-            })
-          });
-      };
-      const toggle = (event, param) => {
-          op.value.hide();
-          console.log('x' + param);
-          compania.value = param;
-          share.value = false;
-          nextTick(() => {
-            //op.value.show(event);
-            share.value = true;
-            const miDiv = document.getElementById("share-div");
-            window.scrollTo({
-              top: miDiv.offsetTop,
-              left: 0,
-              behavior: "smooth",
-            });
-            sharingInfo.value = {
-              title: 'Hola. Te invito a que tu también ayudes a Bomberos de Chile.',
-              url: 'https://www.soapbomberos.cl',
-              description: 'Compra el SOAP en '+ compania.value.url + 'y haz un aporte a ' + compania.value.compania + '.',
-              quote: 'Hola. Te invito a que tu tambien ayudes a Bomberos de Chile.',
-              hashtags: 'soap,ayuda,heroes,hazloporellos',
-              twitterUser: '',
-              media:
-                'https://www.soapbomberos.cl/media/logos/default.png',
-            };
-            
-          });
-      }
-      const buscarConvenios = async () => {
-        await storeConvenio.getConvenios()
-          .catch(() => {
-            const [error] = Object.values(storeConvenio.convenioErrors);
-            Swal.fire({
-              text: error,
-              icon: "error",
-              buttonsStyling: false,
-              confirmButtonText: "Ok",
-              heightAuto: false,
-              customClass: {
-                confirmButton: "btn fw-semobold btn-light-primary",
-              },
-            })
-          });
-      };
-      const obtenerComunas = () => {
-        storeComuna.getComunas()
-          .catch(() => {
-            const [error] = Object.values(storeComuna.comunaErrors);
-            Swal.fire({
-              text: error,
-              icon: "error",
-              buttonsStyling: false,
-              confirmButtonText: "Ok",
-              heightAuto: false,
-              customClass: {
-                confirmButton: "btn fw-semobold btn-light-primary",
-              },
-            })
-          });
-      };
-      const buscarAporte = async (comuna) => {
-        loading.value = true;
-        await buscarConvenios();
-        store.getAporte(comuna)
-          .then(() => {
-            loading.value = false;
-            var convenios = storeConvenio.allConvenios.filter(c=>c.comuna==comuna);
-            store.allAportes.forEach((aporte, index) => {
-              var convenio = convenios.find(c=>c.nombre == aporte.compania);
-              if(convenio){
-                aporte.url = 'https://www.soapbomberos.cl/yo-apoyo/' + convenio.codigo;
-              }
-              
-            });
-            //recorremos y ponemos la info al convenio
-          })
-          .catch(() => {
-            const [error] = Object.values(store.aporteErrors);
-            Swal.fire({
-              text: error,
-              icon: "error",
-              buttonsStyling: false,
-              confirmButtonText: "Ok",
-              heightAuto: false,
-              customClass: {
-                confirmButton: "btn fw-semobold btn-light-primary",
-              },
-            })
-          });
-      };
-      const dt = ref();
-      const allAportes = computed(() => {
-        return store.allAportes;
-      });
-      const currentAporte = computed(() => {
-        return store.currentAporte;
-      });
-      const allComunas = computed(() => {
-        return storeComuna.allComunas;
-      });
-  
-      const copyClip = (url)=>{
-        navigator.clipboard.writeText(url),
-        toast.add({ severity: 'info', summary: 'Info', detail: 'Url copiada al porta papeles', life: 3000 });
-      }
-      const loading = ref(true);
-  
-      const networks = [
-    {
-      network: 'facebook',
-      name: 'Facebook',
-      icon: 'fab fah fa-lg fa-facebook-f',
-      color: '#1877f2',
-    },
-    
-    {
-      network: 'linkedin',
-      name: 'LinkedIn',
-      icon: 'fab fah fa-lg fa-linkedin',
-      color: '#007bb5',
-    },
-  
-    {
-      network: 'sms',
-      name: 'SMS',
-      icon: 'far fah fa-lg fa-comment-dots',
-      color: '#333333',
-    },
-    {
-      network: 'telegram',
-      name: 'Telegram',
-      icon: 'fab fah fa-lg fa-telegram-plane',
-      color: '#0088cc',
-    },
-    {
-      network: 'x',
-      name: 'X',
-      icon: 'fab fah fa-lg fa-x-twitter',
-      color: '#1da1f2',
-    },
-     {
-      network: 'whatsapp',
-      name: 'Whatsapp',
-      icon: 'fab fah fa-lg fa-whatsapp',
-      color: '#25d366',
+
+<script lang="ts">
+import { ref, defineComponent, computed, onMounted } from "vue";
+import { VueReCaptcha, useReCaptcha } from 'vue-recaptcha-v3'
+import { useBus } from  "@/core/bus/bus"; 
+import { ErrorMessage, Field, Form } from "vee-validate";
+import Price from "@/components/widgets/Price.vue";
+import { useTerminalStore } from "@/stores/terminal";
+import ChatBot from "@/components/widgets/ChatBot.vue";
+import Suscripcion from "@/components/widgets/Suscripcion.vue";
+import _ from "lodash";
+import * as Yup from "yup";
+import { useRouter, useRoute} from "vue-router";
+import { useConvenioStore } from "@/stores/convenio";
+import { useCotizacionStore } from "@/stores/cotizacion";
+import { useCarroCompraStore } from "@/stores/carroCompra";
+import { vMaska } from "maska"
+import Swal from "sweetalert2/dist/sweetalert2.js";
+import { patenteEsValido } from "@/core/validators/YupPatente";
+import router from "@/router";
+import { useGtm } from '@gtm-support/vue-gtm';
+const isVisible = ref(false);
+
+export interface IVehiculo {
+  patente: string
+}
+export interface ICotizacion {
+  vehiculo: IVehiculo,
+  carroId:string,
+  convenioAporte:string;
+  terminal:string;
+  terminalEmail:string;
+  token:string;
+}
+export default defineComponent({
+  name: "main-dashboard",
+  components: {
+    Price,
+    ChatBot,
+    ErrorMessage,
+    Field,
+    Form,
+    Suscripcion
+  }, 
+  setup() {
+    const router = useRouter();
+    const store = useCotizacionStore();
+    const storeTerminal = useTerminalStore();
+    const storeConvenio = useConvenioStore();
+    const storeCarro = useCarroCompraStore();
+    let loading = ref(false);
+    const { bus } = useBus();
+    var gtm = useGtm();
+    const mostrarChatBot = ref(false);
+    const botonChatBot = ref(false);
+    const cotizacionValidator = Yup.object().shape({
+      patente: Yup.string().required("Es obligatorio").label("Patente").test("yupIsPatente", "Patente ingresada no es valida", function (value) {
+          return patenteEsValido(value);
+        }),
+    });
+    const route = useRoute();
+    const convenioAporte = route.params.id;
+    var jsonCarro = store.getCarro();
+    let carro = {carroId:''};
+    if(jsonCarro){
+      carro = JSON.parse(store.getCarro());
     }
-  ];
+    const terminal = ref({});
+    var jsonTerminal = storeTerminal.getTerminalStorage();
+    if(jsonTerminal){
+      terminal.value = JSON.parse(jsonTerminal);
+    }
+    const { executeRecaptcha, recaptchaLoaded } = useReCaptcha()
+
+    const recaptcha = async () => {
+      await recaptchaLoaded()
+      const token = await executeRecaptcha('login')
+      return token;
+    }
+    const cotizacionDetails= ref<ICotizacion>({
+      carroId : carro.carroId,
+      convenioAporte:'',
+      terminal: terminal.value.terminalId,
+      terminalEmail: terminal.value.email,
+      token:'',
+      vehiculo : {
+        patente : store.currentCotizacion?.patente
+    }});
+    Yup.addMethod(Yup.string, "yupIsPatente", function (mensaje) {
+      const { message } = mensaje;
+      return this.test("yupIsPatente", message, function (value) {
+        const { path, createError } = this;
+        const { some, more, args } = mensaje;
+        // [value] - value of the property being tested
+        // [path]  - property name,
+        // ...
+        return patenteEsValido(value);
+      });
+    });
+    onMounted(() => {
+      if(convenioAporte){
+        obtenerConvenio(convenioAporte);
+      }
+      obtenerCarro(carro.carroId);
+      setTimeout(function() {
+        isVisible.value = true;
+      },2000);
+
+      setTimeout(() => {
+        isVisible.value = false; 
+      }, 8000);
+    });
+
+    const obtenerCarro = (carroId) =>{
+      storeCarro
+        .getCarroCompra(carroId).then(()=>
+        {
+          if(storeCarro.currentCarroCompra.exitoso){
+            store.setCarro(JSON.stringify({carroId:null, cotizacionId:null}));
+            bus.emit("actualiza-carro-compra", 0);
+          }
+        });
+    }
+
+    const obtenerConvenio = (codigo) =>{
+      storeConvenio
+        .getConvenio(codigo).then(()=>{ 
+          cotizacionDetails.value.convenioAporte =storeConvenio.currentConvenio.codigo; 
+        });
+    }
+    const saveChanges1 = async () => {
+        loading.value = true;
+        // Activate indicator
+        obtenerCarro(carro.carroId);
+        cotizacionDetails.value.token = await recaptcha();
+        store.createCotizacion(cotizacionDetails.value)
+          .then(() => {
+            pushGtag(cotizacionDetails.value.vehiculo.patente);
+            loading.value = false;
+            bus.emit("actualiza-carro-compra", store.currentCotizacion.carroId);
+            store.setCarro(JSON.stringify({carroId:store.currentCotizacion.carroId, cotizacionId:store.currentCotizacion.cotizacionId}));
+
+            if(store.currentCotizacion.Propietario.rut=='1-9'){
+              //No hemos encontrado la información del vehículo. Si desea emitir, debe proporcionarla al momento de emitir.
+              Swal.fire({
+                text: "No hemos encontrado la información del vehículo. Si desea emitir, debe proporcionarla en los siguientes pasos",
+                icon: "success",
+                buttonsStyling: false,
+                confirmButtonText: "Ok!",
+                customClass: {
+                  confirmButton: "btn fw-bold btn-light-primary",
+                },
+              }).then(function () {
+                router.push({ name: "info-vehiculo", params:{id:store.currentCotizacion.cotizacionId} });
+              });
+            } else {
+              router.push({ name: "info-vehiculo", params:{id:store.currentCotizacion.cotizacionId} });
+            }
+          })
+          .catch(() => {
+            loading.value = false;
+            const [error] = Object.values(store.cotizacionErrors);
+            Swal.fire({
+                text: error,
+                icon: "error",
+                buttonsStyling: false,
+                confirmButtonText: "Ok",
+                heightAuto: false,
+                customClass: {
+                confirmButton: "btn fw-semobold btn-light-primary",
+                },
+            });
+          });
+    };
+    const currentConvenio = computed(() => {
+      return storeConvenio.currentConvenio;
+    });
+    const pushGtag = (plate) => {
+        gtm.trackEvent(
+          {
+            event: "begin_checkout", 
+            step:"1",
+            label:"paso_01",
+            form_name:"formulario_principal",
+            item_list_id: "PLATE",
+            item_list_name: "PLATE",
+            items: [
+            {
+                item_id: "plate",
+                item_name: plate
+            }
+          ]
+        });
+        gtm.trackEvent(function() {
+          this.reset();
+        });
+        console.log('loaded pushGtag');
+    };
+    const pushGtagModificar = () => {
+        gtm.trackEvent(
+          {event: "select_item", 
+          item_name:"modificar_poliza",
+          button:"modificar_poliza_home"
+        });
+        gtm.trackEvent(function() {
+          this.reset();
+        });
+        console.log('loaded pushGtag');
+    };
+    const pushGtagDescargar = () => {
+        gtm.trackEvent({event: "select_item", 
+          item_name:"descargar_poliza",
+          button:"descargar_poliza_home"
+        });
+        gtm.trackEvent(function() {
+          this.reset();
+        });
+        console.log('loaded pushGtag');
+    };
+
+    const beforeEnter = (el) => {
+      el.style.transition = 'none';  // Sin transición al principio
+      el.style.transform = 'translateY(-100%)';  // Coloca el div fuera de la vista
+    };
+    const enter = (el, done) => {
+      el.offsetHeight; // Forzar reflow para aplicar el estilo de entrada
+      el.style.transition = 'transform 3s ease'; // Aplica la transición para entrar
+      el.style.transform = 'translateY(0)'; // Mueve el div a su posición final
+      done(); // Finaliza la transición
+    };
+
+    const leave = (el, done) => {
+      el.style.transition = 'transform 3s ease'; // Aplica la transición para salir
+      el.style.transform = 'translateY(-100%)'; // Mueve el div hacia arriba
+      // Debemos usar setTimeout para cambiar el valor de 'isVisible' después de la animación
+      setTimeout(() => {
+        isVisible.value = false; // Cambia a invisible después de que termina la animación de salida
+        done(); // Finaliza la transición
+      }, 3000); // 5000 ms para coincidir con la duración de la animación
+    };
+
+    return {
+      saveChanges1,
+      cotizacionDetails,
+      cotizacionValidator,
+      mostrarChatBot,
+      botonChatBot,
+      loading,
+      currentConvenio,
+      recaptcha,
+      pushGtagDescargar,
+      pushGtagModificar,beforeEnter, enter, leave, isVisible
+    };
+  },
+});
+</script>
+<style lang="scss" scoped>
+.div-asistencias {
+  position: absolute;  /* Posición absoluta */
+  z-index: 999;
+  transform: translateX(-100%);  /* Centra el div horizontalmente */
+  width: 100%;
+  display: inline-block;  /* Se comporta como un bloque en línea */
+  .position-relative{
+    text-align:center;
+    width:700px;
+    @media (max-width: 768px) {
+        width:100%;
+      }
+    img {
+      margin:auto;
+      width:700px;
+      @media (max-width: 768px) {
+        width:100%;
+      }
+    }
+  }
   
-      return {
-        loading,
-        buscarAportes,
-        allAportes,
-        comuna,
-        compania,
-        aporte, currentAporte, buscarAporte,
-        allComunas, toast, copyClip, toggle, op, canvasContainer, copiarAlPortapapeles, share, networks, sharingInfo
-      };
-    },
-  });
-  </script>
+}
+
+.sticky-alert{text-align:center;position:absolute; top:0; left:0;width:100%;border-radius: 0;
+background-color:rgba(255, 0, 130, 0.72)!important; 
+border:0!important;
+color:#fff;}
+.sticky-alert a{opacity:1; color:#fff!important;font-size: 1.2rem;}
+.sticky-alert i{color:#fff!important;}
+</style>
   <style lang="scss" scoped>
   .social-network {
     padding: 3px;
