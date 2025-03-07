@@ -259,6 +259,15 @@ const routes: Array<RouteRecordRaw> = [
         },
       },
       {
+        path: "/poliza-correo",
+        name: "info-poliza-correo",
+        component: () => import("@/views/DescargaRapidaView.vue"),
+        meta: {
+          pageTitle: "Dashboard",
+          breadcrumbs: ["Dashboards"],
+        },
+      },
+      {
         path: "/info-condiciones",
         name: "info-condiciones",
         component: () => import("@/views/CondicionesView.vue"),

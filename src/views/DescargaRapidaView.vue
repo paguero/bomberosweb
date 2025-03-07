@@ -22,61 +22,9 @@
     </div>
 </section>
 
-<section class="section-slider"  v-if="visible">
-    <div class="slider-container">
-        <div data-bs-ride="carousel" data-v-38c47deb="" class="recuperar-poliza">
-            <div class="carousel-inner" data-v-38c47deb="">
-                <div class="p-10 pt-5 text-white" data-v-38c47deb="" style="background-image: url('/media/banners/vigencia-extendida-.png') !important;">
-                    <div class="flex-column align-items-start justify-content-center pb-10" data-v-38c47deb="">
-                      <Form
-                                      id="kt_account_edificio_details_form"
-                                      class="form">
-                <div class="tab-content" id="myTabContent">
-                  <div
-                    class="tab-pane fade show active"
-                    id="home3"
-                    role="tabpanel"
-                  >
-                    <div class="row m-b-lg">
-                      <div class="col-md-12">
-                       <div class="buySuccess-form">
-                          <h5 class="text-white">
-                            Por favor ingresa el código que hemos enviado al correo electronico <b>{{email}}</b>
-                          </h5>
-                            <div class="mb-5">
-                              <label for="patente" class="mb-5">Ingresa el Código de validación</label>
-
-                                <v-otp-input
-                                        ref="otpInput"
-                                        input-classes="otp-input"
-                                        :conditionalClass="['one', 'two', 'three', 'four']"
-                                        separator="-"
-                                        inputType="letter-numeric"
-                                        :num-inputs="6"
-                                        v-model:value="bindValue"
-                                        :should-auto-focus="true"
-                                        :should-focus-order="true"
-                                        @on-change="handleOnChange"
-                                        @on-complete="handleOnComplete"
-                                        :placeholder="['*', '*', '*', '*', '*', '*']"
-                                      />
-                            </div>
-
-                        </div>
-                      </div>
-                  </div>
-                </div>
-              </div>
-              </Form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
 
-<section class="login-section" v-else>
+<section class="login-section">
     <div class="login-content align-items-start">
       <!-- Formulario de inicio de sesión -->
       <div class="login-container" style="max-width:350px">
@@ -97,7 +45,7 @@
                       <div class="col-md-12">
                        <div class="buySuccess-form">
                           <h5>
-                            Para buscar tu póliza, ingresa la Patente del vehículo y te enviaremos un código de 6 números al correo electrónico utilizado en la compra.
+                            Esta opción te permite obtener una copia de tu póliza, la cual es enviada al correo electrónico utilizado en la compra.
                           </h5>
                             <div class="mb-5">
                               <label for="patente">Patente</label>
@@ -108,10 +56,9 @@
                                                                 name="patente"
                                                                value="value"
                                                                v-mask="'AAAAAA'"
-                                                               @change="obtenerVehiculo"
                                                               >
                                                               <Prime-InputText
-                                                              class="form-control form-patente p-2"
+                                                              class="form-control form-patente p-2 text-uppercase"
                                                               name="patente"
                                                               maxlength="8"
                                                               v-bind="field"
@@ -132,22 +79,24 @@
                               <Prime-Button 
                                                       type="submit"
                                                       class="btn btn-primary"
-                                                      label="Continuar"
+                                                      label="Enviar a mi Correo"
                                                       :loading="loading"/>
                             </div>
-                           
+                            <span v-if="email!=''">Hemos enviado tu póliza al correo electrónico <b>{{email}}</b></span>
+                            <div class="alert alert-info" v-if="patenteNoEncontrada.buscada && !patenteNoEncontrada.encontrada">
+                              Lo sentimos, no hemos encontrado la patente.
+                              Si crees que esto es un error y tienes un cargo en tu cuenta por el cobro, solicitanos que busquemos un pago
+                              <button class="btn btn-sm btn-warning" type="button" @click="saveChanges2">Busca y encuentra un pago asociado</button>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </Form><div class="divider">
-                <div class="position-relative">
-                !Ya tienes disponible la opción rápida para obtener la póliza directamente a tu correo!
-                <router-link :to="{name:'info-poliza-correo'}" class="text-link">LLevame hasta ahí</router-link>
-                </div>
+                </Form>
               
-                
+
+              <div class="divider">
           <hr>
         </div>
       
@@ -177,8 +126,6 @@ import moment from "moment";
 import { vMaska } from "maska"
 import { rutEsValido } from "@/core/validators/YupRut";
 import { patenteEsValido } from "@/core/validators/YupPatente";
-
-import VOtpInput from "vue3-otp-input";
 moment.locale("es");
 
 export default defineComponent({
@@ -186,35 +133,14 @@ export default defineComponent({
   components: {
     ErrorMessage,
     Field,
-    Form,
-    VOtpInput 
+    Form, 
   },
   
   setup() {
-    const otpInput = ref<InstanceType<typeof VOtpInput> | null>(null);
-    const bindModal = ref("");
-
-    const handleOnComplete = (value: string) => {
-      saveChanges2(value);
-    };
-
-    const handleOnChange = (value: string) => {
-      console.log("OTP changed: ", value);
-    };
-
-    const clearInput = () => {
-      otpInput.value?.clearInput();
-    };
-
-    const fillInput = (value: string) => {
-      console.log(value);
-      otpInput.value?.fillInput(value);
-    };
-
     const router = useRouter();
     const storeAuth = useAuthStore();
     const store = useCotizacionStore();
-    const storeUsuario = useUsuarioStore();
+    const patenteNoEncontrada = ref({buscada:false, encontrada:false});
     const loading = ref(false);
     const visible = ref(false);
     const email = ref('');
@@ -222,10 +148,7 @@ export default defineComponent({
     const cotizacionsValidator = Yup.object().shape({
       patente: Yup.string().required("Es obligatorio").label("Patente").test("yupIsPatente", "Patente ingresada no es valida", function (value) {
           return patenteEsValido(value);
-        })/*,
-		  rut: Yup.string().required("Es obligatorio").label("Marca").test("yupIsRut", "Rut ingresado no es valido", function (value) {
-          return rutEsValido(value);
-        }),*/
+        })
     });
 
     Yup.addMethod(Yup.string, "yupIsRut", function (mensaje) {
@@ -255,14 +178,16 @@ export default defineComponent({
 
     const saveChanges1 = () => {
       loading.value = true;
-        store.getEmision(cotizacionDetails.value)
+        store.getEmisionEmail(cotizacionDetails.value)
           .then(() => {
             visible.value = true;
             loading.value = false;
-            email.value = store.currentCotizacion.email;
+            email.value = store.currentCotizacion.cliente.email;
+            patenteNoEncontrada.value = {buscada:true, encontrada:true};    
           })
           .catch(() => {
             loading.value = false;
+            patenteNoEncontrada.value = {buscada:true, encontrada:false};
             const [error] = Object.values(store.cotizacionErrors);
             Swal.fire({
                 text: error,
@@ -277,24 +202,25 @@ export default defineComponent({
           });
     };
     
-    const saveChanges2 = (token) => { 
+    const saveChanges2 = () => { 
       loading.value = true;
-      storeUsuario.validarToken({usuarioId: currentCotizacion.value.usuarioId, token})
+      store.verificarPagoPatente(cotizacionDetails.value)
           .then(() => {
-            let user = new User(storeUsuario.usuario as any);
-                let profile = storeUsuario.usuario as any;
-                user.profile = profile,
-                idsrvAuth.storeUser(user).then(()=>{
-                  storeAuth.setAuthOIDC(user);
-                 location.href='/mis-polizas';
-                }).catch((e)=>{
-                  console.log('e ' + e); 
-                });
-
+            Swal.fire({
+                  text: 'Nuestro sistema encontró un pago asociado a tu patente. Se enviará la póliza a tu correo electrónico. Si deseas, puedes consultar nuevamente la patente en unos segundos',
+                  icon: "success",
+                  buttonsStyling: false,
+                  confirmButtonText: "OK",
+                  customClass: {
+                    confirmButton: "btn fw-bold btn-light-danger",
+                  },
+                }).then(()=>{
+                  saveChanges1();
+                });;
           })
           .catch((e) => {
                 loading.value = false;
-                const [error] = Object.values(storeUsuario.errors);
+                const [error] = Object.values(store.cotizacionErrors);
                 Swal.fire({
                   text: e+ ' ' + error,
                   icon: "error",
@@ -327,9 +253,8 @@ export default defineComponent({
       cotizacionDetails,
       cotizacionsValidator,
       value,
-      handleOnChange,
-      handleOnComplete,
-      email
+      email,
+      patenteNoEncontrada
     };
   },
 });

@@ -581,7 +581,7 @@ export default defineComponent({
       saveChanges,
       pushGtagDescargar,
       verificarPagoCarro,
-      //beforeEnter, enter, leave, isVisible,
+     // beforeEnter, enter, leave, isVisible,
       cerrarAsistencias
     };
   },

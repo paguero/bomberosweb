@@ -169,6 +169,17 @@ export const useCotizacionStore = defineStore("cotizacion", () => {
       });
   }
 
+  function getEmisionEmail(params: IConsultaCotizacion) {
+    return ApiService.post("cotizacion/v1/webhook/duplicado", params)
+      .then(({ data }) => {
+        setCotizacion(data);
+      })
+      .catch(({ response }) => {
+        setCotizacionError(response.data.errores);
+		    throw new Error();
+      });
+  }
+
   function createCotizacion(params: ICotizacion|any) {
     ApiService.setHeader();
     return ApiService.post("Cotizacion/v1/cotizacion", params)
@@ -229,6 +240,16 @@ export const useCotizacionStore = defineStore("cotizacion", () => {
       });
   }
 
+  
+  function verificarPagoPatente(params: ICotizacion|undefined) {
+    ApiService.setHeader();
+    return ApiService.post(`cotizacion/v1/webhook/consulta/pagos`, params)
+      .catch(({ response }) => {
+        setCotizacionError(response.data.errores);
+		    throw new Error();
+      });
+  }
+
   function verPdf(id: string|undefined) {
     return ApiService.get(`soap/poliza/pdf/${id}`)
       .catch(({ response }) => {
@@ -252,9 +273,10 @@ export const useCotizacionStore = defineStore("cotizacion", () => {
     setCarro,
     getCarro,
     getEmision,
+    getEmisionEmail,
     getEmisionValidacion,
     getEmisionesValidacion,
-    endoso, verificarPago
+    endoso, verificarPago, verificarPagoPatente
   };
 });
 
