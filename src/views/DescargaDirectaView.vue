@@ -22,7 +22,7 @@
     </div>
 </section>
 
-<section class="section-slider">
+<section class="section-slider d-none">
     <div class="slider-container">
         <div data-bs-ride="carousel" data-v-38c47deb="" class="recuperar-poliza">
             <div class="carousel-inner" data-v-38c47deb="">
@@ -126,7 +126,7 @@
                                                                @change="obtenerVehiculo"
                                                               >
                                                               <Prime-InputText
-                                                              class="form-control form-patente p-2"
+                                                              class="form-control form-patente p-2 text-uppercase"
                                                               name="patente"
                                                               maxlength="8"
                                                               v-bind="field"
@@ -151,6 +151,12 @@
                             </div>
                             </div>
                           </div>
+                          <div class="alert alert-info" v-if="patenteNoEncontrada.buscada && !patenteNoEncontrada.encontrada">
+                              ⚠️ Lo sentimos, no hemos encontrado la patente.
+                              Si crees que esto es un error y tienes un cargo en tu cuenta por el cobro, solicitanos que busquemos un pago
+                              <button class="btn btn-sm btn-warning" type="button" @click="saveChanges2">Busca y encuentra un pago asociado</button>
+                            </div>
+
                           <div class="card-body p-2">
                               <ul class="list-unstyled" v-if="currentCotizacion.vehiculo && currentCotizacion.emitida">
                                 <!-- Notif item -->
@@ -172,17 +178,8 @@
                                   </div>
                                   <!-- Action -->
                                   <div class="d-flex ms-auto align-items-center flex-row">
-                                    <p class="small me-5 text-nowrap">Acciones</p>
                                     <!-- Notification action START -->
-                                    <div class="dropdown position-absolute end-0 top-0 mt-3 me-3">
-                                      <a href="#" class="z-index-1 text-secondary btn position-relative py-0 px-2" id="cardNotiAction1" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="bi bi-three-dots"></i>
-                                      </a>
-                                      <!-- Card share action dropdown menu -->
-                                      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cardNotiAction1">
-                                        <li><a class="dropdown-item" :href="currentCotizacion.urlPoliza"> <i class="bi bi-download fa-fw pe-2"></i>Descargar PDF</a></li>
-                                      </ul>
-                                    </div>
+                                    <a :href="currentCotizacion.urlPoliza"> <i class="bi bi-download fa-fw pe-2"></i>Descargar PDF</a>
                                     <!-- Notification action END -->
                                     </div>
                                   </div>
@@ -234,7 +231,7 @@ export default defineComponent({
   setup() {
     const otpInput = ref<InstanceType<typeof VOtpInput> | null>(null);
     const bindModal = ref("");
-
+    const patenteNoEncontrada = ref({buscada:false, encontrada:false});
     const handleOnComplete = (value: string) => {
       console.log("OTP completed: ", value);
     };
@@ -294,12 +291,14 @@ export default defineComponent({
 
     const saveChanges1 = () => {
       loading.value = true;
-        store.getEmision(cotizacionDetails.value)
+        store.getEmisionDescarga(cotizacionDetails.value)
           .then(() => {
             loading.value = false;
+            patenteNoEncontrada.value = {buscada:true, encontrada:true};  
           })
           .catch(() => {
             loading.value = false;
+            patenteNoEncontrada.value = {buscada:true, encontrada:false};  
             const [error] = Object.values(store.cotizacionErrors);
             Swal.fire({
                 text: error,
@@ -314,6 +313,37 @@ export default defineComponent({
           });
     };
    
+    const saveChanges2 = () => { 
+      loading.value = true;
+      store.verificarPagoPatente(cotizacionDetails.value)
+          .then(() => {
+            Swal.fire({
+                  text: 'Nuestro sistema encontró un pago asociado a tu patente. Se enviará la póliza a tu correo electrónico. Si deseas, puedes consultar nuevamente la patente en unos segundos',
+                  icon: "success",
+                  buttonsStyling: false,
+                  confirmButtonText: "OK",
+                  customClass: {
+                    confirmButton: "btn fw-bold btn-light-danger",
+                  },
+                }).then(()=>{
+                  saveChanges1();
+                });;
+          })
+          .catch((e) => {
+                loading.value = false;
+                const [error] = Object.values(store.cotizacionErrors);
+                Swal.fire({
+                  text: e+ ' ' + error,
+                  icon: "error",
+                  buttonsStyling: false,
+                  confirmButtonText: "Intentar nuevamente!",
+                  customClass: {
+                    confirmButton: "btn fw-bold btn-light-danger",
+                  },
+                });
+              });
+    };
+
     const route = useRoute();
     
     const cotizacionDetails = ref<IConsultaCotizacion>({
@@ -327,6 +357,7 @@ export default defineComponent({
 
     return {
       saveChanges1,
+      saveChanges2,
       currentCotizacion,
       loading,
       visible,
@@ -334,7 +365,8 @@ export default defineComponent({
       cotizacionsValidator,
       value,
       handleOnChange,
-      handleOnComplete
+      handleOnComplete,
+      patenteNoEncontrada
     };
   },
 });

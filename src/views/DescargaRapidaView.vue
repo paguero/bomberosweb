@@ -82,9 +82,13 @@
                                                       label="Enviar a mi Correo"
                                                       :loading="loading"/>
                             </div>
-                            <span v-if="email!=''">Hemos enviado tu póliza al correo electrónico <b>{{email}}</b></span>
+                            <span v-if="email!=''">📧 Hemos enviado tu póliza al correo electrónico <b>{{email}}</b>
+                            <br/>
+                            ⚠️ ¿Tienes problemas para recibir tu póliza en el correo?. Por favor usa esta opción que permite descargar directamente el PDF
+                            <router-link :to="{name:'info-poliza-directa'}" class="text-link">LLevame hasta ahí</router-link>
+                            </span>
                             <div class="alert alert-info" v-if="patenteNoEncontrada.buscada && !patenteNoEncontrada.encontrada">
-                              Lo sentimos, no hemos encontrado la patente.
+                              ⚠️ Lo sentimos, no hemos encontrado la patente.
                               Si crees que esto es un error y tienes un cargo en tu cuenta por el cobro, solicitanos que busquemos un pago
                               <button class="btn btn-sm btn-warning" type="button" @click="saveChanges2">Busca y encuentra un pago asociado</button>
                             </div>

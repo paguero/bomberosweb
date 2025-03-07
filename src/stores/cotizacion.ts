@@ -157,6 +157,16 @@ export const useCotizacionStore = defineStore("cotizacion", () => {
       });
   }
 
+  function getEmisionDescarga(params: IConsultaCotizacion) {
+    return ApiService.post("cotizacion/v1/cotizacion/emision/consulta/descarga", params)
+      .then(({ data }) => {
+        setCotizacion(data);
+      })
+      .catch(({ response }) => {
+        setCotizacionError(response.data.errores);
+		throw new Error();
+      });
+  }
 
   function getEmision(params: IConsultaCotizacion) {
     return ApiService.post("cotizacion/v1/cotizacion/emision/consulta", params)
@@ -276,7 +286,8 @@ export const useCotizacionStore = defineStore("cotizacion", () => {
     getEmisionEmail,
     getEmisionValidacion,
     getEmisionesValidacion,
-    endoso, verificarPago, verificarPagoPatente
+    endoso, verificarPago, verificarPagoPatente,
+    getEmisionDescarga
   };
 });
 

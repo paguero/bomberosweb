@@ -268,6 +268,15 @@ const routes: Array<RouteRecordRaw> = [
         },
       },
       {
+        path: "/poliza-directa",
+        name: "info-poliza-directa",
+        component: () => import("@/views/DescargaDirectaView.vue"),
+        meta: {
+          pageTitle: "Dashboard",
+          breadcrumbs: ["Dashboards"],
+        },
+      },
+      {
         path: "/info-condiciones",
         name: "info-condiciones",
         component: () => import("@/views/CondicionesView.vue"),
