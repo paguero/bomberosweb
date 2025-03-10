@@ -73,7 +73,7 @@
           <div class="carousel-item slide1 active">
             <div class="content-slider slide flex-column align-items-start justify-content-center">
               <h2>Compra tu <br>SOAP Bomberos<br>
-              antes y obtén gratis <br>asistencia en carretera</h2>
+              y obtén gratis <br>asistencia en carretera</h2>
               <router-link :to="{name:'promo-grua'}" class="benefit-button">Conoce este beneficio <span>→</span></router-link>
             </div>
           </div>
