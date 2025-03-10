@@ -1,10 +1,10 @@
 <template>
-  <!--<Transition @before-enter="beforeEnter" @enter="enter" @leave="leave">
-    <div class="div-asistencias" v-if="isVisible">
+  <Transition @before-enter="beforeEnter" @enter="enter" @leave="leave">
+    <div class="div-asistencias" v-if="isVisible && allCotizaciones?.length==1">
     <InviteFriendsModal @cerrarAsistencias="cerrarAsistencias"/>
     </div>
   </Transition>
--->
+
     <div class="overlayed-loader fullscreen-overlayed-loader" v-if="loading">
     <div class="fullscreen-overlayed-loader__overlay"></div> 
     <div class="ecw-loader-animation fullscreen-overlayed-loader__loader">
@@ -68,6 +68,9 @@
                 
             </tbody>
         </table>
+
+        <button v-if="allCotizaciones?.length==1" type="button" @click="cerrarAsistencias(true)" class="btn btn-lg btn-danger-soft active me-2 mb-4 mb-sm-0">Quiero canjear mis asistencias Gratis</button>
+            
     </div>
     <img src="/media/misc/foto-activa-seguros.webp" alt="Bomberos exitosos">
     <h2>¡Has comprado tu SOAP y aportaste a Bomberos de Chile con éxito!</h2>
@@ -403,7 +406,7 @@ export default defineComponent({
     const cerrarAsistencias = (continuar) => {
       isVisible.value = false;
       if(continuar){
-        window.open(`http://127.0.0.1:5173/encuesta/${carroId}/${id.value}`);
+        window.open(`https://asistencias.aseguraonline.cl/encuesta/${carroId}/${id.value}`);
       }
     };
 
@@ -550,7 +553,7 @@ export default defineComponent({
         console.log('loaded pushGtag');
     };
 
-    /*const beforeEnter = (el) => {
+    const beforeEnter = (el) => {
       el.style.transition = 'none';  // Sin transición al principio
       el.style.transform = 'translateY(-100%)';  // Coloca el div fuera de la vista
     };
@@ -569,7 +572,7 @@ export default defineComponent({
         this.isVisible = false; // Cambia a invisible después de que termina la animación de salida
         done(); // Finaliza la transición
       }, 5000); // 5000 ms para coincidir con la duración de la animación
-    };*/
+    };
 
     return {
       loading,
@@ -581,7 +584,7 @@ export default defineComponent({
       saveChanges,
       pushGtagDescargar,
       verificarPagoCarro,
-     // beforeEnter, enter, leave, isVisible,
+      beforeEnter, enter, leave, isVisible,
       cerrarAsistencias
     };
   },
@@ -693,6 +696,20 @@ export default defineComponent({
   .radar:nth-child(4) {
       animation-delay: .15s;
   }
+}
+
+a:hover {
+    --bs-link-color-rgb: var(--bs-link-hover-color-rgb);
+}
+.btn-danger-soft {
+    color: #d6293e;
+    background-color: rgba(214, 41, 62, 0.1);
+}
+.btn-danger-soft.active {
+  color: #fff !important;
+    background-color: #d6293e !important;
+    border-color: #d6293e !important;
+
 }
 
 </style>
