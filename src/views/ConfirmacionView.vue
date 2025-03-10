@@ -26,17 +26,6 @@
 
 
 <section class="vehicle-summary">
-    <div class="vehicle-details p-4" v-for="(cotizacion, x) in allCotizaciones" v-bind:key="x">
-      <p><router-link :to="{name:'info-persona', params:{id:cotizacion.cotizacionId}}" class="text-inherit">
-        <strong>{{$filters.formatPatente(cotizacion.vehiculo.patente)}} {{cotizacion.vehiculo.modelo}} / {{cotizacion.vehiculo.anio}}</strong></router-link>
-      </p>
-      <p>{{cotizacion.cliente.nombre}} {{cotizacion.cliente.apellidoPaterno}}</p>
-      <a href="#" @click="confirmarEliminarCotizacion(cotizacion.cotizacionId)" class="remove-link">
-       🗑️ Remover
-      </a>
-    </div>
-  
-    <router-link :to="{name:'info-nuevo', params:{id:currentCarroCompra?.carroId??0}}"  class="add-vehicle-button">+ Agregar nuevo vehículo</router-link>
     <Form
                                       id="kt_account_edificio_details_form"
                                       novalidate="novalidate"
@@ -69,6 +58,18 @@
       </p>
     </div>
   </Form>
+  <div class="vehicle-details p-4" v-for="(cotizacion, x) in allCotizaciones" v-bind:key="x">
+      <p><router-link :to="{name:'info-persona', params:{id:cotizacion.cotizacionId}}" class="text-inherit">
+        <strong>{{$filters.formatPatente(cotizacion.vehiculo.patente)}} {{cotizacion.vehiculo.modelo}} / {{cotizacion.vehiculo.anio}}</strong></router-link>
+      </p>
+      <p>{{cotizacion.cliente.nombre}} {{cotizacion.cliente.apellidoPaterno}}</p>
+      <a href="#" @click="confirmarEliminarCotizacion(cotizacion.cotizacionId)" class="remove-link">
+       🗑️ Remover
+      </a>
+    </div>
+  
+    <router-link :to="{name:'info-nuevo', params:{id:currentCarroCompra?.carroId??0}}"  class="add-vehicle-button">+ Agregar nuevo vehículo</router-link>
+    
   </section>
   
   <section class="auto-payment-section">
