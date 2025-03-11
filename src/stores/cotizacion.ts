@@ -250,6 +250,15 @@ export const useCotizacionStore = defineStore("cotizacion", () => {
       });
   }
 
+  function verificaPagoPOS(carroId:string) {
+    ApiService.setHeader();
+    return ApiService.get(`Cotizacion/v1/emision/soap/carro/validacion/pos/check`, carroId)
+      .catch(() => {
+		    throw new Error();
+      });
+  }
+
+  
   
   function verificarPagoPatente(params: ICotizacion|undefined) {
     ApiService.setHeader();
@@ -287,7 +296,7 @@ export const useCotizacionStore = defineStore("cotizacion", () => {
     getEmisionValidacion,
     getEmisionesValidacion,
     endoso, verificarPago, verificarPagoPatente,
-    getEmisionDescarga
+    getEmisionDescarga, verificaPagoPOS
   };
 });
 

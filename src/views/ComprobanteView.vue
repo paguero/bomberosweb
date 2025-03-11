@@ -69,7 +69,7 @@
             </tbody>
         </table>
 
-        <button v-if="allCotizaciones?.length==1" type="button" @click="cerrarAsistencias(true)" class="btn btn-lg btn-danger-soft active me-2 mb-4 mb-sm-0">Quiero canjear mis asistencias Gratis</button>
+        <button v-if="allCotizaciones?.length==1" type="button" @click="cerrarAsistencias(true)" class="btn btn-lg btn-danger-soft active me-2 mb-4 mb-sm-0">Quiero mis asistencias Gratis</button>
             
     </div>
     <img src="/media/misc/foto-activa-seguros.webp" alt="Bomberos exitosos">

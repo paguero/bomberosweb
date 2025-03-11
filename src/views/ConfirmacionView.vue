@@ -102,7 +102,7 @@
   <div class="content-wrapper flex-row-fluid container space-2 space-3--lg">
     <!-- start page main wrapper -->
     <!-- end page main wrapper -->
-    <Prime-Dialog v-model:visible="modalPOS" modal :closable="false" header="Pago POS" :style="{ width: '50vw' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+    <Prime-Dialog v-model:visible="modalPOS" style="{ z-index: 3 }" modal :closable="false" header="Pago POS" :style="{ width: '50vw' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
       <div class="d-flex flex-column flex-md-row justify-content-center align-items-center">
           <div class="d-flex flex-column">Por favor, termina el pago en la POS. Una vez aprobado, esta ventana se cerrará automáticamente.<br/> No cierres este mensaje.
           <p v-if="mostrarMensaje" class="alert alert-secondary mt-5 text-black">
@@ -113,6 +113,10 @@
           </div>
           <img src="/media/img/redelcom.png"/>
       </div>
+        <div class="flex align-items-center gap-3 mb-5" v-if="visibleEspecial">
+          <h4>El proceso está tardando más de lo esperado. Por favor, si lo desea puedes consultar si el pago ya ha sido recepcionado.</h4>
+          <button @click="verificarPagoCarro" type="button" class="btn btn-success btn-lg align-items-center">Verifica si el pago llegó</button>          
+        </div>
         <div class="flex align-items-center gap-3">
           <Prime-Button label="Cancelar" @click="refrescarCarro" text class="btn btn-primary btn-lg d-flex justify-content-between align-items-center"  />          
         </div>
@@ -159,6 +163,7 @@ export default defineComponent({
     const loading = ref(true);
     const modalPOS = ref(false);
     const mostrarMensaje = ref(false);
+    const visibleEspecial = ref(false);
     const signalr = useSignalR();
     var gtm = useGtm(); 
     
@@ -184,6 +189,11 @@ export default defineComponent({
             pushGtag(currentCarroCompra.value.totalPagar);
             if(storeCarro.currentCarroCompra.urlPago=='RDC'){
               modalPOS.value = true;
+
+              setTimeout(function() {
+                visibleEspecial.value = true;
+              }, 10000);
+
             } else {
               location.href = storeCarro.currentCarroCompra.urlPago;
             }
@@ -294,7 +304,40 @@ export default defineComponent({
       obtenerCarro(carro.carroId);
     });
 
-    const refrescarCarro = () => {     
+    const verificarPagoCarro = async () => {
+        loading.value = true;
+        await store.verificaPagoPOS(carro.carroId)
+          .then(() => {
+            loading.value = false;
+            Swal.fire({
+                text: 'El pago se encuentra acreditado, te enviaremos al comprobante. Muchas gracias',
+                icon: "success",
+                buttonsStyling: false,
+                confirmButtonText: "Ok",
+                heightAuto: false,
+                customClass: {
+                confirmButton: "btn fw-semobold btn-light-primary",
+                },
+            }).teh(()=>{
+              router.push({ name: "info-comprobante", params:{id:carro.carroId} });
+            });
+          }).catch(() => {
+            loading.value = false;
+            Swal.fire({
+                text: 'Aún no hemos recibido un pago efectivo. Si deseas puedes seguir esperando',
+                icon: "info",
+                buttonsStyling: false,
+                confirmButtonText: "Ok",
+                heightAuto: false,
+                customClass: {
+                confirmButton: "btn fw-semobold btn-light-primary",
+                },
+            });
+          });
+    };
+
+    const refrescarCarro = () => {    
+      visibleEspecial.value = false; 
       obtenerCarro(carro.carroId);
       modalPOS.value = false;
     };
@@ -356,7 +399,7 @@ export default defineComponent({
       eliminarCotizacion,
       confirmarEliminarCotizacion,
       modalPOS,
-      mostrarMensaje, refrescarCarro
+      mostrarMensaje, refrescarCarro, visibleEspecial, verificarPagoCarro
     };
   },
 });
@@ -365,6 +408,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.p-component-overlay-enter {z-index:22!important;}
 .aporte-breath {
   animation-name: breath;
   animation-duration: 1s;
