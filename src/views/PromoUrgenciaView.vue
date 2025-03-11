@@ -78,7 +78,7 @@
         </ul>
 
         <h2>Atención al Cliente</h2>
-        <p>Central de asistencia MAWDY:
+        <p>Central de asistencia ONASSIST:
           <ul><li>
 Para llamados: +56 223407008</li>
 <li>Atención vía Whatsapp: +56  961712386</li></ul>
@@ -93,7 +93,7 @@ Para llamados: +56 223407008</li>
         </ul>
 
         <h2>Tarifa Mensual</h2>
-        <p>UF 0,066 + IVA por cliente vigente al cierre de mes.</p>
+        <p>$2.990 por cliente vigente al cierre de mes.</p>
      
     </div>
     

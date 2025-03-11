@@ -158,10 +158,9 @@
           
           <!-- Info -->
           <ul class="list-inline position-relative justify-content-center justify-content-lg-start mb-4">
-            <li class="list-inline-item me-2"> <i class="bi bi-patch-check-fill h6 me-1"></i>asistencia en carretera</li>
-            <li class="list-inline-item me-2"> <i class="bi bi-patch-check-fill h6 me-1"></i>accidente personal full</li>
-            <li class="list-inline-item"> <i class="bi bi-patch-check-fill h6 me-1"></i>Seguro de asistencia
-              en sala de urgencia</li>
+            <li class="list-inline-item me-2"> <i class="bi bi-patch-check-fill h6 me-1"></i>Asistencia en carretera</li>
+            <li class="list-inline-item me-2"> <i class="bi bi-patch-check-fill h6 me-1"></i>Accidente personal Full</li>
+            <li class="list-inline-item"> <i class="bi bi-patch-check-fill h6 me-1"></i>Asistencia sala de urgencia</li>
           </ul>
   
           <div class="d-sm-flex align-items-center justify-content-center justify-content-lg-start">
