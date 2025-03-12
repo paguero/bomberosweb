@@ -320,7 +320,7 @@ export default defineComponent({
     const obtenerConvenio = (codigo) =>{
       storeConvenio
         .getConvenio(codigo).then(()=>{ 
-          cotizacionDetails.value.convenioAporte =storeConvenio.currentConvenio.codigo; 
+          cotizacionDetails.value.convenioAporte = storeConvenio.currentConvenio.codigo; 
         });
     }
     const saveChanges1 = async () => {

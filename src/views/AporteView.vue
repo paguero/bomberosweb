@@ -73,7 +73,7 @@
       <div class="alert alert-primary" v-if="currentConvenio.mensaje">{{currentConvenio.mensaje}}</div>
       <div
                                 class="form-group col-md-6"
-                                v-if="!currentConvenio.nombre || (currentConvenio && currentConvenio.esEmbajador)"
+                                v-if="!currentConvenio.nombre && (currentConvenio && !currentConvenio.esComuna)"
                               >
         <label for="comuna">*Comuna</label>
         
@@ -96,11 +96,11 @@
               </div>
                               <div v-else class="form-group col-md-6">
                                 <Field  type="hidden"
-                                                                    v-model="cotizacionDetails.compania"
+                                                                    v-model="currentConvenio.comuna"
                                                                     name="comuna"
                                                                  />
                               </div>
-                              <div v-if="!currentConvenio.codigo || (currentConvenio && currentConvenio.esComuna) || (currentConvenio && currentConvenio.esEmbajador)"
+                              <div v-if="!currentConvenio.codigo || (currentConvenio && currentConvenio.esComuna)"
                                 class="form-group col-md-6">
         <label for="compania">*Compañía de bomberos</label>
         <Field 
