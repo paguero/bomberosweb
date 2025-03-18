@@ -60,7 +60,15 @@
                     <td class="align-middle border-top-0">#{{data.numeroPoliza}}</td>
                     <td class="align-middle border-top-0">{{$filters.formatCurrency(data.planPesos)}}<br/>
                       <span class="custom-badge badge bg-warning">{{$filters.formatCurrency(data.aporte)}}</span>
-                      <br/>{{$filters.formatCurrency(data.montoPago)}}</td>
+                      <br/>{{$filters.formatCurrency(data.montoPago)}}
+                      <span v-if="data.montoDescuento>0">
+                        -{{$filters.formatCurrency(data.montoDescuento)}}
+                      </span>
+                      <span v-if="data.montoDescuento>0">
+                        <b>{{$filters.formatCurrency(data.totalConDescuento)}}</b>
+                      </span>
+                    
+                    </td>
                     <td class="align-middle border-top-0">
                       <span class="cursor-pointer" v-if="data.urlPoliza!=''" @click="descargarCertificado(data)"><i  class="p-1 pi pi-file-pdf"></i>Certificado</span>
                     </td>

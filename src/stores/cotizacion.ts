@@ -277,6 +277,20 @@ export const useCotizacionStore = defineStore("cotizacion", () => {
       });
   }
   
+  function descuentoCotizacion(params: any) {
+    return ApiService.patch(`cotizacion/v1/cotizacion/${params.carroId}/${params.cotizacionId}/descuento`, params)
+      .catch(({ response }) => {
+        setCotizacionError(response.data.errores);
+		    throw new Error();
+      });
+  }
+  function removerDescuentoCotizacion(params: any) {
+    return ApiService.patch(`cotizacion/v1/cotizacion/${params.carroId}/${params.cotizacionId}/descuento/remover`, params)
+      .catch(({ response }) => {
+        setCotizacionError(response.data.errores);
+		    throw new Error();
+      });
+  }
 
   return {
     verPdf,
@@ -296,7 +310,9 @@ export const useCotizacionStore = defineStore("cotizacion", () => {
     getEmisionValidacion,
     getEmisionesValidacion,
     endoso, verificarPago, verificarPagoPatente,
-    getEmisionDescarga, verificaPagoPOS
+    getEmisionDescarga, verificaPagoPOS,
+    descuentoCotizacion,
+    removerDescuentoCotizacion
   };
 });
 

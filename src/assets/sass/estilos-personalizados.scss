@@ -2042,6 +2042,10 @@ a.buy-button {
   background-position: center;
   background-repeat: no-repeat;
 }
+.slide0 {
+  background-image: url('/media/banners/banner_mercado_pago-01.jpg');
+}
+
 .slide1 {
   background-image: url('/media/banners/slider-grua.png');
 }
@@ -2814,6 +2818,9 @@ a.buy-button {
     background-repeat: no-repeat;
   }
 
+  .slide0 {
+    background-image: url('/media/banners/banner_mercado_pago-mobile02.jpg');
+  }
   .slide1 {
     background-image: url('/media/banners/slider-grua-mobile.webp');
   }

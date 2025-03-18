@@ -46,6 +46,14 @@
         <span>Total a Pagar</span>
         <span>{{$filters.formatCurrency(currentCarroCompra.totalPagar)}}</span>
       </div>
+      <div class="summary-item" v-if="currentCarroCompra.totalDescuentos>0">
+        <span>Descuentos</span>
+        <span>{{$filters.formatCurrency(currentCarroCompra.totalDescuentos)}}</span>
+      </div>
+      <div class="summary-total" v-if="currentCarroCompra.totalDescuentos>0">
+        <span>Precio Final Rebajado</span>
+        <span>{{$filters.formatCurrency(currentCarroCompra.totalConDescuento)}}</span>
+      </div>
       <Prime-Button id="kt_account_edificio_details_submit"
                               :disabled="!currentCarroCompra.totalPagar || currentCarroCompra.totalPagar==0"
                                class="pay-button" type="submit"
@@ -59,13 +67,62 @@
     </div>
   </Form>
   <div class="vehicle-details p-4" v-for="(cotizacion, x) in allCotizaciones" v-bind:key="x">
+    <div class="row align-items-center p-4">
+      <div class="col-12 col-md-6 col-lg-6 mb-4 mb-md-0">
       <p><router-link :to="{name:'info-persona', params:{id:cotizacion.cotizacionId}}" class="text-inherit">
         <strong>{{$filters.formatPatente(cotizacion.vehiculo.patente)}} {{cotizacion.vehiculo.modelo}} / {{cotizacion.vehiculo.anio}}</strong></router-link>
       </p>
       <p>{{cotizacion.cliente.nombre}} {{cotizacion.cliente.apellidoPaterno}}</p>
       <a href="#" @click="confirmarEliminarCotizacion(cotizacion.cotizacionId)" class="remove-link">
-       🗑️ Remover
+       🗑️ Quitar el auto
       </a>
+      </div>
+      <!-- input group -->
+      <div class="col-12 col-md-6 col-lg-6">
+          <li class="list-group-item d-flex flex-column justify-content-between align-items-start rounded">
+                                      <div class="me-auto">
+                                        <div class="mb-2"><strong>¿Tienes un cupón de descuento?</strong>
+                                        <br/><small>El cupón <b>SOAPMP</b> no lo debes ingresar aquí. Ingrésalo directamente al momento de pagar en Mercado Pago</small></div>
+                                      </div>
+                                      <div class="d-flex flex-row" v-if="!cotizacion.montoDescuento">
+                                      <span ><Field
+                                            type="text"
+                                            maxlength="50"
+                                            name="cuponDescuento"
+                                            class="
+                                              form-control form-control-sm
+                                              mb-3 mb-lg-0
+                                            "
+                                            placeholder="Codigo"
+                                            v-model="cotizacion.cuponDescuento"
+                                          /></span>
+                               
+                                <Prime-Button id="kt_descuento"
+                                class="ms-2 btn btn-secondary btn-sm d-flex justify-content-between align-items-center" type="submit"
+                                :loading="loading" label="Aplicar" @click="aplicarDescuento(cotizacion)">
+                                  
+                                </Prime-Button>
+                                      </div>
+                                      <div class="d-flex flex-row" v-else>
+                                      <span >Aplicaste el cupón <b>{{cotizacion.cuponDescuento}}</b> por un monto de - {{$filters.formatCurrency(cotizacion.montoDescuento)}}</span>
+                                      <a href="#!" @click="removerDescuento(cotizacion)" class="text-decoration-none text-inherit">
+                                          <span class="me-1 align-text-bottom">
+                                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2 text-success">
+                                                <polyline points="3 6 5 6 21 6"></polyline>
+                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                                <line x1="10" y1="11" x2="10" y2="17"></line>
+                                                <line x1="14" y1="11" x2="14" y2="17"></line>
+                                              </svg>
+                                          </span>
+                                          <span class="text-muted">Remover cupón</span>
+                                        </a>
+                                      </div>
+                                  </li> 
+                                    
+                                 </div>
+                                 </div>
+                                 <!-- price -->
+
     </div>
   
     <router-link :to="{name:'info-nuevo', params:{id:currentCarroCompra?.carroId??0}}"  class="add-vehicle-button">+ Agregar nuevo vehículo</router-link>
@@ -379,6 +436,71 @@ export default defineComponent({
       });
     }
 
+    const aplicarDescuento = (cotizacion) => {
+        loading.value = true;
+        store.descuentoCotizacion({carroId:cotizacion.carroId, cotizacionId : cotizacion.cotizacionId, codigo : cotizacion.cuponDescuento})
+          .then(() => {
+            Swal.fire({
+              text: "El cupón fue aplicado exitosamente.",
+              icon: "success",
+              buttonsStyling: false,
+              confirmButtonText: "Ok!",
+              customClass: {
+                confirmButton: "btn fw-bold btn-light-primary",
+              },
+            }).then(function () {
+              loading.value = false;
+              obtenerCarro(cotizacion.carroId);
+            });
+          })
+          .catch(() => {
+            loading.value = false;
+            const [error] = Object.values(store.cotizacionErrors);
+            Swal.fire({
+                text: error,
+                icon: "error",
+                buttonsStyling: false,
+                confirmButtonText: "Ok",
+                heightAuto: false,
+                customClass: {
+                confirmButton: "btn fw-semobold btn-light-primary",
+                },
+            });
+          });
+    };
+
+    const removerDescuento = (cotizacion) => {
+        loading.value = true;
+        store.removerDescuentoCotizacion({carroId:cotizacion.carroId, cotizacionId : cotizacion.cotizacionId, codigo : cotizacion.cuponDescuento})
+          .then(() => {
+             Swal.fire({
+              text: "El cupón fue removido exitosamente.",
+              icon: "success",
+              buttonsStyling: false,
+              confirmButtonText: "Ok!",
+              customClass: {
+                confirmButton: "btn fw-bold btn-light-primary",
+              },
+            }).then(function () {
+              loading.value = false;
+              obtenerCarro(cotizacion.carroId);
+            });
+          })
+          .catch(() => {
+            loading.value = false;
+            const [error] = Object.values(store.cotizacionErrors);
+            Swal.fire({
+                text: error,
+                icon: "error",
+                buttonsStyling: false,
+                confirmButtonText: "Ok",
+                heightAuto: false,
+                customClass: {
+                confirmButton: "btn fw-semobold btn-light-primary",
+                },
+            });
+          });
+    };
     const pushGtag = (monto) => {
         gtm.trackEvent({"event": `checkout`, 
           "form_name":"ir_a_pagar",
@@ -398,7 +520,7 @@ export default defineComponent({
       currentCarroCompra,
       eliminarCotizacion,
       confirmarEliminarCotizacion,
-      modalPOS,
+      modalPOS, aplicarDescuento, removerDescuento,
       mostrarMensaje, refrescarCarro, visibleEspecial, verificarPagoCarro
     };
   },
