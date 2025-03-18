@@ -85,7 +85,7 @@
         </ul>
 
         <h2>Atención al Cliente</h2>
-        <p><strong>Central de asistencia vía Whatsapp:</strong></p>
+        <p><strong>Central de asistencia vía Whatsapp:</strong>+56 9 61712386</p>
      
     </div>
     
