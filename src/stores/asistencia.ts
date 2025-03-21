@@ -43,7 +43,7 @@ export const useAsistenciaStore = defineStore("asistencia", () => {
   }
 
   function getRegalo(carroId:string) {
-    return ApiService.get("asistencia/v1/asistencias/regalo", carroId)
+    return ApiService.get("../../asistencias/api/asistencia/v1/asistencias/regalo", carroId)
       .catch(({ response }) => {
         setAsistenciaError(response.data.errors);
 		    throw new Error();
