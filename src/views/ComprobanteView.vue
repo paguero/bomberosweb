@@ -405,7 +405,8 @@ export default defineComponent({
       store.setCarro(JSON.stringify({carroId:null, cotizacionId:null}));
       await verificarPagoCarro(carroId);
       await obtenerCarro(carroId);
-      obtenerAsistencias(carroId);
+      //obtenerAsistencias(carroId);
+      regaloAsistencias(carroId);
       pushGtag();
       loading.value = false;
       isVisible.value = true;
@@ -497,6 +498,10 @@ export default defineComponent({
                 },
             });
           });
+    };
+
+    const regaloAsistencias = async (carroId) => {
+        await storeAsistencia.getRegalo(carroId);
     };
 
     const allCotizaciones = computed(() => {

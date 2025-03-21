@@ -42,6 +42,14 @@ export const useAsistenciaStore = defineStore("asistencia", () => {
       });
   }
 
+  function getRegalo(carroId:string) {
+    return ApiService.get("asistencia/v1/asistencias/regalo", carroId)
+      .catch(({ response }) => {
+        setAsistenciaError(response.data.errors);
+		    throw new Error();
+      });
+  }
+
   function getAsistencia(id: string) {
     return ApiService.get("asistencia", id)
       .then(({ data }) => {
@@ -95,7 +103,8 @@ export const useAsistenciaStore = defineStore("asistencia", () => {
 	getAsistencia,
 	createAsistencia,
 	updateAsistencia,
-    deleteAsistencia
+    deleteAsistencia,
+    getRegalo
   };
 });
 
