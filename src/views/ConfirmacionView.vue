@@ -88,6 +88,7 @@
                                       <span ><Field
                                             type="text"
                                             maxlength="50"
+                                            @change="convertToUppercase(cotizacion)"
                                             name="cuponDescuento"
                                             class="
                                               form-control form-control-sm
@@ -513,6 +514,10 @@ export default defineComponent({
         console.log('loaded pushGtag');
     };
 
+    const convertToUppercase = (cotizacion) => {
+      cotizacion.cuponDescuento = cotizacion.cuponDescuento.toUpperCase();
+    }
+
     return {
       loading,
       saveChanges1,
@@ -521,7 +526,7 @@ export default defineComponent({
       eliminarCotizacion,
       confirmarEliminarCotizacion,
       modalPOS, aplicarDescuento, removerDescuento,
-      mostrarMensaje, refrescarCarro, visibleEspecial, verificarPagoCarro
+      mostrarMensaje, refrescarCarro, visibleEspecial, verificarPagoCarro, convertToUppercase
     };
   },
 });
