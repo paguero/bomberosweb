@@ -77,7 +77,7 @@
   </section>
 
    <!-- Sección del slider -->
-   <section class="section-slider mt-0 pt-0">
+   <section class="section-slider mt-0 pt-0" v-if="allCotizaciones?.length==1">
         <div class="slider-container">
           <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
            
