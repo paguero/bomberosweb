@@ -1,10 +1,4 @@
 <template>
-  <Transition @before-enter="beforeEnter" @enter="enter" @leave="leave">
-    <div class="div-asistencias" v-if="isVisible && allCotizaciones?.length==1">
-    <InviteFriendsModal @cerrarAsistencias="cerrarAsistencias"/>
-    </div>
-  </Transition>
-
     <div class="overlayed-loader fullscreen-overlayed-loader" v-if="loading">
     <div class="fullscreen-overlayed-loader__overlay"></div> 
     <div class="ecw-loader-animation fullscreen-overlayed-loader__loader">
@@ -75,15 +69,31 @@
                 </tr>
                 
             </tbody>
-        </table>
-
-        <button v-if="allCotizaciones?.length==1" type="button" @click="cerrarAsistencias(true)" class="btn btn-lg btn-danger-soft active me-2 mb-4 mb-sm-0">Quiero mis asistencias Gratis</button>
-            
+        </table>    
     </div>
-    <img src="/media/misc/foto-activa-seguros.webp" alt="Bomberos exitosos">
+    <!--img src="/media/misc/foto-activa-seguros.webp" alt="Bomberos exitosos"-->
     <h2>¡Has comprado tu SOAP y aportaste a Bomberos de Chile con éxito!</h2>
     </div>
   </section>
+
+   <!-- Sección del slider -->
+   <section class="section-slider mt-0 pt-0">
+        <div class="slider-container">
+          <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+           
+            <div class="carousel-inner">
+              <div class="carousel-item slide1 active">
+                <div class="content-slider slide flex-column align-items-start justify-content-center">
+                  <h2>Ya compraste tu <br>SOAP Bomberos<br>
+                  Ahora obtén <br>tus asistencias gratis</h2>
+                  <button v-if="allCotizaciones?.length==1" type="button" @click="cerrarAsistencias(true)" class="benefit-button">Quiero mis asistencias Gratis</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </section>
+
   <Form
                                       id="kt_account_edificio_details_form"
                                       novalidate="novalidate"
