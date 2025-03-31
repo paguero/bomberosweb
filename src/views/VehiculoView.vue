@@ -558,7 +558,7 @@ export default defineComponent({
       if(cotizacionDetails.value.vehiculo)
         loading.value = true;  
         await obtenerPrima(await newValue);
-        await obtenerPrimaExtendida(await newValue);
+        //await obtenerPrimaExtendida(await newValue);
         await obtenerMarcas(await newValue);
         loading.value = false;
     });
